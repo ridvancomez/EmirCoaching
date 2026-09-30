@@ -73,4 +73,4 @@ cd EmirCoaching
 
 ## Lisans
 
-Bu proje portföy amaçlıdır. Tasarım hakları Emir Coaching'e aittir.
+Tasarım ve içerik hakları Emir Coaching'e aittir.
