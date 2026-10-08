@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emir Coaching | Kişiye Özel Fitness ve Beslenme Koçluğu</title>
+  <title>Kişiye Özel Diyet Planı | Emir Coaching — Uzman Diyetisyen Desteği</title>
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="description"
-    content="Emir Coaching ile hedefine özel antrenman ve beslenme planlarıyla dönüşümünü başlat. Profesyonel koçluk, WhatsApp üzerinden bizzat destek.">
+    content="Uzman diyetisyen tarafından hazırlanan kişiye özel diyet planı: kalori ve makro hesabı, günlük 5 öğün, haftalık menü güncellemesi ve WhatsApp ile 1-1 destek.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100;200;300;400;500;600;700;800;900&family=Inter&family=Montserrat:wght@400;600&family=Rubik:wght@400;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@400;700&family=Montserrat:wght@400;600&family=Rubik:wght@400;600&display=swap"
     rel="stylesheet">
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 
@@ -40,10 +40,10 @@
       <nav class="navbar__nav" aria-label="Ana menü">
         <ul class="navbar__menu">
           <li class="navbar__menu-item">
-            <a href="index.html" class="navbar__menu-link navbar__menu-link--active" title="Ana Sayfa">Ana Sayfa</a>
+            <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
           <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link" title="Paketler sayfasına git">Paketler</a>
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active" title="Paketler sayfasına git">Paketler</a>
           </li>
           <li class="navbar__menu-item">
             <a href="hikayemiz.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -70,10 +70,10 @@
     <nav class="mobile-drawer__nav" aria-label="Mobil ana menü">
       <ul class="mobile-drawer__menu">
         <li class="mobile-drawer__item">
-          <a href="index.html" class="mobile-drawer__link mobile-drawer__link--active" title="Ana Sayfa">Ana Sayfa</a>
+          <a href="index.html" class="mobile-drawer__link" title="Ana Sayfa">Ana Sayfa</a>
         </li>
         <li class="mobile-drawer__item">
-          <button type="button" class="mobile-drawer__link mobile-drawer__submenu-toggle" aria-expanded="false"
+          <button type="button" class="mobile-drawer__link mobile-drawer__link--active mobile-drawer__submenu-toggle" aria-expanded="false"
             aria-controls="mobile-drawer-packages">
             Paketler
             <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="mobile-drawer__chevron"
@@ -105,7 +105,152 @@
   </aside>
 
   <main>
-    <!-- SAYFA İÇERİĞİ BURAYA -->
+    <!-- ==================== Hero (paketler hero'su) ==================== -->
+    <section class="paketler-hero" aria-labelledby="diyet-hero-title">
+      <img src="images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+        title="Emir Coaching Kişiye Özel Diyet Planı" class="paketler-hero__bg">
+      <div class="paketler-hero__overlay" aria-hidden="true"></div>
+      <div class="paketler-hero__fade" aria-hidden="true"></div>
+
+      <div class="paketler-hero__content">
+        <nav class="paketler-hero__breadcrumb" aria-label="Sayfa konumu">
+          <ul class="paketler-hero__breadcrumb-list">
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="index.html" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
+            </li>
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="paketler.html" class="paketler-hero__breadcrumb-link" title="Paketler">Paketler</a>
+            </li>
+          </ul>
+        </nav>
+
+        <h1 id="diyet-hero-title" class="paketler-hero__title paketler-hero__title--wide">
+          UZMANLARLA ÇALIŞMAK <span class="paketler-hero__title-accent">PROFESYONELLİK</span> GEREKTİRİR
+        </h1>
+
+        <p class="paketler-hero__text">
+          Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı
+          olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.
+        </p>
+
+        <nav class="paketler-hero__filter" aria-label="Paket kategorileri">
+          <div class="paketler-hero__tabs">
+            <a href="paketler.html" class="paketler-hero__tab" title="Tüm paketleri gör">Tümü</a>
+            <a href="paketler.html?kategori=gumus" class="paketler-hero__tab paketler-hero__tab--gumus" title="Gümüş paketleri gör">Gümüş</a>
+            <a href="paketler.html?kategori=altin" class="paketler-hero__tab paketler-hero__tab--altin" title="Altın paketleri gör">Altın</a>
+          </div>
+          <span class="paketler-hero__diet-btn paketler-hero__diet-btn--active" aria-current="page">Kişiye Özel Diyet Planı</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ==================== Program Detay ==================== -->
+    <section class="program-detay container" aria-label="Program detayı">
+      <article class="program-detay__card" aria-labelledby="program-icerik-title">
+        <div class="program-detay__author">
+          <img src="images/uzman-ceyda.jpg" alt="Uzm. Dr. Ceyda Güler" title="Uzm. Dr. Ceyda Güler" width="76"
+            height="76" class="program-detay__avatar">
+          <p class="program-detay__author-text">
+            <span class="program-detay__author-name">Uzm. Dr. <strong>Ceyda Güler</strong></span>
+            <span class="program-detay__author-role">Tarafından Hazırlanır</span>
+          </p>
+        </div>
+
+        <h2 id="program-icerik-title" class="program-detay__title">Program İçeriği</h2>
+
+        <div class="program-detay__lists">
+          <ul class="program-detay__list">
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>Kişiye özel kalori ve makro hesabı</span>
+              </li>
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>Gluten, laktoz, alerjen alternatifleri</span>
+              </li>
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>İlerleme takibi ve raporlama</span>
+              </li>
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>Takviye önerisi (isteğe bağlı)</span>
+              </li>
+          </ul>
+          <ul class="program-detay__list">
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>Günlük 5 öğün planlaması</span>
+              </li>
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>Haftalık menü güncellemesi</span>
+              </li>
+              <li class="program-detay__item">
+                <iconify-icon icon="mdi:check-circle-outline" mode="svg" noobserver class="program-detay__check" aria-hidden="true"></iconify-icon>
+                <span>WhatsApp ile 1-1 destek</span>
+              </li>
+          </ul>
+        </div>
+      </article>
+
+      <aside class="program-ucret" aria-labelledby="program-ucret-label">
+        <p id="program-ucret-label" class="program-ucret__label">PROGRAM ÜCRETİ</p>
+        <p class="program-ucret__price">₺ 1.950</p>
+        <p class="program-ucret__note">Tek seferlik ödeme / 4 haftalık program</p>
+        <hr class="program-ucret__divider">
+        <a href="diyet-formu.html" class="program-ucret__button" title="Diyet formunu doldurarak koçluk paketine ekle">Koçluk
+          Paketine Ekle</a>
+        <p class="program-ucret__secure">Güvenli ödeme altyapısı ile 256-bit SSL korumalı.</p>
+      </aside>
+    </section>
+
+    <!-- ==================== Nasıl Çalışır ==================== -->
+    <section class="nasil-calisir" aria-labelledby="nasil-calisir-title">
+      <div class="container nasil-calisir__inner">
+        <h2 id="nasil-calisir-title" class="nasil-calisir__title">Nasıl Çalışır?</h2>
+        <ol class="nasil-calisir__steps">
+          <li class="nasil-calisir__step">
+            <span class="nasil-calisir__icon" aria-hidden="true">
+              <iconify-icon icon="mdi:clipboard-text" mode="svg" noobserver></iconify-icon>
+            </span>
+            <h3 class="nasil-calisir__step-title">1. Formu Doldur</h3>
+            <p class="nasil-calisir__step-text">Hedeflerini ve beslenme alışkanlıklarını içeren detaylı formu doldur.</p>
+          </li>
+          <li class="nasil-calisir__step">
+            <span class="nasil-calisir__icon" aria-hidden="true">
+              <iconify-icon icon="mdi:silverware-fork-knife" mode="svg" noobserver></iconify-icon>
+            </span>
+            <h3 class="nasil-calisir__step-title">2. Planın Hazırlanır</h3>
+            <p class="nasil-calisir__step-text">Uzman koçumuz verilerini analiz ederek sana özel planını 24 saat içinde hazırlar.</p>
+          </li>
+          <li class="nasil-calisir__step">
+            <span class="nasil-calisir__icon" aria-hidden="true">
+              <iconify-icon icon="mdi:message-text" mode="svg" noobserver></iconify-icon>
+            </span>
+            <h3 class="nasil-calisir__step-title">3. WhatsApp'tan Ulaşılır</h3>
+            <p class="nasil-calisir__step-text">Planın sana WhatsApp üzerinden iletilir ve destek sürecimiz başlar.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta cta--detail" aria-labelledby="cta-title">
+      <div class="container cta__inner">
+        <h2 id="cta-title" class="cta__title">HANGİ PAKETİN SANA UYGUN OLDUĞUNDAN EMİN DEĞİL MİSİN?</h2>
+        <p class="cta__text">Hedeflerini bizimle paylaş, senin için en doğru başlangıç noktasını birlikte belirleyelim.</p>
+        <div class="cta__actions">
+          <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
+            data-contact-trigger>Hemen Başla</button>
+          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+            title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
+            <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+            <span>WhatsApp İletişim</span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">

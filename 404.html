@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emir Coaching | Kişiye Özel Fitness ve Beslenme Koçluğu</title>
+  <title>404 — Sayfa Bulunamadı | Emir Coaching</title>
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="description"
-    content="Emir Coaching ile hedefine özel antrenman ve beslenme planlarıyla dönüşümünü başlat. Profesyonel koçluk, WhatsApp üzerinden bizzat destek.">
+    content="Aradığın sayfa bulunamadı. Emir Coaching paketlerine, danışan değişimlerine, blog yazılarına veya iletişim sayfasına buradan devam edebilirsin.">
+  <meta name="robots" content="noindex">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +41,7 @@
       <nav class="navbar__nav" aria-label="Ana menü">
         <ul class="navbar__menu">
           <li class="navbar__menu-item">
-            <a href="index.html" class="navbar__menu-link navbar__menu-link--active" title="Ana Sayfa">Ana Sayfa</a>
+            <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
           <li class="navbar__menu-item">
             <a href="paketler.html" class="navbar__menu-link" title="Paketler sayfasına git">Paketler</a>
@@ -70,7 +71,7 @@
     <nav class="mobile-drawer__nav" aria-label="Mobil ana menü">
       <ul class="mobile-drawer__menu">
         <li class="mobile-drawer__item">
-          <a href="index.html" class="mobile-drawer__link mobile-drawer__link--active" title="Ana Sayfa">Ana Sayfa</a>
+          <a href="index.html" class="mobile-drawer__link" title="Ana Sayfa">Ana Sayfa</a>
         </li>
         <li class="mobile-drawer__item">
           <button type="button" class="mobile-drawer__link mobile-drawer__submenu-toggle" aria-expanded="false"
@@ -105,7 +106,96 @@
   </aside>
 
   <main>
-    <!-- SAYFA İÇERİĞİ BURAYA -->
+    <!-- ==================== 404 Hero ==================== -->
+    <section class="paketler-hero paketler-hero--compact hata-404" aria-labelledby="hata-404-title">
+      <img src="images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+        title="Emir Coaching" class="paketler-hero__bg">
+      <div class="paketler-hero__overlay" aria-hidden="true"></div>
+      <div class="paketler-hero__fade" aria-hidden="true"></div>
+
+      <div class="paketler-hero__content">
+        <nav class="paketler-hero__breadcrumb" aria-label="Sayfa konumu">
+          <ul class="paketler-hero__breadcrumb-list">
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="index.html" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
+            </li>
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="404.html" class="paketler-hero__breadcrumb-link" title="404 Eror" aria-current="page">404 Eror</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Dev "404" (dekoratif): Inter'in "4"ü üst üste binen konturlardan oluşur; text-stroke
+             bu iç çizgileri gösterdiği için kontur 4px çizilip harfin içi maskeyle silinir,
+             geriye temiz 2px dış kontur kalır. -->
+        <svg class="hata-404__rakam" viewBox="4 -140 400 145" aria-hidden="true" focusable="false">
+          <defs>
+            <mask id="hata-404-rakam-maske" maskUnits="userSpaceOnUse" x="4" y="-140" width="400" height="145">
+              <rect x="4" y="-140" width="400" height="145" fill="#fff" />
+              <text x="0" y="0" font-size="184.7" fill="#000">404</text>
+            </mask>
+          </defs>
+          <text class="hata-404__rakam-metin" x="0" y="0" font-size="184.7" mask="url(#hata-404-rakam-maske)">404</text>
+        </svg>
+
+        <h1 id="hata-404-title" class="hata-404__title">
+          Bu Sayfa <span class="hata-404__title-vurgu">Programda Yok</span>
+        </h1>
+        <p class="hata-404__text">Aradığın sayfa taşınmış veya hiç var olmamış olabilir. Aşağıdan devam edebilirsin.</p>
+
+        <form class="hata-404__arama" role="search" action="#" data-hata-arama>
+          <label for="hata-404-arama" class="visually-hidden">Sitede ara</label>
+          <iconify-icon icon="mdi:magnify" mode="svg" noobserver class="hata-404__arama-icon" aria-hidden="true"></iconify-icon>
+          <input type="search" id="hata-404-arama" name="q" class="hata-404__arama-input" placeholder="Sitede ara..."
+            autocomplete="off">
+        </form>
+
+        <div class="cta__actions hata-404__actions">
+          <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
+            data-contact-trigger>Hemen Başla</button>
+          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+            title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
+            <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+            <span>WhatsApp İletişim</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Hızlı linkler ==================== -->
+    <section class="hata-404-linkler container" aria-labelledby="hata-404-linkler-title">
+      <h2 id="hata-404-linkler-title" class="hata-404-linkler__title">Bunlara Bakmak İsteyebilirsin</h2>
+      <ul class="hata-404-linkler__list">
+        <li>
+          <a href="paketler.html" class="hata-404-linkler__card" title="Paketler sayfasına git">
+            <span class="hata-404-linkler__name">Paketler</span>
+            <span class="hata-404-linkler__desc">Sana uygun kademeyi seç.</span>
+            <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="hata-404-linkler__arrow" aria-hidden="true"></iconify-icon>
+          </a>
+        </li>
+        <li>
+          <a href="degisimler.html" class="hata-404-linkler__card" title="Değişimler sayfasına git">
+            <span class="hata-404-linkler__name">Değişimler</span>
+            <span class="hata-404-linkler__desc">Gerçek danışan hikayeleri.</span>
+            <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="hata-404-linkler__arrow" aria-hidden="true"></iconify-icon>
+          </a>
+        </li>
+        <li>
+          <a href="blog.html" class="hata-404-linkler__card" title="Blog sayfasına git">
+            <span class="hata-404-linkler__name">Blog</span>
+            <span class="hata-404-linkler__desc">Kanıta dayalı yazılar.</span>
+            <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="hata-404-linkler__arrow" aria-hidden="true"></iconify-icon>
+          </a>
+        </li>
+        <li>
+          <a href="iletisim.html" class="hata-404-linkler__card" title="İletişim sayfasına git">
+            <span class="hata-404-linkler__name">İletişim</span>
+            <span class="hata-404-linkler__desc">Sorularını bize ilet.</span>
+            <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="hata-404-linkler__arrow" aria-hidden="true"></iconify-icon>
+          </a>
+        </li>
+      </ul>
+    </section>
   </main>
 
   <footer class="footer">
@@ -374,6 +464,10 @@
   </div>
 
   <script src="js/main.js"></script>
+  <script>
+    // Site araması henüz yok: form gönderimi şimdilik engellenir (yer tutucu davranış)
+    document.querySelector("[data-hata-arama]").addEventListener("submit", (event) => event.preventDefault());
+  </script>
 </body>
 
 </html>

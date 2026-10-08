@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>501 — Sunucu Hatası | Emir Coaching</title>
+  <link rel="icon" href="images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="description"
+    content="Sunucumuz bu isteği şu an karşılayamıyor. Kısa bir süre sonra tekrar deneyebilir ya da Emir Coaching ana sayfasından devam edebilirsin.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100;200;300;400;500;600;700;800;900&family=Inter&family=Montserrat:wght@400;600&family=Rubik:wght@400;600&display=swap"
+    rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="hata-sayfa">
+
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" title="Emir Coaching Anasayfa">
+        <img src="images/logo.png" alt="Emir Coaching Logo" title="Emir Coaching Logo" width="194" height="29"
+          class="navbar__logo-img">
+      </a>
+
+      <input type="checkbox" id="navbar-toggle" class="navbar__toggle-input">
+      <label for="navbar-toggle" class="navbar__toggle" aria-label="Menüyü aç/kapat">
+        <span class="navbar__toggle-bar"></span>
+        <span class="navbar__toggle-bar"></span>
+        <span class="navbar__toggle-bar"></span>
+      </label>
+
+      <nav class="navbar__nav" aria-label="Ana menü">
+        <ul class="navbar__menu">
+          <li class="navbar__menu-item">
+            <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="mobile-drawer-overlay" aria-hidden="true"></div>
+
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Mobil menü" aria-hidden="true">
+    <a href="index.html" class="mobile-drawer__logo" title="Emir Coaching Anasayfa">
+      <img src="images/footer-logo.png" alt="Emir Coaching Logo" title="Emir Coaching Logo" width="194" height="29"
+        class="mobile-drawer__logo-img">
+    </a>
+
+    <nav class="mobile-drawer__nav" aria-label="Mobil ana menü">
+      <ul class="mobile-drawer__menu">
+        <li class="mobile-drawer__item">
+          <a href="index.html" class="mobile-drawer__link" title="Ana Sayfa">Ana Sayfa</a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- ==================== 501 Hero ==================== -->
+    <!-- Sunucu hatası sayfası: veri gerektiren öğe yok (arama, iletişim, hızlı linkler) -->
+    <section class="paketler-hero paketler-hero--compact hata-404 hata-404--sunucu" aria-labelledby="hata-501-title">
+      <img src="images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+        title="Emir Coaching" class="paketler-hero__bg">
+      <div class="paketler-hero__overlay" aria-hidden="true"></div>
+      <div class="paketler-hero__fade" aria-hidden="true"></div>
+
+      <div class="paketler-hero__content">
+        <nav class="paketler-hero__breadcrumb" aria-label="Sayfa konumu">
+          <ul class="paketler-hero__breadcrumb-list">
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="index.html" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
+            </li>
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="501.html" class="paketler-hero__breadcrumb-link" title="501 Eror" aria-current="page">501 Eror</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Dev "501" (dekoratif): 404 sayfasındaki maskeli kontur tekniği (iç çizgiler silinir) -->
+        <svg class="hata-404__rakam" viewBox="2 -140 344 145" aria-hidden="true" focusable="false">
+          <defs>
+            <mask id="hata-501-rakam-maske" maskUnits="userSpaceOnUse" x="2" y="-140" width="344" height="145">
+              <rect x="2" y="-140" width="344" height="145" fill="#fff" />
+              <text x="0" y="0" font-size="184.7" fill="#000">501</text>
+            </mask>
+          </defs>
+          <text class="hata-404__rakam-metin" x="0" y="0" font-size="184.7" mask="url(#hata-501-rakam-maske)">501</text>
+        </svg>
+
+        <h1 id="hata-501-title" class="hata-404__title">
+          Sistem <span class="hata-404__title-vurgu">Cheat Day'de</span>
+        </h1>
+        <p class="hata-404__text">Sunucumuz bu isteği şu an karşılayamıyor. Kısa bir süre sonra tekrar deneyebilirsin.</p>
+
+        <div class="cta__actions hata-404__actions">
+          <a href="index.html" class="hero__button hero__button--primary" title="Ana sayfaya dön">Ana Sayfaya Dön</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer footer--sade">
+    <img src="images/footer-e.png" alt="Emir Coaching dekoratif E harfi" title="Emir Coaching" width="752" height="394" class="footer__deco" aria-hidden="true">
+
+    <div class="footer__container">
+      <div class="footer__top">
+        <img src="images/footer-logo.png" alt="Emir Coaching Logo" title="Emir Coaching" width="434" height="64" class="footer__logo">
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

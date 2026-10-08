@@ -201,7 +201,7 @@
 
     var submenuToggle = drawer.querySelector(".mobile-drawer__submenu-toggle");
     var submenu = drawer.querySelector(".mobile-drawer__submenu");
-    var mobileQuery = window.matchMedia("(max-width: 1024px)");
+    var mobileQuery = window.matchMedia("(max-width: 999px)");
     var isOpen = false;
 
     // Label, gizli checkbox'ı tetikler; klavye erişimi için buton gibi davranmasını sağla
@@ -278,10 +278,107 @@
     });
   }
 
+  // Kaydırma animasyonu: bölüm başlıkları ve kartlar görünür alana girince bir kez
+  // aşağıdan süzülerek belirir (CSS: .reveal / .is-visible, @keyframes fade-up).
+  // Açılışta zaten ekranda olanlar animasyonsuz kalır (yanıp sönme olmaz);
+  // aynı kapsayıcıdaki kardeşler 80ms arayla gelir. Modal ve footer kapsam dışı.
+  var REVEAL_SELECTORS = [
+    // Bölüm başlıkları
+    ".social__title", ".program__title", ".story__title", ".faq__title", ".cta__title",
+    ".paket-detay__heading", ".blog-posts__title", ".tum-degisimler__title",
+    ".perde-arkasi__title", ".sayilar__title", ".iletisim-sosyal__title",
+    ".nasil-calisir__title", ".program-detay__title", ".beslenme__title",
+    ".hata-404-linkler__title", ".gizlilik-belgeler__title",
+    // Kartlar ve bloklar
+    ".program__left", ".program__right", ".story__row", ".qa__slider", ".faq__item",
+    ".paketler-card", ".beslenme__box", ".modul-card", ".paket-detay__total", ".fiyat-karti",
+    ".uygunluk__card", ".yorum-card", ".blog-featured__card", ".blog-card",
+    ".oneri-card", ".yazar-bio", ".sosyal-card", ".sayilar__grid",
+    ".program-detay__card", ".nasil-calisir__step", ".hata-404-linkler__card",
+    ".gizlilik-bolum", ".gizlilik-belgeler"
+  ];
+  var REVEAL_STAGGER = 80;
+  var REVEAL_MAX_STEPS = 3;
+
+  function initReveal() {
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    var main = document.querySelector("main");
+
+    if (!main) {
+      return;
+    }
+
+    var elements = Array.prototype.slice.call(main.querySelectorAll(REVEAL_SELECTORS.join(",")))
+      .filter(function (el) {
+        // Ekranda olanlar (ör. hero altı) ve iç içe eşleşmelerin içtekileri atlanır
+        var rect = el.getBoundingClientRect();
+        var inView = rect.top < window.innerHeight && rect.bottom > 0;
+        var nested = el.parentElement && el.parentElement.closest(".reveal");
+
+        if (inView || nested) {
+          return false;
+        }
+
+        el.classList.add("reveal");
+        return true;
+      });
+
+    if (!elements.length) {
+      return;
+    }
+
+    // Aynı kapsayıcıdaki kardeşler sırayla gelir
+    elements.forEach(function (el) {
+      var siblings = Array.prototype.filter.call(el.parentElement.children, function (child) {
+        return child.classList.contains("reveal");
+      });
+      var step = Math.min(siblings.indexOf(el), REVEAL_MAX_STEPS);
+      el.style.setProperty("--reveal-delay", step * REVEAL_STAGGER + "ms");
+    });
+
+    document.documentElement.classList.add("has-reveal");
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        var el = entry.target;
+        observer.unobserve(el);
+        el.classList.add("is-visible");
+
+        el.addEventListener("animationend", function onEnd(event) {
+          if (event.target !== el) {
+            return;
+          }
+
+          el.removeEventListener("animationend", onEnd);
+          el.classList.remove("reveal", "is-visible");
+          el.style.removeProperty("--reveal-delay");
+        });
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
+
+    elements.forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    initReveal();
     initMobileDrawer();
     initPrivacyModal();
     initContactModal();
     initContactSuccessModal();
   });
+
+  // Sayfaya özel scriptlerin (ör. diyet-formu.js) ortak başarı modalını kullanabilmesi için
+  window.EmirCoaching = window.EmirCoaching || {};
+  window.EmirCoaching.openSuccessModal = openContactSuccessModal;
 })();
