@@ -1,0 +1,6 @@
+namespace EmirCoaching.Business.Common;
+
+public record PagedResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int Size)
+{
+    public int TotalPages => Size == 0 ? 0 : (int)Math.Ceiling(TotalCount / (double)Size);
+}
