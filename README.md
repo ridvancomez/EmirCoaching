@@ -1,76 +1,48 @@
-# Emir Coaching — Frontend
+# EmirCoaching — Backend API
 
-Kişisel antrenör web sitesi. Figma tasarımından sıfırdan kodlandı.
+Kişisel antrenörlük hizmeti için N-Tier mimaride geliştirilen ASP.NET Core backend.
 
-**Canlı Demo:** *(yakında)*
+## Teknoloji Stack
 
----
+- **Framework:** ASP.NET Core 10.0
+- **ORM:** Entity Framework Core
+- **Veritabanı:** MSSQL
+- **Validasyon:** FluentValidation
+- **Mimari:** N-Tier (Entities → DataAccess → Business → Web)
 
-## Özellikler
+## Proje Yapısı
 
-- Figma tasarımından birebir uygulandı
-- Tam responsive — 1920px'ten 320px'e (iPhone 4)
-- SEO uyumlu semantik HTML5
-- Saf CSS3 — Bootstrap / Tailwind yok
-- Saf JavaScript — framework yok
-
-**Bileşenler:**
-- Program kartları carousel
-- Hikaye carousel + Privacy Blur toggle
-- Müşteri yorum carousel
-- FAQ accordion
-- Hamburger → drawer menü (mobil)
-- İletişim formu popup
-- Gizlilik politikası popup
-- CSS count-up animasyonu (Intersection Observer)
-
----
-
-## Teknoloji
-
-| | |
-|---|---|
-| Markup | HTML5 (semantik) |
-| Stil | CSS3 (custom properties, flexbox, grid) |
-| Script | Vanilla JavaScript (ES6+) |
-| İkonlar | Iconify (SVG mode) |
-| Font | Geologica, Inter (Google Fonts) |
-
----
-
-## Yapı
-
-```
 EmirCoaching/
-├── index.html       # Ana sayfa
-├── layout.html      # Yeni sayfalar için şablon
-├── style.css        # Tüm stiller + responsive breakpoint'ler
-├── main.js          # Ortak JS (navbar, drawer, modaller)
-├── index.js         # Anasayfaya özel JS (carousel, animasyonlar)
-├── images/          # Görseller
-└── design/          # Figma tasarım token'ları (md)
-```
+├── EmirCoaching.Entities/      # Domain modelleri, BaseEntity, Identity
+├── EmirCoaching.DataAccess/    # AppDbContext, Repository/UnitOfWork, migrations
+├── EmirCoaching.Business/      # Servisler, DTO'lar, FluentValidation validators
+└── EmirCoaching.Web/           # Controllers, Views, Admin paneli
+## Mimari Kararlar
 
----
+- **Repository + Unit of Work Pattern** — `IRepository<T>` generic repository, servis katmanında işlem bütünlüğü için `IUnitOfWork` (transaction desteğiyle)
+- **Soft Delete** — `BaseEntity.IsDeleted` üzerinden global query filter; kayıtlar fiziksel silinmez
+- **Result Pattern** — Servis katmanı `Result<T>` döner, exception yerine kontrollü hata yönetimi
+- **DTO + FluentValidation** — Entity'ler doğrudan dışa açılmaz, her DTO için ayrı validator
+
+## Domain Modeli (Özet)
+
+15+ entity ile gerçek bir iş modeli:
+- **Package** — 3 paket × 2 lokasyon (Evde/Salonda) = 6 kayıt; modüller ve highlight'larla ilişkili
+- **Transformation** — önce/sonra müşteri dönüşüm kayıtları, kategori bazlı (yağ kaybı, kas kazanımı, form koruma)
+- **DietFormSubmission** — diyet formu başvuruları, Türk telefon format validasyonu
+- **ConsentRecord** — KVKK/açık rıza/ticari ileti onay kayıtları (IP, zaman damgası, İYS durumu ile)
+- **BlogPost**, **Faq**, **Testimonial**, **LegalDocument** — içerik yönetimi
 
 ## Kurulum
-
-Sunucu gerekmez. `index.html` dosyasını tarayıcıda aç.
 
 ```bash
 git clone https://github.com/ridvancomez/EmirCoaching.git
 cd EmirCoaching
-# index.html'i tarayıcıda aç
+dotnet restore
+dotnet ef database update --project EmirCoaching.DataAccess --startup-project EmirCoaching.Web
+dotnet run --project EmirCoaching.Web
 ```
 
----
+## Durum
 
-## Ekran Görüntüleri
-
-*(yakında)*
-
----
-
-## Lisans
-
-Tasarım ve içerik hakları Emir Coaching'e aittir.
+🚧 Aktif geliştirme aşamasında.
