@@ -4,12 +4,7 @@ using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Business.Services.Abstract;
 
-public interface IFaqService
+public interface IFaqService : ICrudService<FaqResponse, CreateFaqRequest, UpdateFaqRequest>
 {
-    Task<IEnumerable<FaqDto>> GetByGroupAsync(FaqGroup group);
-    Task<IEnumerable<FaqDto>> GetAllAsync();
-    Task<FaqDto?> GetByIdAsync(int id);
-    Task<Result<int>> CreateAsync(CreateFaqDto dto);
-    Task<Result> UpdateAsync(UpdateFaqDto dto);
-    Task<Result> DeleteAsync(int id);
+    Task<Result<IReadOnlyList<FaqResponse>>> GetByGroupAsync(FaqGroup group);
 }

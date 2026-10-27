@@ -9,6 +9,5 @@ public class PackageModuleItemConfiguration : IEntityTypeConfiguration<PackageMo
     public void Configure(EntityTypeBuilder<PackageModuleItem> builder)
     {
         builder.Property(x => x.Text).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.LockedLabel).HasMaxLength(100);
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmirCoaching.DataAccess.Repositories.Concrete;
 
-public class Repository<T>(AppDbContext context) : IRepository<T> where T : BaseEntity
+public abstract class Repository<T>(AppDbContext context) : IRepository<T> where T : BaseEntity
 {
     protected readonly AppDbContext Context = context;
     protected readonly DbSet<T> Set = context.Set<T>();
@@ -24,14 +24,4 @@ public class Repository<T>(AppDbContext context) : IRepository<T> where T : Base
 
     public void Remove(T entity) =>
         Set.Remove(entity);
-
-    protected static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> query, int page, int size)
-    {
-        page = Math.Max(page, 1);
-        size = Math.Clamp(size, 1, 100);
-
-        var total = await query.CountAsync();
-        var items = await query.Skip((page - 1) * size).Take(size).ToListAsync();
-        return new PagedList<T>(items, total, page, size);
-    }
 }

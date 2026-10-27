@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abonelikten Çıktın | Emir Coaching</title>
+  <link rel="icon" href="images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="description"
+    content="Emir Coaching e-bülten aboneliğinden çıktın. Kampanya ve duyuru e-postaları artık sana gönderilmez.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preload" href="fonts/geologica/geologica-v5-latin_latin-ext-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter/inter-v20-latin_latin-ext-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="hata-sayfa">
+
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" title="Emir Coaching Anasayfa">
+        <img src="images/logo.png" alt="Emir Coaching Logo" title="Emir Coaching Logo" width="194" height="29"
+          class="navbar__logo-img">
+      </a>
+
+      <input type="checkbox" id="navbar-toggle" class="navbar__toggle-input">
+      <label for="navbar-toggle" class="navbar__toggle" aria-label="Menüyü aç/kapat">
+        <span class="navbar__toggle-bar"></span>
+        <span class="navbar__toggle-bar"></span>
+        <span class="navbar__toggle-bar"></span>
+      </label>
+
+      <nav class="navbar__nav" aria-label="Ana menü">
+        <ul class="navbar__menu">
+          <li class="navbar__menu-item">
+            <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="paketler.html" class="navbar__menu-link" title="Paketler sayfasına git">Paketler</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="degisimler.html" class="navbar__menu-link" title="Değişimler sayfasına git">Değişimler</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="mobile-drawer-overlay" aria-hidden="true"></div>
+
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Mobil menü" aria-hidden="true">
+    <a href="index.html" class="mobile-drawer__logo" title="Emir Coaching Anasayfa">
+      <img src="images/footer-logo.png" alt="Emir Coaching Logo" title="Emir Coaching Logo" width="194" height="29"
+        class="mobile-drawer__logo-img">
+    </a>
+
+    <nav class="mobile-drawer__nav" aria-label="Mobil ana menü">
+      <ul class="mobile-drawer__menu">
+        <li class="mobile-drawer__item">
+          <a href="index.html" class="mobile-drawer__link" title="Ana Sayfa">Ana Sayfa</a>
+        </li>
+        <li class="mobile-drawer__item">
+          <button type="button" class="mobile-drawer__link mobile-drawer__submenu-toggle" aria-expanded="false"
+            aria-controls="mobile-drawer-packages">
+            Paketler
+            <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="mobile-drawer__chevron"
+              aria-hidden="true"></iconify-icon>
+          </button>
+          <ul id="mobile-drawer-packages" class="mobile-drawer__submenu">
+            <li>
+              <a href="paketler.html#temel-paket" class="mobile-drawer__sublink" title="Başlangıç &amp; Deneme paketine git">Başlangıç &amp; Deneme</a>
+            </li>
+            <li>
+              <a href="paketler.html#orta-paket" class="mobile-drawer__sublink" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a>
+            </li>
+            <li>
+              <a href="paketler.html#premium-paket" class="mobile-drawer__sublink" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a>
+            </li>
+          </ul>
+        </li>
+        <li class="mobile-drawer__item">
+          <a href="hakkimda.html" class="mobile-drawer__link" title="Hakkımda sayfasına git">Hakkımda</a>
+        </li>
+        <li class="mobile-drawer__item">
+          <a href="degisimler.html" class="mobile-drawer__link" title="Değişimler sayfasına git">Değişimler</a>
+        </li>
+        <li class="mobile-drawer__item">
+          <a href="blog.html" class="mobile-drawer__link" title="Blog sayfasına git">Blog</a>
+        </li>
+        <li class="mobile-drawer__item">
+          <a href="iletisim.html" class="mobile-drawer__link" title="İletişim sayfasına git">İletişim</a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- ==================== Bülten İptal Hero ==================== -->
+    <!-- Abonelikten çıkma işlemini Brevo yapar (e-postadaki "Abonelikten çık" linki → Brevo sayfası).
+         Bu sayfa yalnızca çıkış sonrası onay ekranıdır; Brevo'da yönlendirme adresi olarak kullanılır. -->
+    <section class="paketler-hero paketler-hero--compact hata-404 hata-404--sunucu bulten-iptal"
+      aria-labelledby="bulten-iptal-title">
+      <img src="images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+        title="Emir Coaching" class="paketler-hero__bg">
+      <div class="paketler-hero__overlay" aria-hidden="true"></div>
+      <div class="paketler-hero__fade" aria-hidden="true"></div>
+
+      <div class="paketler-hero__content">
+        <nav class="paketler-hero__breadcrumb" aria-label="Sayfa konumu">
+          <ul class="paketler-hero__breadcrumb-list">
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="index.html" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
+            </li>
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="bulten-iptal.html" class="paketler-hero__breadcrumb-link" title="Bülten Aboneliği" aria-current="page">Bülten Aboneliği</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Dev ikon (dekoratif): 404/501'deki rakamın yerini alır -->
+        <iconify-icon icon="mdi:email-check-outline" mode="svg" noobserver class="bulten-iptal__ikon"
+          aria-hidden="true"></iconify-icon>
+
+        <h1 id="bulten-iptal-title" class="hata-404__title">
+          Abonelikten <span class="hata-404__title-vurgu">Çıktın</span>
+        </h1>
+        <p class="hata-404__text">E-posta adresin bülten listemizden çıkarıldı. Fikrini değiştirirsen sitenin altındaki alandan yeniden abone olabilirsin.</p>
+
+        <div class="cta__actions hata-404__actions">
+          <a href="index.html" class="hero__button hero__button--primary" title="Ana sayfaya dön">Ana Sayfaya Dön</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer footer--sade">
+    <img src="images/footer-e.png" alt="Emir Coaching dekoratif E harfi" title="Emir Coaching" width="752" height="394" class="footer__deco" aria-hidden="true">
+
+    <div class="footer__container">
+      <div class="footer__top">
+        <img src="images/footer-logo.png" alt="Emir Coaching Logo" title="Emir Coaching" width="434" height="64" class="footer__logo">
+      </div>
+      <!-- Alt satır: logonun alt boşluğunun içine oturur, footer yüksekliğini değiştirmez (yıl JS ile güncellenir) -->
+      <div class="footer__bottom">
+        <p class="footer__copyright"><span class="footer__copyright-kelime">Copyright </span>&copy; <span data-yil>2026</span> EmirCoaching</p>
+        <a href="https://github.com/ridvancomez" class="footer__credit" title="Rıdvan Çömez GitHub profili" target="_blank" rel="noopener">Created by Rıdvan Çömez</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

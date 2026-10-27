@@ -9,6 +9,7 @@ public class DietFormSubmissionConfiguration : IEntityTypeConfiguration<DietForm
     public void Configure(EntityTypeBuilder<DietFormSubmission> builder)
     {
         builder.Property(x => x.FullName).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Email).HasMaxLength(256).IsRequired();
         builder.Property(x => x.PhoneNumber).HasMaxLength(20).IsRequired();
         builder.Property(x => x.HeightCm).HasPrecision(5, 1);
         builder.Property(x => x.CurrentWeight).HasPrecision(5, 1);
@@ -19,6 +20,8 @@ public class DietFormSubmissionConfiguration : IEntityTypeConfiguration<DietForm
         builder.Property(x => x.Supplements).HasMaxLength(500);
 
         builder.HasIndex(x => x.Status);
+        builder.HasIndex(x => x.Email);
+        builder.HasIndex(x => x.PhoneNumber);
 
         builder.HasMany(x => x.ConsentRecords)
             .WithOne(x => x.DietFormSubmission)

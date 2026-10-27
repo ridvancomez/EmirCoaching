@@ -16,7 +16,8 @@ EmirCoaching/
 ├── EmirCoaching.Entities/      # Domain modelleri, BaseEntity, Identity
 ├── EmirCoaching.DataAccess/    # AppDbContext, Repository/UnitOfWork, migrations
 ├── EmirCoaching.Business/      # Servisler, DTO'lar, FluentValidation validators
-└── EmirCoaching.Web/           # Controllers, Views, Admin paneli
+├── EmirCoaching.API/           # Controllers, DI, CORS (REST API)
+└── EmirCoaching.Web/           # Statik site (wwwroot)
 ## Mimari Kararlar
 
 - **Repository + Unit of Work Pattern** — `IRepository<T>` generic repository, servis katmanında işlem bütünlüğü için `IUnitOfWork` (transaction desteğiyle)
@@ -39,7 +40,8 @@ EmirCoaching/
 git clone https://github.com/ridvancomez/EmirCoaching.git
 cd EmirCoaching
 dotnet restore
-dotnet ef database update --project EmirCoaching.DataAccess --startup-project EmirCoaching.Web
+dotnet ef database update --project EmirCoaching.DataAccess --startup-project EmirCoaching.API
+dotnet run --project EmirCoaching.API
 dotnet run --project EmirCoaching.Web
 ```
 

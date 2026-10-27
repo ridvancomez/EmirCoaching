@@ -2,7 +2,11 @@ using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Entities.Entities;
 
-public class PackageModule : BaseEntity
+/// <summary>
+/// Paket detay sayfasındaki modül kartı (Antrenman, Beslenme, Takip &amp; Ölçüm, Koçluk).
+/// Kartın "4 Modül" rozeti kilitli olmayan kalem sayısından hesaplanır.
+/// </summary>
+public class PackageModule : BaseEntity, ISortable
 {
     public string Title { get; set; } = string.Empty;
     public string IconKey { get; set; } = string.Empty;

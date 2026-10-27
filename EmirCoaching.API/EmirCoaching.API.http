@@ -1,0 +1,6 @@
+@EmirCoaching.API_HostAddress = http://localhost:5164
+
+GET {{EmirCoaching.API_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###

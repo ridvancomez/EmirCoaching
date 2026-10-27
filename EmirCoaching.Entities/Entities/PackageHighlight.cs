@@ -2,9 +2,15 @@ using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Entities.Entities;
 
-public class PackageHighlight : BaseEntity
+/// <summary>
+/// Paket kartındaki özellik satırı (paketler sayfası ve ana sayfa "Bu Pakette Neler Var").
+/// Paketler arasındaki tek içerik farkı kilitli satırdır (örn. Zoom görüşmesi 3 aylıkta kilitli).
+/// "Pakete Özel" / "6 ve 12 Aylık Pakette" etiket metinleri front-end'de sabittir.
+/// </summary>
+public class PackageHighlight : BaseEntity, ISortable
 {
     public string Text { get; set; } = string.Empty;
+    public bool IsLocked { get; set; } // paketler-card__feature--kilitli
     public int SortOrder { get; set; }
 
     public int PackageId { get; set; }

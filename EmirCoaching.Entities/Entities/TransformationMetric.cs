@@ -2,7 +2,11 @@ using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Entities.Entities;
 
-public class TransformationMetric : BaseEntity
+/// <summary>
+/// Değişim kartındaki ölçüm satırı (Ağırlık: -12 KG, Yağ Oranı: -%8, Kas Kütlesi: +2 KG).
+/// Değer serbest metindir ("Sabit" gibi değerler de girilebilir).
+/// </summary>
+public class TransformationMetric : BaseEntity, ISortable
 {
     public string Label { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;

@@ -16,4 +16,10 @@ public class LegalDocumentRepository(AppDbContext context)
         await Set.IgnoreQueryFilters()
             .Where(x => x.Type == type)
             .MaxAsync(x => (int?)x.Version) ?? 0;
+
+    public async Task<IReadOnlyList<LegalDocumentRevision>> GetRevisionsAsync(LegalDocumentType type) =>
+        await Context.LegalDocumentRevisions.AsNoTracking()
+            .Where(x => x.Type == type)
+            .OrderByDescending(x => x.Version)
+            .ToListAsync();
 }

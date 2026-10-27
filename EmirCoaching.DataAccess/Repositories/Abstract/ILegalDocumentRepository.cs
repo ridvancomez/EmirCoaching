@@ -9,4 +9,7 @@ public interface ILegalDocumentRepository : IRepository<LegalDocument>
 
     // Silinmiş sürümler dahil en yüksek sürüm numarası (yoksa 0)
     Task<int> GetLatestVersionAsync(LegalDocumentType type);
+
+    // "Revizyon Geçmişi": yeniden eskiye
+    Task<IReadOnlyList<LegalDocumentRevision>> GetRevisionsAsync(LegalDocumentType type);
 }

@@ -1,18 +1,19 @@
 using EmirCoaching.Business.Common;
 using EmirCoaching.Business.Dtos;
-using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Business.Services.Abstract;
 
 public interface ITransformationService
 {
-    // sort: "en-yeniler" (varsayılan) | "en-eskiler"
-    Task<IEnumerable<TransformationDto>> GetListAsync(TransformationCategory? category, string? sort);
-    Task<IEnumerable<TransformationDto>> GetHomeAsync();
-    Task<TransformationDetailDto?> GetDetailAsync(int id);
+    // typeSlug: TransformationType.Slug (data-category); sort: "en-yeniler" (varsayılan) | "en-eskiler"
+    Task<Result<IReadOnlyList<TransformationResponse>>> GetListAsync(string? typeSlug, string? sort);
+    Task<Result<IReadOnlyList<TransformationResponse>>> GetHomeAsync();
+    Task<Result<TransformationDetailResponse>> GetDetailAsync(int id);
 
     // Admin
-    Task<Result<int>> CreateAsync(CreateTransformationDto dto);
-    Task<Result> UpdateAsync(UpdateTransformationDto dto);
+    Task<Result<IReadOnlyList<TransformationResponse>>> GetAllAsync(); // pasifler dahil
+    Task<Result<TransformationDetailResponse>> GetByIdAsync(int id);  // pasif olsa da döner
+    Task<Result<int>> CreateAsync(CreateTransformationRequest request);
+    Task<Result> UpdateAsync(UpdateTransformationRequest request);
     Task<Result> DeleteAsync(int id);
 }

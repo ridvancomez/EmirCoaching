@@ -1,7 +1,6 @@
 using EmirCoaching.DataAccess.Context;
 using EmirCoaching.DataAccess.Repositories.Abstract;
 using EmirCoaching.DataAccess.Repositories.Concrete;
-using EmirCoaching.Entities.Common;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EmirCoaching.DataAccess.Repositories.UnitOfWork;
@@ -14,16 +13,37 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork, IDisposable
     private IDbContextTransaction? _transaction;
 
     public IPackageRepository Packages => Get(() => new PackageRepository(context));
-    public IBlogPostRepository BlogPosts => Get(() => new BlogPostRepository(context));
-    public ITransformationRepository Transformations => Get(() => new TransformationRepository(context));
-    public IFaqRepository Faqs => Get(() => new FaqRepository(context));
-    public ILegalDocumentRepository LegalDocuments => Get(() => new LegalDocumentRepository(context));
-    public IContactMessageRepository ContactMessages => Get(() => new ContactMessageRepository(context));
-    public IDietFormRepository DietForms => Get(() => new DietFormRepository(context));
-    public INewsletterRepository NewsletterSubscribers => Get(() => new NewsletterRepository(context));
+    public IPackageModuleRepository PackageModules => Get(() => new PackageModuleRepository(context));
+    public IPackageHighlightRepository PackageHighlights => Get(() => new PackageHighlightRepository(context));
+    public ITestimonialRepository Testimonials => Get(() => new TestimonialRepository(context));
 
-    public IRepository<T> Repository<T>() where T : BaseEntity =>
-        Get<IRepository<T>>(() => new Repository<T>(context));
+    public IBlogCategoryRepository BlogCategories => Get(() => new BlogCategoryRepository(context));
+    public IBlogPostRepository BlogPosts => Get(() => new BlogPostRepository(context));
+
+    public ITransformationTypeRepository TransformationTypes => Get(() => new TransformationTypeRepository(context));
+    public ITransformationRepository Transformations => Get(() => new TransformationRepository(context));
+    public ITransformationMetricRepository TransformationMetrics => Get(() => new TransformationMetricRepository(context));
+
+    public IFaqRepository Faqs => Get(() => new FaqRepository(context));
+    public IVideoQuestionRepository VideoQuestions => Get(() => new VideoQuestionRepository(context));
+    public ISiteStatRepository SiteStats => Get(() => new SiteStatRepository(context));
+    public ISiteSettingRepository SiteSettings => Get(() => new SiteSettingRepository(context));
+    public ISocialLinkRepository SocialLinks => Get(() => new SocialLinkRepository(context));
+    public ISocialPostRepository SocialPosts => Get(() => new SocialPostRepository(context));
+    public IPageContentRepository PageContents => Get(() => new PageContentRepository(context));
+    public IDietProgramRepository DietPrograms => Get(() => new DietProgramRepository(context));
+    public IDietProgramStepRepository DietProgramSteps => Get(() => new DietProgramStepRepository(context));
+    public ILegalDocumentRepository LegalDocuments => Get(() => new LegalDocumentRepository(context));
+
+    public IContactMessageRepository ContactMessages => Get(() => new ContactMessageRepository(context));
+    public IDietFormSubmissionRepository DietFormSubmissions => Get(() => new DietFormSubmissionRepository(context));
+    public INewsletterSubscriberRepository NewsletterSubscribers => Get(() => new NewsletterSubscriberRepository(context));
+    public IConsentRecordRepository ConsentRecords => Get(() => new ConsentRecordRepository(context));
+
+    public IRefreshTokenRepository RefreshTokens => Get(() => new RefreshTokenRepository(context));
+    public ILoginAttemptRepository LoginAttempts => Get(() => new LoginAttemptRepository(context));
+
+    public IUploadReferenceRepository UploadReferences => Get(() => new UploadReferenceRepository(context));
 
     private TRepository Get<TRepository>(Func<TRepository> factory) where TRepository : class
     {

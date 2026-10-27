@@ -11,7 +11,6 @@ public class ContactMessageConfiguration : IEntityTypeConfiguration<ContactMessa
         builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
         builder.Property(x => x.Phone).HasMaxLength(20).IsRequired();
         builder.Property(x => x.Email).HasMaxLength(256).IsRequired();
-        builder.Property(x => x.Location).HasMaxLength(20);
         builder.Property(x => x.Message).HasMaxLength(2000);
 
         builder.HasIndex(x => x.Status);

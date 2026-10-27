@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmirCoaching.Business", "Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmirCoaching.Web", "EmirCoaching.Web\EmirCoaching.Web.csproj", "{60A5A8A4-E484-4C77-946A-B6E3972986E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmirCoaching.API", "EmirCoaching.API\EmirCoaching.API.csproj", "{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{60A5A8A4-E484-4C77-946A-B6E3972986E2}.Release|x64.Build.0 = Release|Any CPU
 		{60A5A8A4-E484-4C77-946A-B6E3972986E2}.Release|x86.ActiveCfg = Release|Any CPU
 		{60A5A8A4-E484-4C77-946A-B6E3972986E2}.Release|x86.Build.0 = Release|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Debug|x64.Build.0 = Debug|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Debug|x86.Build.0 = Debug|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Release|x64.ActiveCfg = Release|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Release|x64.Build.0 = Release|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Release|x86.ActiveCfg = Release|Any CPU
+		{673B8FB1-E6FC-42F7-BD03-BE95F9C7CCD2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

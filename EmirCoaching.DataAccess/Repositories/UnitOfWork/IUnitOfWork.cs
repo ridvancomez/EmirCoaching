@@ -1,21 +1,51 @@
 using EmirCoaching.DataAccess.Repositories.Abstract;
-using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.DataAccess.Repositories.UnitOfWork;
 
+// Kural: her entity için I{Entity}Repository; property adı AppDbContext'teki DbSet adıyla aynı.
+// Repository'si olmayanlar üst kaydı üzerinden yönetilir:
+// PackageModuleItem → PackageModule (cascade), BlogTag/BlogPostTag → BlogPosts, LegalDocumentRevision → LegalDocuments.
 public interface IUnitOfWork : IAsyncDisposable
 {
+    // Paketler
     IPackageRepository Packages { get; }
-    IBlogPostRepository BlogPosts { get; }
-    ITransformationRepository Transformations { get; }
-    IFaqRepository Faqs { get; }
-    ILegalDocumentRepository LegalDocuments { get; }
-    IContactMessageRepository ContactMessages { get; }
-    IDietFormRepository DietForms { get; }
-    INewsletterRepository NewsletterSubscribers { get; }
+    IPackageModuleRepository PackageModules { get; }
+    IPackageHighlightRepository PackageHighlights { get; }
+    ITestimonialRepository Testimonials { get; }
 
-    // Özel arayüzü olmayan entity'ler için (SiteSetting, SiteStat, BlogCategory, ConsentRecord ...)
-    IRepository<T> Repository<T>() where T : BaseEntity;
+    // Blog
+    IBlogCategoryRepository BlogCategories { get; }
+    IBlogPostRepository BlogPosts { get; }
+
+    // Değişimler
+    ITransformationTypeRepository TransformationTypes { get; }
+    ITransformationRepository Transformations { get; }
+    ITransformationMetricRepository TransformationMetrics { get; }
+
+    // Site içeriği
+    IFaqRepository Faqs { get; }
+    IVideoQuestionRepository VideoQuestions { get; }
+    ISiteStatRepository SiteStats { get; }
+    ISiteSettingRepository SiteSettings { get; }
+    ISocialLinkRepository SocialLinks { get; }
+    ISocialPostRepository SocialPosts { get; }
+    IPageContentRepository PageContents { get; }
+    IDietProgramRepository DietPrograms { get; }
+    IDietProgramStepRepository DietProgramSteps { get; }
+    ILegalDocumentRepository LegalDocuments { get; }
+
+    // Formlar ve onaylar
+    IContactMessageRepository ContactMessages { get; }
+    IDietFormSubmissionRepository DietFormSubmissions { get; }
+    INewsletterSubscriberRepository NewsletterSubscribers { get; }
+    IConsentRecordRepository ConsentRecords { get; }
+
+    // Kimlik doğrulama (kullanıcılar UserManager ile yönetilir)
+    IRefreshTokenRepository RefreshTokens { get; }
+    ILoginAttemptRepository LoginAttempts { get; }
+
+    // Entity'ye bağlı olmayan sorgu: yüklenen dosyaları kullanan kayıtlar (görsel temizliği)
+    IUploadReferenceRepository UploadReferences { get; }
 
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();

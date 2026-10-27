@@ -2,15 +2,27 @@ using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Entities.Entities;
 
-public class Package : BaseEntity
+/// <summary>
+/// Koçluk paketi (Başlangıç &amp; Deneme, Dönüşüm Protokolü, VIP Yaşam Tarzı). Her paket Salonda ve Evde
+/// olarak ayrı kayıttır. Satış Shopier'de yapılır; sitede yalnızca PurchaseUrl'e yönlendirilir.
+/// Kullanıldığı yerler: ana sayfa fiyat kartları, paketler sayfası, paket detay, blog detaydaki önerilen paket.
+/// </summary>
+public class Package : BaseEntity, ISluggable, ISortable, IActivatable
 {
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
-    public string Subtitle { get; set; } = string.Empty;
+    public string Subtitle { get; set; } = string.Empty; // "6 Aylık Dönüşüm Programı"
     public int DurationMonths { get; set; }
     public decimal Price { get; set; }
     public PackageLocation Location { get; set; }
     public string ShortDescription { get; set; } = string.Empty;
+
+    // Shopier ürün linki ("Satın Al" butonları)
+    public string PurchaseUrl { get; set; } = string.Empty;
+
+    // "En Çok Tercih Edilen" rozeti; her Location için en fazla bir paket (filtreli unique index)
+    public bool IsFeatured { get; set; }
+
     public int SortOrder { get; set; }
     public bool IsActive { get; set; }
     public string? MetaTitle { get; set; }

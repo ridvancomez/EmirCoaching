@@ -3,85 +3,134 @@ using EmirCoaching.Business.Common;
 using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.DataAccess.Repositories.UnitOfWork;
+using EmirCoaching.Entities.Common;
 using EmirCoaching.Entities.Entities;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 
 namespace EmirCoaching.Business.Services.Concrete;
 
 public class PackageService(
     IUnitOfWork unitOfWork,
     IMapper mapper,
-    IValidator<CreatePackageDto> createValidator,
-    IValidator<UpdatePackageDto> updateValidator) : IPackageService
+    IValidator<CreatePackageRequest> createValidator,
+    IValidator<UpdatePackageRequest> updateValidator,
+    ILogger<PackageService> logger) : IPackageService
 {
     private const string SlugInUse = "Bu slug başka bir pakette kullanılıyor.";
 
-    public async Task<IEnumerable<PackageDto>> GetListAsync() =>
-        mapper.Map<List<PackageDto>>(await unitOfWork.Packages.GetActiveListAsync());
+    public async Task<Result<IReadOnlyList<PackageResponse>>> GetListAsync() =>
+        Result<IReadOnlyList<PackageResponse>>.Success(
+            mapper.Map<List<PackageResponse>>(await unitOfWork.Packages.GetActiveListAsync()));
 
-    public async Task<PackageDetailDto?> GetDetailAsync(string slug)
+    public async Task<Result<PackageDetailResponse>> GetDetailAsync(string slug)
     {
         var package = await unitOfWork.Packages.GetBySlugWithDetailsAsync(slug);
-        return package is null ? null : mapper.Map<PackageDetailDto>(package);
+        if (package is null)
+        {
+            logger.LogWarning("Paket {Slug} bulunamadı", slug);
+            return Result<PackageDetailResponse>.NotFound("Paket bulunamadı.");
+        }
+
+        return Result<PackageDetailResponse>.Success(mapper.Map<PackageDetailResponse>(package));
     }
 
-    public async Task<Result<int>> CreateAsync(CreatePackageDto dto)
+    public async Task<Result<IReadOnlyList<PackageResponse>>> GetAllAsync() =>
+        Result<IReadOnlyList<PackageResponse>>.Success(
+            mapper.Map<List<PackageResponse>>(await unitOfWork.Packages.GetOrderedListAsync()));
+
+    public async Task<Result<PackageDetailResponse>> GetByIdAsync(int id)
     {
-        var errors = await createValidator.GetErrorsAsync(dto);
+        var package = await unitOfWork.Packages.GetDetailByIdAsync(id);
+        if (package is null)
+        {
+            logger.LogWarning("Paket {Id} bulunamadı", id);
+            return Result<PackageDetailResponse>.NotFound("Paket bulunamadı.");
+        }
+
+        return Result<PackageDetailResponse>.Success(mapper.Map<PackageDetailResponse>(package));
+    }
+
+    public async Task<Result<int>> CreateAsync(CreatePackageRequest request)
+    {
+        var errors = await createValidator.GetErrorsAsync(request);
         if (errors.Count > 0)
             return Result<int>.Invalid(errors);
 
-        if (await unitOfWork.Packages.SlugExistsAsync(dto.Slug))
+        if (await unitOfWork.Packages.SlugExistsAsync(request.Slug))
             return Result<int>.Conflict(SlugInUse);
 
-        var package = mapper.Map<Package>(dto);
-        AddChildren(package, dto);
+        var package = mapper.Map<Package>(request);
+        SyncChildren(package, request);
 
-        await unitOfWork.Packages.AddAsync(package);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.BeginTransactionAsync();
+        try
+        {
+            await ReleaseFeaturedAsync(request.Location, request.IsFeatured, currentId: null);
+            await unitOfWork.Packages.AddAsync(package);
+            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.CommitAsync();
+        }
+        catch
+        {
+            await unitOfWork.RollbackAsync();
+            throw;
+        }
+
+        logger.LogInformation("Paket {Id} oluşturuldu", package.Id);
         return Result<int>.Success(package.Id);
     }
 
-    public async Task<Result> UpdateAsync(UpdatePackageDto dto)
+    public async Task<Result> UpdateAsync(UpdatePackageRequest request)
     {
-        var errors = await updateValidator.GetErrorsAsync(dto);
+        var errors = await updateValidator.GetErrorsAsync(request);
         if (errors.Count > 0)
             return Result.Invalid(errors);
 
-        var package = await unitOfWork.Packages.GetByIdWithDetailsAsync(dto.Id);
+        var package = await unitOfWork.Packages.GetByIdWithDetailsAsync(request.Id);
         if (package is null)
-            return Result.NotFound();
+            return Result.NotFound("Paket bulunamadı.");
 
-        if (await unitOfWork.Packages.SlugExistsAsync(dto.Slug, dto.Id))
+        var childErrors = CheckChildIds(package, request);
+        if (childErrors.Count > 0)
+            return Result.Invalid(childErrors);
+
+        if (await unitOfWork.Packages.SlugExistsAsync(request.Slug, request.Id))
             return Result.Conflict(SlugInUse);
 
-        mapper.Map(dto, package);
+        await unitOfWork.BeginTransactionAsync();
+        try
+        {
+            // Paket değişmeden önce çalışmalı: aksi halde eski ve yeni öne çıkan aynı SaveChanges'e düşer
+            await ReleaseFeaturedAsync(request.Location, request.IsFeatured, request.Id);
 
-        // Alt kayıtlar gönderilen listeyle değiştirilir; eskileri soft delete olur.
-        // Modül silinince takip edilen kalemleri de cascade ile soft delete olur.
-        var moduleRepository = unitOfWork.Repository<PackageModule>();
-        foreach (var module in package.Modules.ToList())
-            moduleRepository.Remove(module);
+            mapper.Map(request, package);
+            SyncChildren(package, request);
 
-        var highlightRepository = unitOfWork.Repository<PackageHighlight>();
-        foreach (var highlight in package.Highlights.ToList())
-            highlightRepository.Remove(highlight);
+            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.CommitAsync();
+        }
+        catch
+        {
+            await unitOfWork.RollbackAsync();
+            throw;
+        }
 
-        AddChildren(package, dto);
-
-        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Paket {Id} güncellendi", package.Id);
         return Result.Success();
     }
 
     public async Task<Result> DeleteAsync(int id)
     {
-        // Alt kayıtlar yüklü olmalı ki cascade ile birlikte soft delete olsunlar
+        // Alt kayıtlar (modül, kalem, öne çıkan, yorum) yüklü olmalı ki cascade ile birlikte soft delete olsunlar
         var package = await unitOfWork.Packages.GetByIdWithDetailsAsync(id);
         if (package is null)
-            return Result.NotFound();
+            return Result.NotFound("Paket bulunamadı.");
 
         unitOfWork.Packages.Remove(package);
         await unitOfWork.SaveChangesAsync();
+
+        logger.LogInformation("Paket {Id} silindi", id);
         return Result.Success();
     }
 
@@ -89,7 +138,7 @@ public class PackageService(
     {
         var package = await unitOfWork.Packages.GetByIdWithDetailsAsync(packageId);
         if (package is null)
-            return Result.NotFound();
+            return Result.NotFound("Paket bulunamadı.");
 
         var modules = package.Modules.ToDictionary(m => m.Id);
         if (moduleIds.Count != modules.Count || moduleIds.Distinct().Count() != moduleIds.Count
@@ -100,32 +149,70 @@ public class PackageService(
             modules[moduleIds[i]].SortOrder = i + 1;
 
         await unitOfWork.SaveChangesAsync();
+
+        logger.LogInformation("Paket {Id} modül sırası güncellendi", packageId);
         return Result.Success();
     }
 
-    private static void AddChildren(Package package, CreatePackageDto dto)
+    // "En Çok Tercih Edilen" her kategoride tektir: paket işaretlendiyse aynı kategorideki eskisi kaldırılır.
+    // Unique index ihlal edilmesin diye eskisi önce ayrı SaveChanges ile kaydedilir (çağıran transaction açar).
+    private async Task ReleaseFeaturedAsync(PackageLocation location, bool isFeatured, int? currentId)
     {
-        for (var m = 0; m < dto.Modules.Count; m++)
+        if (!isFeatured)
+            return;
+
+        var previous = await unitOfWork.Packages.GetFeaturedAsync(location);
+        if (previous is null || previous.Id == currentId)
+            return;
+
+        previous.IsFeatured = false;
+        await unitOfWork.SaveChangesAsync();
+    }
+
+    // Gönderilen alt kayıt Id'leri bu pakete (kalemde ise aynı modüle) ait olmalı ve tekrar etmemeli.
+    private static List<string> CheckChildIds(Package package, UpdatePackageRequest request)
+    {
+        var errors = new List<string>();
+        var modules = package.Modules.ToDictionary(m => m.Id);
+
+        if (!ChildListSync.AreKnownIds(request.Modules.Select(m => m.Id), modules.Keys))
+            errors.Add("Gönderilen modüllerden biri bu pakete ait değil veya tekrar ediyor.");
+        if (!ChildListSync.AreKnownIds(request.Highlights.Select(h => h.Id), package.Highlights.Select(h => h.Id)))
+            errors.Add("Gönderilen öne çıkan maddelerden biri bu pakete ait değil veya tekrar ediyor.");
+
+        var itemsValid = request.Modules.All(m =>
         {
-            var input = dto.Modules[m];
-            var module = new PackageModule { Title = input.Title, IconKey = input.IconKey, SortOrder = m + 1 };
+            var known = m.Id is { } id && modules.TryGetValue(id, out var module) ? module.Items.Select(i => i.Id) : [];
+            return ChildListSync.AreKnownIds(m.Items.Select(i => i.Id), known);
+        });
+        if (!itemsValid)
+            errors.Add("Gönderilen kalemlerden biri kendi modülüne ait değil veya tekrar ediyor.");
 
-            for (var i = 0; i < input.Items.Count; i++)
+        return errors;
+    }
+
+    // Alt kayıtlar gönderilen listeyle eşitlenir; numaraları korunur. Listeden çıkan kayıt soft delete olur
+    // (modülle birlikte kalemleri de cascade ile). Liste sırası SortOrder olur.
+    private void SyncChildren(Package package, CreatePackageRequest request)
+    {
+        ChildListSync.Sync(package.Modules, request.Modules, m => m.Id, unitOfWork.PackageModules.Remove, (module, input, order) =>
+        {
+            module.Title = input.Title;
+            module.IconKey = input.IconKey;
+            module.SortOrder = order;
+            ChildListSync.Sync(module.Items, input.Items, i => i.Id, item => module.Items.Remove(item), (item, itemInput, itemOrder) =>
             {
-                var item = input.Items[i];
-                module.Items.Add(new PackageModuleItem
-                {
-                    Text = item.Text,
-                    State = item.State,
-                    LockedLabel = item.LockedLabel,
-                    SortOrder = i + 1
-                });
-            }
+                item.Text = itemInput.Text;
+                item.IsLocked = itemInput.IsLocked;
+                item.SortOrder = itemOrder;
+            });
+        });
 
-            package.Modules.Add(module);
-        }
-
-        for (var h = 0; h < dto.Highlights.Count; h++)
-            package.Highlights.Add(new PackageHighlight { Text = dto.Highlights[h], SortOrder = h + 1 });
+        ChildListSync.Sync(package.Highlights, request.Highlights, h => h.Id, unitOfWork.PackageHighlights.Remove, (highlight, input, order) =>
+        {
+            highlight.Text = input.Text;
+            highlight.IsLocked = input.IsLocked;
+            highlight.SortOrder = order;
+        });
     }
 }

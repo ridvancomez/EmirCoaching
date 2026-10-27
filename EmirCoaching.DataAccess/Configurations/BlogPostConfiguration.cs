@@ -13,11 +13,18 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
         builder.Property(x => x.Summary).HasMaxLength(500).IsRequired();
         builder.Property(x => x.ContentHtml).IsRequired();
         builder.Property(x => x.CoverImagePath).HasMaxLength(300);
+        builder.Property(x => x.CoverImageCaption).HasMaxLength(200);
         builder.Property(x => x.MetaTitle).HasMaxLength(70);
         builder.Property(x => x.MetaDescription).HasMaxLength(170);
 
         builder.HasIndex(x => x.Slug).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(x => new { x.IsPublished, x.PublishedAt });
+
+        // Her kategoride tek "Öne Çıkan" yazı
+        builder.HasIndex(x => x.CategoryId)
+            .IsUnique()
+            .HasFilter("[IsFeatured] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("IX_BlogPosts_Category_Featured");
 
         builder.HasOne(x => x.Author)
             .WithMany(x => x.BlogPosts)

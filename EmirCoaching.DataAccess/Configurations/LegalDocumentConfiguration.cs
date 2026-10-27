@@ -9,6 +9,7 @@ public class LegalDocumentConfiguration : IEntityTypeConfiguration<LegalDocument
     public void Configure(EntityTypeBuilder<LegalDocument> builder)
     {
         builder.Property(x => x.Title).HasMaxLength(150).IsRequired();
+        builder.Property(x => x.Note).HasMaxLength(300).IsRequired();
         builder.Property(x => x.FilePath).HasMaxLength(300);
 
         builder.HasIndex(x => new { x.Type, x.Version }).IsUnique();

@@ -3,14 +3,15 @@ using FluentValidation;
 
 namespace EmirCoaching.Business.Validation;
 
-public class CreateTransformationDtoValidator : AbstractValidator<CreateTransformationDto>
+public class CreateTransformationRequestValidator : AbstractValidator<CreateTransformationRequest>
 {
-    public CreateTransformationDtoValidator()
+    public CreateTransformationRequestValidator()
     {
         RuleFor(x => x.ClientName).NotEmpty().MaximumLength(100);
         RuleFor(x => x.Age).InclusiveBetween(10, 100);
         RuleFor(x => x.DurationWeeks).InclusiveBetween(1, 520);
-        RuleFor(x => x.Category).IsInEnum();
+        RuleFor(x => x.TransformationTypeId).GreaterThan(0);
+        RuleFor(x => x.Section).IsInEnum();
         RuleFor(x => x.Quote).NotEmpty().MaximumLength(500);
         RuleFor(x => x.Story).NotEmpty();
         RuleFor(x => x.BeforeImagePath).NotEmpty().SitePath();
@@ -26,11 +27,5 @@ public class CreateTransformationDtoValidator : AbstractValidator<CreateTransfor
     }
 }
 
-public class UpdateTransformationDtoValidator : AbstractValidator<UpdateTransformationDto>
-{
-    public UpdateTransformationDtoValidator()
-    {
-        Include(new CreateTransformationDtoValidator());
-        RuleFor(x => x.Id).GreaterThan(0);
-    }
-}
+public class UpdateTransformationRequestValidator()
+    : UpdateRequestValidator<UpdateTransformationRequest, CreateTransformationRequest>(new CreateTransformationRequestValidator());

@@ -121,6 +121,10 @@ namespace EmirCoaching.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CoverImageCaption")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("CoverImagePath")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -132,6 +136,9 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeatured")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsPublished")
@@ -176,7 +183,10 @@ namespace EmirCoaching.DataAccess.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_BlogPosts_Category_Featured")
+                        .HasFilter("[IsFeatured] = 1 AND [IsDeleted] = 0");
 
                     b.HasIndex("RecommendedPackageId");
 
@@ -187,6 +197,60 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("IsPublished", "PublishedAt");
 
                     b.ToTable("BlogPosts");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogPostTag", b =>
+                {
+                    b.Property<int>("BlogPostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BlogTagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BlogPostId", "BlogTagId");
+
+                    b.HasIndex("BlogTagId");
+
+                    b.ToTable("BlogPostTags");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("BlogTags");
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.ConsentRecord", b =>
@@ -282,9 +346,8 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Location")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<int?>("Location")
+                        .HasColumnType("int");
 
                     b.Property<string>("Message")
                         .HasMaxLength(2000)
@@ -350,10 +413,18 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("HeightCm")
                         .HasPrecision(5, 1)
@@ -393,9 +464,155 @@ namespace EmirCoaching.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
+                    b.HasIndex("PhoneNumber");
+
                     b.HasIndex("Status");
 
                     b.ToTable("DietFormSubmissions");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.DietProgram", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DietitianFullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DietitianPhotoPath")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("DietitianTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("DurationWeeks")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DietPrograms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DietitianFullName = "Ceyda Güler",
+                            DietitianPhotoPath = "/images/uzman-ceyda.jpg",
+                            DietitianTitle = "Uzm. Dr.",
+                            DurationWeeks = 4,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Price = 1950m,
+                            Title = "Kişiye Özel Diyet Planı"
+                        });
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.DietProgramStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("Icon")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DietProgramSteps");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Hedeflerini ve beslenme alışkanlıklarını içeren detaylı formu doldur.",
+                            Icon = 1,
+                            IsDeleted = false,
+                            SortOrder = 1,
+                            Title = "Formu Doldur"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Uzman koçumuz verilerini analiz ederek sana özel planını 24 saat içinde hazırlar.",
+                            Icon = 2,
+                            IsDeleted = false,
+                            SortOrder = 2,
+                            Title = "Planın Hazırlanır"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Planın sana WhatsApp üzerinden iletilir ve destek sürecimiz başlar.",
+                            Icon = 3,
+                            IsDeleted = false,
+                            SortOrder = 3,
+                            Title = "WhatsApp'tan Ulaşılır"
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.Faq", b =>
@@ -466,6 +683,11 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("datetime2");
 
@@ -503,6 +725,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             FilePath = "/yasal-metinler/kvkk-aydinlatma-metni.pdf",
                             IsCurrent = true,
                             IsDeleted = false,
+                            Note = "İlk yayın.",
                             PublishedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Title = "KVKK Aydınlatma Metni",
                             Type = 0,
@@ -515,6 +738,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             FilePath = "/yasal-metinler/acik-riza-metni.pdf",
                             IsCurrent = true,
                             IsDeleted = false,
+                            Note = "İlk yayın.",
                             PublishedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Title = "Açık Rıza Metni",
                             Type = 1,
@@ -527,6 +751,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             FilePath = "/yasal-metinler/cerez-politikasi.pdf",
                             IsCurrent = true,
                             IsDeleted = false,
+                            Note = "İlk yayın.",
                             PublishedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Title = "Çerez Politikası",
                             Type = 2,
@@ -539,6 +764,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             FilePath = "/yasal-metinler/iptal-ve-iade-kosullari.pdf",
                             IsCurrent = true,
                             IsDeleted = false,
+                            Note = "İlk yayın.",
                             PublishedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Title = "İptal ve İade Koşulları",
                             Type = 3,
@@ -551,9 +777,138 @@ namespace EmirCoaching.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsCurrent = true,
                             IsDeleted = false,
+                            Note = "İlk yayın.",
                             PublishedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Title = "Gizlilik Politikası",
                             Type = 5,
+                            Version = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FilePath = "/yasal-metinler/ticari-elektronik-ileti-onay-metni.pdf",
+                            IsCurrent = true,
+                            IsDeleted = false,
+                            Note = "İlk yayın.",
+                            PublishedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Title = "Ticari Elektronik İleti Onay Metni",
+                            Type = 4,
+                            Version = 1
+                        });
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.LegalDocumentRevision", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LegalDocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime>("RevisedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LegalDocumentId");
+
+                    b.HasIndex("Type", "Version")
+                        .IsUnique();
+
+                    b.ToTable("LegalDocumentRevisions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LegalDocumentId = 1,
+                            Note = "İlk yayın.",
+                            RevisedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0,
+                            Version = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LegalDocumentId = 2,
+                            Note = "İlk yayın.",
+                            RevisedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 1,
+                            Version = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LegalDocumentId = 3,
+                            Note = "İlk yayın.",
+                            RevisedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 2,
+                            Version = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LegalDocumentId = 4,
+                            Note = "İlk yayın.",
+                            RevisedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 3,
+                            Version = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LegalDocumentId = 5,
+                            Note = "İlk yayın.",
+                            RevisedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 5,
+                            Version = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LegalDocumentId = 6,
+                            Note = "İlk yayın.",
+                            RevisedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 4,
                             Version = 1
                         });
                 });
@@ -577,6 +932,11 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -591,6 +951,8 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
+
+                    b.HasIndex("IpAddress", "CreatedAt");
 
                     b.ToTable("NewsletterSubscribers");
                 });
@@ -618,6 +980,9 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Location")
                         .HasColumnType("int");
 
@@ -637,6 +1002,11 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("PurchaseUrl")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
@@ -661,6 +1031,11 @@ namespace EmirCoaching.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Location")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Packages_Location_Featured")
+                        .HasFilter("[IsFeatured] = 1 AND [IsDeleted] = 0");
+
                     b.HasIndex("Slug")
                         .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
@@ -675,11 +1050,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             DurationMonths = 3,
                             IsActive = true,
                             IsDeleted = false,
+                            IsFeatured = false,
                             Location = 0,
                             MetaDescription = "Emir Coaching Başlangıç & Deneme: 3 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Başlangıç & Deneme Paket Detayı | Emir Coaching",
                             Name = "Başlangıç & Deneme",
                             Price = 3450m,
+                            PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "3 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "baslangic-deneme",
                             SortOrder = 1,
@@ -692,11 +1069,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             DurationMonths = 6,
                             IsActive = true,
                             IsDeleted = false,
+                            IsFeatured = true,
                             Location = 0,
                             MetaDescription = "Emir Coaching Dönüşüm Protokolü: 6 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Dönüşüm Protokolü Paket Detayı | Emir Coaching",
                             Name = "Dönüşüm Protokolü",
                             Price = 8250m,
+                            PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "6 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "donusum-protokolu",
                             SortOrder = 2,
@@ -709,11 +1088,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             DurationMonths = 12,
                             IsActive = true,
                             IsDeleted = false,
+                            IsFeatured = false,
                             Location = 0,
                             MetaDescription = "Emir Coaching VIP Yaşam Tarzı: 12 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "VIP Yaşam Tarzı Paket Detayı | Emir Coaching",
                             Name = "VIP Yaşam Tarzı",
                             Price = 14900m,
+                            PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "12 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "vip-yasam-tarzi",
                             SortOrder = 3,
@@ -726,11 +1107,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             DurationMonths = 3,
                             IsActive = true,
                             IsDeleted = false,
+                            IsFeatured = false,
                             Location = 1,
                             MetaDescription = "Emir Coaching Başlangıç & Deneme (Evde): evde antrenmanla 3 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Başlangıç & Deneme (Evde) Paket Detayı | Emir Coaching",
                             Name = "Başlangıç & Deneme",
                             Price = 3450m,
+                            PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "Evde antrenmanla 3 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "baslangic-deneme-evde",
                             SortOrder = 1,
@@ -743,11 +1126,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             DurationMonths = 6,
                             IsActive = true,
                             IsDeleted = false,
+                            IsFeatured = true,
                             Location = 1,
                             MetaDescription = "Emir Coaching Dönüşüm Protokolü (Evde): evde antrenmanla 6 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Dönüşüm Protokolü (Evde) Paket Detayı | Emir Coaching",
                             Name = "Dönüşüm Protokolü",
                             Price = 8250m,
+                            PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "Evde antrenmanla 6 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "donusum-protokolu-evde",
                             SortOrder = 2,
@@ -760,11 +1145,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             DurationMonths = 12,
                             IsActive = true,
                             IsDeleted = false,
+                            IsFeatured = false,
                             Location = 1,
                             MetaDescription = "Emir Coaching VIP Yaşam Tarzı (Evde): evde antrenmanla 12 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "VIP Yaşam Tarzı (Evde) Paket Detayı | Emir Coaching",
                             Name = "VIP Yaşam Tarzı",
                             Price = 14900m,
+                            PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "Evde antrenmanla 12 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "vip-yasam-tarzi-evde",
                             SortOrder = 3,
@@ -787,6 +1174,9 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLocked")
                         .HasColumnType("bit");
 
                     b.Property<int>("PackageId")
@@ -815,216 +1205,360 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 1,
                             SortOrder = 1,
-                            Text = "Kişiye Özel Planlama"
+                            Text = "Kişiye özel antrenman planlaması"
                         },
                         new
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 1,
                             SortOrder = 2,
-                            Text = "Haftalık Düzenli Takip"
+                            Text = "Kalorisi hesaplanmış beslenme planı"
                         },
                         new
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 1,
                             SortOrder = 3,
-                            Text = "7/24 WhatsApp Desteği"
+                            Text = "Kan tahlili analizi & revize"
                         },
                         new
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 1,
                             SortOrder = 4,
-                            Text = "Detaylı Gelişim Raporları"
+                            Text = "Haftalık durum değerlendirmesi"
                         },
                         new
                         {
                             Id = 5,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 2,
-                            SortOrder = 1,
-                            Text = "Kişiye Özel Planlama"
+                            IsLocked = false,
+                            PackageId = 1,
+                            SortOrder = 5,
+                            Text = "Birebir WhatsApp iletişimi"
                         },
                         new
                         {
                             Id = 6,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 2,
-                            SortOrder = 2,
-                            Text = "Haftalık Düzenli Takip"
+                            IsLocked = true,
+                            PackageId = 1,
+                            SortOrder = 6,
+                            Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 7,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 2,
-                            SortOrder = 3,
-                            Text = "7/24 WhatsApp Desteği"
+                            SortOrder = 1,
+                            Text = "Kişiye özel antrenman planlaması"
                         },
                         new
                         {
                             Id = 8,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 2,
-                            SortOrder = 4,
-                            Text = "Detaylı Gelişim Raporları"
+                            SortOrder = 2,
+                            Text = "Kalorisi hesaplanmış beslenme planı"
                         },
                         new
                         {
                             Id = 9,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 3,
-                            SortOrder = 1,
-                            Text = "Kişiye Özel Planlama"
+                            IsLocked = false,
+                            PackageId = 2,
+                            SortOrder = 3,
+                            Text = "Kan tahlili analizi & revize"
                         },
                         new
                         {
                             Id = 10,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 3,
-                            SortOrder = 2,
-                            Text = "Haftalık Düzenli Takip"
+                            IsLocked = false,
+                            PackageId = 2,
+                            SortOrder = 4,
+                            Text = "Haftalık durum değerlendirmesi"
                         },
                         new
                         {
                             Id = 11,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 3,
-                            SortOrder = 3,
-                            Text = "7/24 WhatsApp Desteği"
+                            IsLocked = false,
+                            PackageId = 2,
+                            SortOrder = 5,
+                            Text = "Birebir WhatsApp iletişimi"
                         },
                         new
                         {
                             Id = 12,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 3,
-                            SortOrder = 4,
-                            Text = "Detaylı Gelişim Raporları"
+                            IsLocked = false,
+                            PackageId = 2,
+                            SortOrder = 6,
+                            Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 13,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 4,
+                            IsLocked = false,
+                            PackageId = 3,
                             SortOrder = 1,
-                            Text = "Kişiye Özel Planlama"
+                            Text = "Kişiye özel antrenman planlaması"
                         },
                         new
                         {
                             Id = 14,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 4,
+                            IsLocked = false,
+                            PackageId = 3,
                             SortOrder = 2,
-                            Text = "Haftalık Düzenli Takip"
+                            Text = "Kalorisi hesaplanmış beslenme planı"
                         },
                         new
                         {
                             Id = 15,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 4,
+                            IsLocked = false,
+                            PackageId = 3,
                             SortOrder = 3,
-                            Text = "7/24 WhatsApp Desteği"
+                            Text = "Kan tahlili analizi & revize"
                         },
                         new
                         {
                             Id = 16,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 4,
+                            IsLocked = false,
+                            PackageId = 3,
                             SortOrder = 4,
-                            Text = "Detaylı Gelişim Raporları"
+                            Text = "Haftalık durum değerlendirmesi"
                         },
                         new
                         {
                             Id = 17,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 5,
-                            SortOrder = 1,
-                            Text = "Kişiye Özel Planlama"
+                            IsLocked = false,
+                            PackageId = 3,
+                            SortOrder = 5,
+                            Text = "Birebir WhatsApp iletişimi"
                         },
                         new
                         {
                             Id = 18,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 5,
-                            SortOrder = 2,
-                            Text = "Haftalık Düzenli Takip"
+                            IsLocked = false,
+                            PackageId = 3,
+                            SortOrder = 6,
+                            Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 19,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 5,
-                            SortOrder = 3,
-                            Text = "7/24 WhatsApp Desteği"
+                            IsLocked = false,
+                            PackageId = 4,
+                            SortOrder = 1,
+                            Text = "Kişiye özel antrenman planlaması"
                         },
                         new
                         {
                             Id = 20,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 5,
-                            SortOrder = 4,
-                            Text = "Detaylı Gelişim Raporları"
+                            IsLocked = false,
+                            PackageId = 4,
+                            SortOrder = 2,
+                            Text = "Kalorisi hesaplanmış beslenme planı"
                         },
                         new
                         {
                             Id = 21,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 6,
-                            SortOrder = 1,
-                            Text = "Kişiye Özel Planlama"
+                            IsLocked = false,
+                            PackageId = 4,
+                            SortOrder = 3,
+                            Text = "Kan tahlili analizi & revize"
                         },
                         new
                         {
                             Id = 22,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 6,
-                            SortOrder = 2,
-                            Text = "Haftalık Düzenli Takip"
+                            IsLocked = false,
+                            PackageId = 4,
+                            SortOrder = 4,
+                            Text = "Haftalık durum değerlendirmesi"
                         },
                         new
                         {
                             Id = 23,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            PackageId = 6,
-                            SortOrder = 3,
-                            Text = "7/24 WhatsApp Desteği"
+                            IsLocked = false,
+                            PackageId = 4,
+                            SortOrder = 5,
+                            Text = "Birebir WhatsApp iletişimi"
                         },
                         new
                         {
                             Id = 24,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = true,
+                            PackageId = 4,
+                            SortOrder = 6,
+                            Text = "Yüz Yüze Zoom Görüşmesi"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 5,
+                            SortOrder = 1,
+                            Text = "Kişiye özel antrenman planlaması"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 5,
+                            SortOrder = 2,
+                            Text = "Kalorisi hesaplanmış beslenme planı"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 5,
+                            SortOrder = 3,
+                            Text = "Kan tahlili analizi & revize"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 5,
+                            SortOrder = 4,
+                            Text = "Haftalık durum değerlendirmesi"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 5,
+                            SortOrder = 5,
+                            Text = "Birebir WhatsApp iletişimi"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 5,
+                            SortOrder = 6,
+                            Text = "Yüz Yüze Zoom Görüşmesi"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 6,
+                            SortOrder = 1,
+                            Text = "Kişiye özel antrenman planlaması"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 6,
+                            SortOrder = 2,
+                            Text = "Kalorisi hesaplanmış beslenme planı"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 6,
+                            SortOrder = 3,
+                            Text = "Kan tahlili analizi & revize"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
                             PackageId = 6,
                             SortOrder = 4,
-                            Text = "Detaylı Gelişim Raporları"
+                            Text = "Haftalık durum değerlendirmesi"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 6,
+                            SortOrder = 5,
+                            Text = "Birebir WhatsApp iletişimi"
+                        },
+                        new
+                        {
+                            Id = 36,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsLocked = false,
+                            PackageId = 6,
+                            SortOrder = 6,
+                            Text = "Yüz Yüze Zoom Görüşmesi"
                         });
                 });
 
@@ -1330,17 +1864,13 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LockedLabel")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -1363,9 +1893,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 1,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kişiye Özel Antrenman Planlaması"
                         },
                         new
@@ -1373,9 +1903,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 1,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Haftalık Program Güncellemesi"
                         },
                         new
@@ -1383,9 +1913,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 3,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 1,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Hareket Tekniği Videoları"
                         },
                         new
@@ -1393,9 +1923,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 4,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 1,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Sakatlık Uyarlaması"
                         },
                         new
@@ -1403,9 +1933,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 2,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kalorisi Hesaplanmış Beslenme Planı"
                         },
                         new
@@ -1413,9 +1943,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 2,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Öğün Şablonları"
                         },
                         new
@@ -1423,9 +1953,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 2,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Dışarıda Yeme Rehberi"
                         },
                         new
@@ -1433,9 +1963,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 8,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 2,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Supplement Planlaması"
                         },
                         new
@@ -1443,9 +1973,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 9,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 3,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Haftalık Durum Değerlendirmesi"
                         },
                         new
@@ -1453,9 +1983,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 10,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 3,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Vücut Kompozisyonu Takibi"
                         },
                         new
@@ -1463,9 +1993,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 11,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 3,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Aylık Detaylı Rapor"
                         },
                         new
@@ -1473,9 +2003,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 12,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 4,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Birebir WhatsApp İletişimi"
                         },
                         new
@@ -1483,9 +2013,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 13,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 4,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Anlık Program Revizeleri"
                         },
                         new
@@ -1493,9 +2023,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 14,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 4,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
@@ -1503,10 +2033,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 15,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            LockedLabel = "6 ve 12 Aylık Pakette",
+                            IsLocked = true,
                             ModuleId = 4,
                             SortOrder = 4,
-                            State = 2,
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
@@ -1514,9 +2043,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 16,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 5,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kişiye Özel Antrenman Planlaması"
                         },
                         new
@@ -1524,9 +2053,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 17,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 5,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Haftalık Program Güncellemesi"
                         },
                         new
@@ -1534,9 +2063,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 18,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 5,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Hareket Tekniği Videoları"
                         },
                         new
@@ -1544,9 +2073,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 19,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 5,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Sakatlık Uyarlaması"
                         },
                         new
@@ -1554,9 +2083,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 20,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 6,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kalorisi Hesaplanmış Beslenme Planı"
                         },
                         new
@@ -1564,9 +2093,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 21,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 6,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Öğün Şablonları"
                         },
                         new
@@ -1574,9 +2103,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 22,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 6,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Dışarıda Yeme Rehberi"
                         },
                         new
@@ -1584,9 +2113,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 23,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 6,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Supplement Planlaması"
                         },
                         new
@@ -1594,9 +2123,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 24,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 7,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Haftalık Durum Değerlendirmesi"
                         },
                         new
@@ -1604,9 +2133,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 25,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 7,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Vücut Kompozisyonu Takibi"
                         },
                         new
@@ -1614,9 +2143,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 26,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 7,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Aylık Detaylı Rapor"
                         },
                         new
@@ -1624,9 +2153,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 27,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 8,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Birebir WhatsApp İletişimi"
                         },
                         new
@@ -1634,9 +2163,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 28,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 8,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Anlık Program Revizeleri"
                         },
                         new
@@ -1644,9 +2173,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 29,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 8,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
@@ -1654,9 +2183,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 30,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 8,
                             SortOrder = 4,
-                            State = 1,
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
@@ -1664,9 +2193,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 31,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 9,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kişiye Özel Antrenman Planlaması"
                         },
                         new
@@ -1674,9 +2203,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 32,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 9,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Haftalık Program Güncellemesi"
                         },
                         new
@@ -1684,9 +2213,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 33,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 9,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Hareket Tekniği Videoları"
                         },
                         new
@@ -1694,9 +2223,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 34,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 9,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Sakatlık Uyarlaması"
                         },
                         new
@@ -1704,9 +2233,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 35,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 10,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kalorisi Hesaplanmış Beslenme Planı"
                         },
                         new
@@ -1714,9 +2243,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 36,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 10,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Öğün Şablonları"
                         },
                         new
@@ -1724,9 +2253,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 37,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 10,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Dışarıda Yeme Rehberi"
                         },
                         new
@@ -1734,9 +2263,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 38,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 10,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Supplement Planlaması"
                         },
                         new
@@ -1744,9 +2273,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 39,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 11,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Haftalık Durum Değerlendirmesi"
                         },
                         new
@@ -1754,9 +2283,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 40,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 11,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Vücut Kompozisyonu Takibi"
                         },
                         new
@@ -1764,9 +2293,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 41,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 11,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Aylık Detaylı Rapor"
                         },
                         new
@@ -1774,9 +2303,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 42,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 12,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Birebir WhatsApp İletişimi"
                         },
                         new
@@ -1784,9 +2313,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 43,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 12,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Anlık Program Revizeleri"
                         },
                         new
@@ -1794,9 +2323,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 44,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 12,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
@@ -1804,9 +2333,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 45,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 12,
                             SortOrder = 4,
-                            State = 1,
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
@@ -1814,9 +2343,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 46,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 13,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kişiye Özel Antrenman Planlaması"
                         },
                         new
@@ -1824,9 +2353,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 47,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 13,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Haftalık Program Güncellemesi"
                         },
                         new
@@ -1834,9 +2363,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 48,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 13,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Hareket Tekniği Videoları"
                         },
                         new
@@ -1844,9 +2373,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 49,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 13,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Sakatlık Uyarlaması"
                         },
                         new
@@ -1854,9 +2383,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 50,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 14,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kalorisi Hesaplanmış Beslenme Planı"
                         },
                         new
@@ -1864,9 +2393,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 51,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 14,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Öğün Şablonları"
                         },
                         new
@@ -1874,9 +2403,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 52,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 14,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Dışarıda Yeme Rehberi"
                         },
                         new
@@ -1884,9 +2413,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 53,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 14,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Supplement Planlaması"
                         },
                         new
@@ -1894,9 +2423,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 54,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 15,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Haftalık Durum Değerlendirmesi"
                         },
                         new
@@ -1904,9 +2433,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 55,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 15,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Vücut Kompozisyonu Takibi"
                         },
                         new
@@ -1914,9 +2443,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 56,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 15,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Aylık Detaylı Rapor"
                         },
                         new
@@ -1924,9 +2453,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 57,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 16,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Birebir WhatsApp İletişimi"
                         },
                         new
@@ -1934,9 +2463,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 58,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 16,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Anlık Program Revizeleri"
                         },
                         new
@@ -1944,9 +2473,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 59,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 16,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
@@ -1954,10 +2483,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 60,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
-                            LockedLabel = "6 ve 12 Aylık Pakette",
+                            IsLocked = true,
                             ModuleId = 16,
                             SortOrder = 4,
-                            State = 2,
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
@@ -1965,9 +2493,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 61,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 17,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kişiye Özel Antrenman Planlaması"
                         },
                         new
@@ -1975,9 +2503,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 62,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 17,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Haftalık Program Güncellemesi"
                         },
                         new
@@ -1985,9 +2513,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 63,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 17,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Hareket Tekniği Videoları"
                         },
                         new
@@ -1995,9 +2523,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 64,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 17,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Sakatlık Uyarlaması"
                         },
                         new
@@ -2005,9 +2533,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 65,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 18,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kalorisi Hesaplanmış Beslenme Planı"
                         },
                         new
@@ -2015,9 +2543,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 66,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 18,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Öğün Şablonları"
                         },
                         new
@@ -2025,9 +2553,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 67,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 18,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Dışarıda Yeme Rehberi"
                         },
                         new
@@ -2035,9 +2563,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 68,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 18,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Supplement Planlaması"
                         },
                         new
@@ -2045,9 +2573,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 69,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 19,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Haftalık Durum Değerlendirmesi"
                         },
                         new
@@ -2055,9 +2583,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 70,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 19,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Vücut Kompozisyonu Takibi"
                         },
                         new
@@ -2065,9 +2593,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 71,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 19,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Aylık Detaylı Rapor"
                         },
                         new
@@ -2075,9 +2603,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 72,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 20,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Birebir WhatsApp İletişimi"
                         },
                         new
@@ -2085,9 +2613,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 73,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 20,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Anlık Program Revizeleri"
                         },
                         new
@@ -2095,9 +2623,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 74,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 20,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
@@ -2105,9 +2633,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 75,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 20,
                             SortOrder = 4,
-                            State = 1,
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
@@ -2115,9 +2643,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 76,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 21,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kişiye Özel Antrenman Planlaması"
                         },
                         new
@@ -2125,9 +2653,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 77,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 21,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Haftalık Program Güncellemesi"
                         },
                         new
@@ -2135,9 +2663,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 78,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 21,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Hareket Tekniği Videoları"
                         },
                         new
@@ -2145,9 +2673,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 79,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 21,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Sakatlık Uyarlaması"
                         },
                         new
@@ -2155,9 +2683,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 80,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 22,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Kalorisi Hesaplanmış Beslenme Planı"
                         },
                         new
@@ -2165,9 +2693,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 81,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 22,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Öğün Şablonları"
                         },
                         new
@@ -2175,9 +2703,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 82,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 22,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Dışarıda Yeme Rehberi"
                         },
                         new
@@ -2185,9 +2713,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 83,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 22,
                             SortOrder = 4,
-                            State = 0,
                             Text = "Supplement Planlaması"
                         },
                         new
@@ -2195,9 +2723,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 84,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 23,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Haftalık Durum Değerlendirmesi"
                         },
                         new
@@ -2205,9 +2733,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 85,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 23,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Vücut Kompozisyonu Takibi"
                         },
                         new
@@ -2215,9 +2743,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 86,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 23,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Aylık Detaylı Rapor"
                         },
                         new
@@ -2225,9 +2753,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 87,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 24,
                             SortOrder = 1,
-                            State = 0,
                             Text = "Birebir WhatsApp İletişimi"
                         },
                         new
@@ -2235,9 +2763,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 88,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 24,
                             SortOrder = 2,
-                            State = 0,
                             Text = "Anlık Program Revizeleri"
                         },
                         new
@@ -2245,9 +2773,9 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 89,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 24,
                             SortOrder = 3,
-                            State = 0,
                             Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
@@ -2255,10 +2783,173 @@ namespace EmirCoaching.DataAccess.Migrations
                             Id = 90,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
+                            IsLocked = false,
                             ModuleId = 24,
                             SortOrder = 4,
-                            State = 1,
                             Text = "Yüz Yüze Zoom Görüşmesi"
+                        });
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.PageContent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BackgroundImagePath")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ButtonUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("HighlightText")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PageKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PageKey")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("PageContents");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BackgroundImagePath = "/images/slider.png",
+                            ButtonUrl = "/paketler.html",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.",
+                            HighlightText = "GÜÇLÜ",
+                            IsDeleted = false,
+                            PageKey = "home",
+                            Title = "Kendini, bahanelerinden daha GÜÇLÜ hale getir"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.",
+                            HighlightText = "DÖNÜŞÜMÜ",
+                            IsDeleted = false,
+                            PageKey = "paketler",
+                            Title = "SANA UYGUN PAKETİ SEÇ, DÖNÜŞÜMÜ BAŞLAT"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan kapsamlı gelişim planı.",
+                            IsDeleted = false,
+                            PageKey = "paket-detay",
+                            Title = "Detaylı İnceleme"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            PageKey = "blog",
+                            Title = "Blog"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Herkesin başlangıç noktası farklıdır. Önemli olan, hedefe giden yolda gösterilen kararlılık ve doğru stratejidir. İşte kanıtı.",
+                            HighlightText = "Gerçek İnsanlar",
+                            IsDeleted = false,
+                            PageKey = "degisimler",
+                            Title = "Rakamlar Değil, Gerçek İnsanlar"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Gerçek değişim geçici motivasyonlarla değil, sürdürülebilir sistemlerle başlar. Emircoaching olarak, fiziksel potansiyelinizi ortaya çıkarmak için bilimsel temelli bir yaklaşım sunuyoruz.",
+                            HighlightText = "BİNLERCE",
+                            IsDeleted = false,
+                            PageKey = "hakkimda",
+                            Title = "BİR SALONDAN, BİNLERCE DÖNÜŞÜME"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Herkesin başlangıç noktası farklıdır. Önemli olan, hedefe giden yolda gösterilen kararlılık ve doğru stratejidir. İşte kanıtı.",
+                            HighlightText = "Zamanı",
+                            IsDeleted = false,
+                            PageKey = "iletisim",
+                            Title = "Değişime İlk Adımı Atma Zamanı"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.",
+                            HighlightText = "PROFESYONELLİK",
+                            IsDeleted = false,
+                            PageKey = "diyet-formu",
+                            Title = "UZMANLARLA ÇALIŞMAK PROFESYONELLİK GEREKTİRİR"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            BackgroundImagePath = "/images/paketlerslider.png",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.",
+                            HighlightText = "PROFESYONELLİK",
+                            IsDeleted = false,
+                            PageKey = "diyet-plani-detay",
+                            Title = "UZMANLARLA ÇALIŞMAK PROFESYONELLİK GEREKTİRİR"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Bu politika, EMIRCOACHING platformunu kullanan bireylerin kişisel verilerinin toplanması, işlenmesi, saklanması ve korunmasına ilişkin temel ilkeleri ve yasal yükümlülükleri düzenler.",
+                            IsDeleted = false,
+                            PageKey = "gizlilik-politikasi",
+                            Title = "Gizlilik Politikası"
                         });
                 });
 
@@ -2286,42 +2977,41 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Facebook")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Instagram")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LinkedIn")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<string>("LegalEmail")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Twitter")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("WhatsApp")
+                    b.Property<string>("WorkingDays1")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("WorkingHours")
+                    b.Property<string>("WorkingDays2")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("WorkingHours1")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("WorkingHours2")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -2334,11 +3024,13 @@ namespace EmirCoaching.DataAccess.Migrations
                             Address = "Levent Mah. Büyükdere Cad. No:199, Şişli / İstanbul",
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@emircoaching.com",
-                            Instagram = "https://instagram.com/",
                             IsDeleted = false,
+                            LegalEmail = "legal@emircoaching.com",
                             Phone = "+90 545 371 25 15",
-                            WhatsApp = "905453712515",
-                            WorkingHours = "Pazartesi - Cumartesi: 08:00 - 22:00 | Pazar: 10:00 - 20:00"
+                            WorkingDays1 = "Pazartesi - Cumartesi",
+                            WorkingDays2 = "Pazar",
+                            WorkingHours1 = "08:00 - 22:00",
+                            WorkingHours2 = "10:00 - 20:00"
                         });
                 });
 
@@ -2384,6 +3076,170 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.ToTable("SiteStats");
                 });
 
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.SocialLink", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Platform")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Platform")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("SocialLinks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Hızlı destek ve program danışmanlığı için anında ulaş.",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Platform = 0,
+                            SortOrder = 1,
+                            Url = "https://wa.me/905453712515"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Günlük motivasyon ve öğrenci değişimleri.",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Platform = 1,
+                            SortOrder = 2,
+                            Url = "https://instagram.com/"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Antrenman teknikleri ve beslenme tüyoları.",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Platform = 2,
+                            SortOrder = 3,
+                            Url = "https://youtube.com/"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Topluluğumuza katıl ve güncel duyuruları takip et.",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Platform = 3,
+                            SortOrder = 4,
+                            Url = "https://facebook.com/"
+                        });
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.SocialPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(2200)
+                        .HasColumnType("nvarchar(2200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExternalId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Hashtag")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("LikeCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Platform")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PostedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Platform", "ExternalId")
+                        .IsUnique()
+                        .HasFilter("[ExternalId] IS NOT NULL AND [IsDeleted] = 0");
+
+                    b.ToTable("SocialPosts");
+                });
+
             modelBuilder.Entity("EmirCoaching.Entities.Entities.Testimonial", b =>
                 {
                     b.Property<int>("Id")
@@ -2409,8 +3265,12 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("PackageId")
+                    b.Property<int>("PackageId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Rating")
+                        .HasPrecision(2, 1)
+                        .HasColumnType("decimal(2,1)");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
@@ -2427,7 +3287,10 @@ namespace EmirCoaching.DataAccess.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("Testimonials");
+                    b.ToTable("Testimonials", t =>
+                        {
+                            t.HasCheckConstraint("CK_Testimonials_Rating", "[Rating] >= 0 AND [Rating] <= 5 AND [Rating] * 2 = FLOOR([Rating] * 2)");
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.Transformation", b =>
@@ -2462,9 +3325,6 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
                     b.Property<string>("ClientName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -2479,6 +3339,9 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<int>("DurationWeeks")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -2486,6 +3349,9 @@ namespace EmirCoaching.DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Section")
+                        .HasColumnType("int");
 
                     b.Property<bool>("ShowOnHome")
                         .HasColumnType("bit");
@@ -2497,6 +3363,9 @@ namespace EmirCoaching.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TransformationTypeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -2504,6 +3373,10 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TransformationTypeId");
+
+                    b.HasIndex("ShowOnHome", "CreatedAt");
 
                     b.ToTable("Transformations");
                 });
@@ -2549,6 +3422,128 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("TransformationId");
 
                     b.ToTable("TransformationMetrics");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.TransformationType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("TransformationTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "Yağ Kaybı",
+                            Slug = "yag-kaybi",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "Kas Kazanımı",
+                            Slug = "kas-kazanimi",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "Kondisyon & Yağ Kaybı",
+                            Slug = "kondisyon-yag-kaybi",
+                            SortOrder = 3
+                        });
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.VideoQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ThumbnailPath")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("YouTubeUrl")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VideoQuestions");
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Identity.AppUser", b =>
@@ -2634,6 +3629,100 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Identity.LoginAttempt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAgent")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LoginAttempts");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Identity.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByIp")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -2803,6 +3892,25 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Navigation("RecommendedPackage");
                 });
 
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogPostTag", b =>
+                {
+                    b.HasOne("EmirCoaching.Entities.Entities.BlogPost", "BlogPost")
+                        .WithMany("Tags")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EmirCoaching.Entities.Entities.BlogTag", "BlogTag")
+                        .WithMany("Posts")
+                        .HasForeignKey("BlogTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlogPost");
+
+                    b.Navigation("BlogTag");
+                });
+
             modelBuilder.Entity("EmirCoaching.Entities.Entities.ConsentRecord", b =>
                 {
                     b.HasOne("EmirCoaching.Entities.Entities.ContactMessage", "ContactMessage")
@@ -2844,6 +3952,17 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Navigation("Package");
                 });
 
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.LegalDocumentRevision", b =>
+                {
+                    b.HasOne("EmirCoaching.Entities.Entities.LegalDocument", "LegalDocument")
+                        .WithMany("Revisions")
+                        .HasForeignKey("LegalDocumentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LegalDocument");
+                });
+
             modelBuilder.Entity("EmirCoaching.Entities.Entities.PackageHighlight", b =>
                 {
                     b.HasOne("EmirCoaching.Entities.Entities.Package", "Package")
@@ -2882,9 +4001,21 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasOne("EmirCoaching.Entities.Entities.Package", "Package")
                         .WithMany("Testimonials")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.Transformation", b =>
+                {
+                    b.HasOne("EmirCoaching.Entities.Entities.TransformationType", "TransformationType")
+                        .WithMany("Transformations")
+                        .HasForeignKey("TransformationTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TransformationType");
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.TransformationMetric", b =>
@@ -2896,6 +4027,27 @@ namespace EmirCoaching.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Transformation");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Identity.LoginAttempt", b =>
+                {
+                    b.HasOne("EmirCoaching.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Identity.RefreshToken", b =>
+                {
+                    b.HasOne("EmirCoaching.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -2954,6 +4106,16 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Navigation("BlogPosts");
                 });
 
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogPost", b =>
+                {
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogTag", b =>
+                {
+                    b.Navigation("Posts");
+                });
+
             modelBuilder.Entity("EmirCoaching.Entities.Entities.ContactMessage", b =>
                 {
                     b.Navigation("ConsentRecords");
@@ -2967,6 +4129,8 @@ namespace EmirCoaching.DataAccess.Migrations
             modelBuilder.Entity("EmirCoaching.Entities.Entities.LegalDocument", b =>
                 {
                     b.Navigation("ConsentRecords");
+
+                    b.Navigation("Revisions");
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.NewsletterSubscriber", b =>
@@ -2991,6 +4155,11 @@ namespace EmirCoaching.DataAccess.Migrations
             modelBuilder.Entity("EmirCoaching.Entities.Entities.Transformation", b =>
                 {
                     b.Navigation("Metrics");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.TransformationType", b =>
+                {
+                    b.Navigation("Transformations");
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Identity.AppUser", b =>

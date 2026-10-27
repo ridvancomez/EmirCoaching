@@ -19,16 +19,28 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Testimonial> Testimonials { get; set; }
     public DbSet<BlogCategory> BlogCategories { get; set; }
     public DbSet<BlogPost> BlogPosts { get; set; }
+    public DbSet<BlogTag> BlogTags { get; set; }
+    public DbSet<BlogPostTag> BlogPostTags { get; set; }
+    public DbSet<TransformationType> TransformationTypes { get; set; }
     public DbSet<Transformation> Transformations { get; set; }
     public DbSet<TransformationMetric> TransformationMetrics { get; set; }
     public DbSet<Faq> Faqs { get; set; }
+    public DbSet<VideoQuestion> VideoQuestions { get; set; }
     public DbSet<SiteStat> SiteStats { get; set; }
     public DbSet<SiteSetting> SiteSettings { get; set; }
+    public DbSet<SocialLink> SocialLinks { get; set; }
+    public DbSet<SocialPost> SocialPosts { get; set; }
+    public DbSet<PageContent> PageContents { get; set; }
+    public DbSet<DietProgram> DietPrograms { get; set; }
+    public DbSet<DietProgramStep> DietProgramSteps { get; set; }
     public DbSet<LegalDocument> LegalDocuments { get; set; }
+    public DbSet<LegalDocumentRevision> LegalDocumentRevisions { get; set; }
     public DbSet<ContactMessage> ContactMessages { get; set; }
     public DbSet<DietFormSubmission> DietFormSubmissions { get; set; }
     public DbSet<NewsletterSubscriber> NewsletterSubscribers { get; set; }
     public DbSet<ConsentRecord> ConsentRecords { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<LoginAttempt> LoginAttempts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

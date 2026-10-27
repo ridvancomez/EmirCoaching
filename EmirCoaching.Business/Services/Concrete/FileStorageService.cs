@@ -56,15 +56,15 @@ public partial class FileStorageService(IWebHostEnvironment environment) : IFile
     private async Task<string> SaveAsync(IFormFile file, string folder, long maxBytes, Func<string, byte[]?> signatureFor)
     {
         if (file is null || file.Length == 0)
-            throw new ArgumentException("Dosya boş.", nameof(file));
+            throw new ArgumentException("Dosya boş.");
         if (file.Length > maxBytes)
-            throw new ArgumentException($"Dosya en fazla {maxBytes / 1024 / 1024} MB olabilir.", nameof(file));
+            throw new ArgumentException($"Dosya en fazla {maxBytes / 1024 / 1024} MB olabilir.");
         if (!FolderPattern().IsMatch(folder))
-            throw new ArgumentException("Geçersiz klasör adı.", nameof(folder));
+            throw new ArgumentException("Geçersiz klasör adı.");
 
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
         var signature = signatureFor(extension)
-            ?? throw new ArgumentException($"Desteklenmeyen dosya türü: {extension}", nameof(file));
+            ?? throw new ArgumentException($"Desteklenmeyen dosya türü: {extension}");
 
         var header = new byte[12];
         int read;
@@ -74,7 +74,7 @@ public partial class FileStorageService(IWebHostEnvironment environment) : IFile
         var validSignature = read >= signature.Length && header.AsSpan(0, signature.Length).SequenceEqual(signature)
             && (extension != ".webp" || (read >= 12 && header.AsSpan(8, 4).SequenceEqual("WEBP"u8)));
         if (!validSignature)
-            throw new ArgumentException("Dosya içeriği uzantısıyla uyuşmuyor.", nameof(file));
+            throw new ArgumentException("Dosya içeriği uzantısıyla uyuşmuyor.");
 
         var directory = Path.Combine(WebRoot, UploadsFolder, folder);
         Directory.CreateDirectory(directory);
@@ -84,5 +84,19 @@ public partial class FileStorageService(IWebHostEnvironment environment) : IFile
             await file.CopyToAsync(output);
 
         return $"/{UploadsFolder}/{folder}/{fileName}";
+    }
+
+    public Task<IReadOnlyList<string>> ListAsync(DateTime modifiedBefore)
+    {
+        var uploadsRoot = Path.Combine(WebRoot, UploadsFolder);
+        if (!Directory.Exists(uploadsRoot))
+            return Task.FromResult<IReadOnlyList<string>>([]);
+
+        IReadOnlyList<string> paths = new DirectoryInfo(uploadsRoot)
+            .EnumerateFiles("*", SearchOption.AllDirectories)
+            .Where(f => f.LastWriteTimeUtc < modifiedBefore)
+            .Select(f => "/" + Path.GetRelativePath(WebRoot, f.FullName).Replace(Path.DirectorySeparatorChar, '/'))
+            .ToList();
+        return Task.FromResult(paths);
     }
 }

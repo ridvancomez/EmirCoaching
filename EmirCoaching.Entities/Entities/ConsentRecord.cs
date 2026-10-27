@@ -2,8 +2,11 @@ using EmirCoaching.Entities.Common;
 
 namespace EmirCoaching.Entities.Entities;
 
-// Onay kaydı yasal delildir: üç sahip FK'dan (ContactMessage / DietFormSubmission /
-// NewsletterSubscriber) tam biri dolu olur — check constraint ile zorlanır.
+/// <summary>
+/// Kullanıcının verdiği onayın kaydı (gizlilik, sağlık verisi açık rızası, ticari ileti).
+/// Onay anındaki yasal metin sürümüne bağlanır ve tam olarak bir form kaydına aittir
+/// (iletişim mesajı, diyet formu veya bülten aboneliği).
+/// </summary>
 public class ConsentRecord : BaseEntity
 {
     public ConsentType ConsentType { get; set; }
@@ -13,7 +16,6 @@ public class ConsentRecord : BaseEntity
     public DateTime GrantedAt { get; set; }
     public string? IysStatus { get; set; }
 
-    // Onaylanan metnin sürümü
     public int? LegalDocumentId { get; set; }
     public LegalDocument? LegalDocument { get; set; }
 

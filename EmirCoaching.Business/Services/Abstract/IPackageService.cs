@@ -5,12 +5,14 @@ namespace EmirCoaching.Business.Services.Abstract;
 
 public interface IPackageService
 {
-    Task<IEnumerable<PackageDto>> GetListAsync();
-    Task<PackageDetailDto?> GetDetailAsync(string slug);
+    Task<Result<IReadOnlyList<PackageResponse>>> GetListAsync();
+    Task<Result<PackageDetailResponse>> GetDetailAsync(string slug);
 
     // Admin
-    Task<Result<int>> CreateAsync(CreatePackageDto dto);
-    Task<Result> UpdateAsync(UpdatePackageDto dto);
+    Task<Result<IReadOnlyList<PackageResponse>>> GetAllAsync(); // pasifler dahil
+    Task<Result<PackageDetailResponse>> GetByIdAsync(int id);
+    Task<Result<int>> CreateAsync(CreatePackageRequest request);
+    Task<Result> UpdateAsync(UpdatePackageRequest request);
     Task<Result> DeleteAsync(int id);
     Task<Result> ReorderModulesAsync(int packageId, List<int> moduleIds);
 }

@@ -16,6 +16,8 @@ public class TransformationConfiguration : IEntityTypeConfiguration<Transformati
         builder.Property(x => x.BeforeSquarePath).HasMaxLength(300);
         builder.Property(x => x.AfterSquarePath).HasMaxLength(300);
 
+        builder.HasIndex(x => new { x.ShowOnHome, x.CreatedAt });
+
         builder.HasMany(x => x.Metrics)
             .WithOne(x => x.Transformation)
             .HasForeignKey(x => x.TransformationId)

@@ -10,7 +10,10 @@ public class NewsletterSubscriberConfiguration : IEntityTypeConfiguration<Newsle
     {
         builder.Property(x => x.Email).HasMaxLength(256).IsRequired();
 
+        builder.Property(x => x.IpAddress).HasMaxLength(45).IsRequired(); // IPv6 dahil
+
         builder.HasIndex(x => x.Email).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(x => new { x.IpAddress, x.CreatedAt });
 
         builder.HasMany(x => x.ConsentRecords)
             .WithOne(x => x.NewsletterSubscriber)
