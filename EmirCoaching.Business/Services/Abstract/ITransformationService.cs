@@ -16,4 +16,5 @@ public interface ITransformationService
     Task<Result<int>> CreateAsync(CreateTransformationRequest request);
     Task<Result> UpdateAsync(UpdateTransformationRequest request);
     Task<Result> DeleteAsync(int id);
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids); // ya hepsi ya hiçbiri
 }

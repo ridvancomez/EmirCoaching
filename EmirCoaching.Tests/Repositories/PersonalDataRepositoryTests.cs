@@ -1,5 +1,7 @@
 using AwesomeAssertions;
+using EmirCoaching.Business.Common;
 using EmirCoaching.DataAccess.Repositories.Concrete;
+using EmirCoaching.DataAccess.Repositories.UnitOfWork;
 using EmirCoaching.Entities.Common;
 using EmirCoaching.Entities.Entities;
 using EmirCoaching.Tests.Helpers;
@@ -88,6 +90,25 @@ public class PersonalDataRepositoryTests : IDisposable
 
         // Assert
         deleted.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task DeletePermanentlyAsync_ManyWithOneMissing_RestoresAlreadyDeletedRecord()
+    {
+        // Arrange
+        var id = await AddSubscriberWithConsentAsync("ali@example.com");
+
+        // Act — ilk kayıt silinir, 999 yok: transaction geri alınmalı
+        bool deleted;
+        await using (var context = _db.CreateContext())
+        using (var unitOfWork = new UnitOfWork(context))
+            deleted = await unitOfWork.DeletePermanentlyAsync(unitOfWork.NewsletterSubscribers, [id, 999]);
+
+        // Assert
+        await using var check = _db.CreateContext();
+        deleted.Should().BeFalse();
+        (await check.NewsletterSubscribers.AnyAsync(s => s.Id == id)).Should().BeTrue();
+        (await check.ConsentRecords.AnyAsync(c => c.NewsletterSubscriberId == id)).Should().BeTrue();
     }
 
     [Fact]

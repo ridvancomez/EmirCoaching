@@ -168,6 +168,37 @@ public class DietFormSubmissionServiceTests
     }
 
     [Fact]
+    public async Task DeleteManyAsync_WhenOneIsMissing_RollsBackAll()
+    {
+        // Arrange — 1 silindi, 2 yok: ilk silme de geri alınmalı
+        _submissions.Setup(r => r.DeletePermanentlyAsync(1)).ReturnsAsync(true);
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 2]);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.NotFound);
+        _uow.Verify(u => u.RollbackAsync(), Times.Once);
+        _uow.Verify(u => u.CommitAsync(), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeleteManyAsync_WithExistingIds_DeletesAllInOneTransaction()
+    {
+        // Arrange
+        _submissions.Setup(r => r.DeletePermanentlyAsync(It.IsAny<int>())).ReturnsAsync(true);
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 2, 2]);
+
+        // Assert — tekrar eden numara bir kez silinir
+        result.IsSuccess.Should().BeTrue();
+        _submissions.Verify(r => r.DeletePermanentlyAsync(2), Times.Once);
+        _uow.Verify(u => u.BeginTransactionAsync(), Times.Once);
+        _uow.Verify(u => u.CommitAsync(), Times.Once);
+    }
+
+    [Fact]
     public async Task DeleteAsync_WithMissingId_ReturnsNotFound()
     {
         // Act

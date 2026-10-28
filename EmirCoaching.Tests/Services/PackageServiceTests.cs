@@ -277,6 +277,41 @@ public class PackageServiceTests
     }
 
     [Fact]
+    public async Task DeleteManyAsync_LoadsDetailsSoChildrenAreSoftDeletedToo()
+    {
+        // Arrange
+        var first = ExistingPackage();
+        var second = ExistingPackage();
+        second.Id = 2;
+        _packages.Setup(r => r.GetByIdWithDetailsAsync(1)).ReturnsAsync(first);
+        _packages.Setup(r => r.GetByIdWithDetailsAsync(2)).ReturnsAsync(second);
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 2]);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        _packages.Verify(r => r.Remove(first), Times.Once);
+        _packages.Verify(r => r.Remove(second), Times.Once);
+        _packages.Verify(r => r.GetByIdAsync(It.IsAny<int>()), Times.Never);
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteManyAsync_WhenOneIsMissing_DeletesNone()
+    {
+        // Arrange
+        _packages.Setup(r => r.GetByIdWithDetailsAsync(1)).ReturnsAsync(ExistingPackage());
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 99]);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.NotFound);
+        _packages.Verify(r => r.Remove(It.IsAny<Package>()), Times.Never);
+    }
+
+    [Fact]
     public async Task ReorderModulesAsync_WithAllModules_AssignsNewOrder()
     {
         // Arrange

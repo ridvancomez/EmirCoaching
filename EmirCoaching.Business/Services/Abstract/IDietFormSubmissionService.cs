@@ -12,4 +12,5 @@ public interface IDietFormSubmissionService
     Task<Result<PagedResult<DietFormSubmissionResponse>>> GetPagedAsync(DietFormStatus? status, int page, int size);
     Task<Result> UpdateStatusAsync(int id, DietFormStatus newStatus);
     Task<Result> DeleteAsync(int id); // kalıcı silme (KVKK)
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids); // kalıcı, ya hepsi ya hiçbiri
 }

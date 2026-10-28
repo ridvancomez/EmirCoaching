@@ -111,6 +111,21 @@ public class TransformationService(
         return Result.Success();
     }
 
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var loaded = await BulkDelete.LoadAsync(ids, unitOfWork.Transformations.GetWithMetricsAsync, "Seçilen değişimlerden biri bulunamadı.");
+        if (!loaded.IsSuccess)
+            return loaded;
+
+        foreach (var transformation in loaded.Value!)
+            unitOfWork.Transformations.Remove(transformation);
+        await unitOfWork.SaveChangesAsync();
+        await uploadCleanup.DeleteUnusedAsync(loaded.Value!.SelectMany(UploadPaths.Of));
+
+        logger.LogInformation("{Count} değişim silindi: {Ids}", loaded.Value!.Count, loaded.Value!.Select(t => t.Id));
+        return Result.Success();
+    }
+
     private async Task<List<string>> CheckReferencesAsync(CreateTransformationRequest request)
     {
         var errors = new List<string>();

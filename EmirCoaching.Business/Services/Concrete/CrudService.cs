@@ -94,6 +94,30 @@ public abstract class CrudService<TEntity, TResponse, TCreateRequest, TUpdateReq
         return Result.Success();
     }
 
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var loaded = await BulkDelete.LoadAsync(ids, repository.GetByIdAsync, "Seçilen kayıtlardan biri bulunamadı.");
+        if (!loaded.IsSuccess)
+            return loaded;
+
+        var blocked = new List<string>();
+        foreach (var entity in loaded.Value!)
+            blocked.AddRange((await CheckDeleteAsync(entity)).Errors);
+        if (blocked.Count > 0)
+        {
+            logger.LogWarning("{Entity} toplu silme reddedildi: {Errors}", EntityName, blocked);
+            return Result.Conflict(blocked);
+        }
+
+        foreach (var entity in loaded.Value!)
+            repository.Remove(entity);
+        await unitOfWork.SaveChangesAsync(); // tek SaveChanges = tek transaction
+        await ReleaseUploadsAsync(loaded.Value!.SelectMany(UploadPaths.Of));
+
+        logger.LogInformation("{Count} {Entity} kaydı silindi: {Ids}", loaded.Value!.Count, EntityName, loaded.Value!.Select(e => e.Id));
+        return Result.Success();
+    }
+
     // Admin listesinin kaynağı ve sırası; sıralı entity'ler GetOrderedAsync ile ezer
     protected virtual Task<IReadOnlyList<TEntity>> ListAsync() => repository.GetAllAsync();
 

@@ -23,4 +23,30 @@ public static class UnitOfWorkExtensions
             throw;
         }
     }
+
+    // Toplu kalıcı silme, ya hepsi ya hiçbiri: kayıtlardan biri yoksa hiçbiri silinmez, false döner
+    public static async Task<bool> DeletePermanentlyAsync<T>(this IUnitOfWork unitOfWork, IPersonalDataRepository<T> repository,
+        IReadOnlyCollection<int> ids) where T : BaseEntity
+    {
+        await unitOfWork.BeginTransactionAsync();
+        try
+        {
+            foreach (var id in ids.Distinct())
+            {
+                if (await repository.DeletePermanentlyAsync(id))
+                    continue;
+
+                await unitOfWork.RollbackAsync();
+                return false;
+            }
+
+            await unitOfWork.CommitAsync();
+            return true;
+        }
+        catch
+        {
+            await unitOfWork.RollbackAsync();
+            throw;
+        }
+    }
 }

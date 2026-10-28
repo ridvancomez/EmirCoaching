@@ -134,6 +134,20 @@ public class PackageService(
         return Result.Success();
     }
 
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var loaded = await BulkDelete.LoadAsync(ids, unitOfWork.Packages.GetByIdWithDetailsAsync, "Seçilen paketlerden biri bulunamadı.");
+        if (!loaded.IsSuccess)
+            return loaded;
+
+        foreach (var package in loaded.Value!)
+            unitOfWork.Packages.Remove(package);
+        await unitOfWork.SaveChangesAsync();
+
+        logger.LogInformation("{Count} paket silindi: {Ids}", loaded.Value!.Count, loaded.Value!.Select(p => p.Id));
+        return Result.Success();
+    }
+
     public async Task<Result> ReorderModulesAsync(int packageId, List<int> moduleIds)
     {
         var package = await unitOfWork.Packages.GetByIdWithDetailsAsync(packageId);

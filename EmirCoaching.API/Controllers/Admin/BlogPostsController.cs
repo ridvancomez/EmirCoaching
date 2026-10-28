@@ -35,6 +35,11 @@ public class BlogPostsController(IBlogPostService blogPostService) : AdminContro
     public async Task<IActionResult> Delete(int id) =>
         FromResult(await blogPostService.DeleteAsync(id));
 
+    // Ya hepsi ya hiçbiri: biri bulunamaz veya silinemezse hiçbiri silinmez; gövde: [3, 7, 12] → 204 / 400 / 404 / 409
+    [HttpPost("bulk-delete")]
+    public async Task<IActionResult> DeleteMany(List<int> ids) =>
+        FromResult(await blogPostService.DeleteManyAsync(ids));
+
     // Taslağı yayınlar → 204 / 404
     [HttpPost("{id:int}/publish")]
     public async Task<IActionResult> Publish(int id) =>

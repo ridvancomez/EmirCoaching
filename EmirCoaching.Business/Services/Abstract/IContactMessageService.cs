@@ -12,4 +12,5 @@ public interface IContactMessageService
     Task<Result<PagedResult<ContactMessageResponse>>> GetPagedAsync(ContactMessageStatus? status, int page, int size);
     Task<Result> UpdateStatusAsync(int id, ContactMessageStatus newStatus);
     Task<Result> DeleteAsync(int id); // kalıcı silme (KVKK)
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids); // kalıcı, ya hepsi ya hiçbiri
 }

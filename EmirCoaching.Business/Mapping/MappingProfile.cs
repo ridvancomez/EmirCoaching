@@ -31,7 +31,9 @@ public class MappingProfile : Profile
 
         // Kimlik doğrulama (roller UserManager'dan ayrıca eklenir)
         CreateMap<AppUser, CurrentUserResponse>()
-            .ForMember(d => d.Roles, o => o.Ignore());
+            .ForMember(d => d.Roles, o => o.Ignore())
+            .ForMember(d => d.AvatarUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.AvatarPath));
+        CreateMap<UpdateProfileRequest, AppUser>(); // yalnızca aynı adlı alanlar: ad, unvan, biyografi, fotoğraf
 
         // Blog
         CreateMap<AppUser, BlogAuthorResponse>()

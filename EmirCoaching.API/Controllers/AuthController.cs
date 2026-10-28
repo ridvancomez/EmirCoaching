@@ -41,6 +41,19 @@ public class AuthController(IAuthService authService) : ApiControllerBase
     public async Task<IActionResult> Me() =>
         FromResult(await authService.GetCurrentUserAsync(CurrentUserId));
 
+    // Kullanıcı ayarları: ad, unvan, biyografi, fotoğraf (blog yazar kartı) → 204 / 400 / 401
+    [Authorize]
+    [HttpPut("me")]
+    public async Task<IActionResult> UpdateProfile(UpdateProfileRequest request) =>
+        FromResult(await authService.UpdateProfileAsync(CurrentUserId, request));
+
+    // Diğer oturumlar kapanır, bu oturum yeni token çiftiyle devam eder → 200 { accessToken, expiresAt } + cookie / 400 / 401 / 429
+    [Authorize]
+    [HttpPost("change-password")]
+    [EnableRateLimiting(RateLimitPolicies.Login)] // mevcut şifre denemesi kaba kuvvete açık olmasın
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request) =>
+        FromResult(await authService.ChangePasswordAsync(CurrentUserId, request, GetRequestInfo()), WriteTokens);
+
     private OkObjectResult WriteTokens(AuthTokens tokens)
     {
         Response.Cookies.Append(RefreshCookieName, tokens.RefreshToken, RefreshCookieOptions(tokens.RefreshTokenExpiresAt));

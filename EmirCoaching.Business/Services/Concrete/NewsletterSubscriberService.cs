@@ -88,4 +88,17 @@ public class NewsletterSubscriberService(
         logger.LogInformation("Bülten aboneliği {Id} kalıcı olarak silindi", id);
         return Result.Success();
     }
+
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var check = BulkDelete.Validate(ids);
+        if (!check.IsSuccess)
+            return check;
+
+        if (!await unitOfWork.DeletePermanentlyAsync(unitOfWork.NewsletterSubscribers, ids))
+            return Result.NotFound("Seçilen abonelerden biri bulunamadı.");
+
+        logger.LogInformation("{Count} bülten aboneliği kalıcı olarak silindi: {Ids}", ids.Distinct().Count(), ids.Distinct());
+        return Result.Success();
+    }
 }

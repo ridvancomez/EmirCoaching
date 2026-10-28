@@ -25,4 +25,9 @@ public class ContactMessagesController(IContactMessageService contactMessageServ
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) =>
         FromResult(await contactMessageService.DeleteAsync(id));
+
+    // KVKK: kalıcı silme, ya hepsi ya hiçbiri; gövde: [3, 7, 12] → 204 / 400 / 404
+    [HttpPost("bulk-delete")]
+    public async Task<IActionResult> DeleteMany(List<int> ids) =>
+        FromResult(await contactMessageService.DeleteManyAsync(ids));
 }

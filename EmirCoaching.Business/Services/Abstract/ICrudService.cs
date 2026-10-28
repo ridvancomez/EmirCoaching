@@ -11,4 +11,7 @@ public interface ICrudService<TResponse, in TCreateRequest, in TUpdateRequest>
     Task<Result<int>> CreateAsync(TCreateRequest request);
     Task<Result> UpdateAsync(TUpdateRequest request);
     Task<Result> DeleteAsync(int id);
+
+    // Ya hepsi ya hiçbiri (bkz. BulkDelete)
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids);
 }

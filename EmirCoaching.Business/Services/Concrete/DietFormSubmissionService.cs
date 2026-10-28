@@ -66,6 +66,19 @@ public class DietFormSubmissionService(
         return Result.Success();
     }
 
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var check = BulkDelete.Validate(ids);
+        if (!check.IsSuccess)
+            return check;
+
+        if (!await unitOfWork.DeletePermanentlyAsync(unitOfWork.DietFormSubmissions, ids))
+            return Result.NotFound("Seçilen başvurulardan biri bulunamadı.");
+
+        logger.LogInformation("{Count} diyet formu kalıcı olarak silindi: {Ids}", ids.Distinct().Count(), ids.Distinct());
+        return Result.Success();
+    }
+
     public async Task<Result> UpdateStatusAsync(int id, DietFormStatus newStatus)
     {
         if (!Enum.IsDefined(newStatus))

@@ -26,6 +26,7 @@ public class AuthServiceTests
     private readonly Mock<IRefreshTokenRepository> _refreshTokens = new();
     private readonly Mock<ILoginAttemptRepository> _loginAttempts = new();
     private readonly Mock<IJwtTokenService> _tokens = new();
+    private readonly Mock<IUploadCleanupService> _uploadCleanup = new();
     private readonly AppUser _user = new() { Id = 1, Email = "admin@emircoaching.com", FullName = "Emir" };
     private readonly AuthService _service;
 
@@ -46,6 +47,7 @@ public class AuthServiceTests
 
         _service = new AuthService(_userManager.Object, _uow.Object, _tokens.Object, TestMapper.Create(),
             Options.Create(new JwtOptions { RefreshTokenDays = 7 }), new LoginRequestValidator(),
+            new UpdateProfileRequestValidator(), new ChangePasswordRequestValidator(), _uploadCleanup.Object,
             NullLogger<AuthService>.Instance);
     }
 
@@ -300,6 +302,92 @@ public class AuthServiceTests
 
         // Assert
         result.ErrorType.Should().Be(ResultErrorType.NotFound);
+    }
+
+    // ---- UpdateProfileAsync ----
+
+    [Fact]
+    public async Task UpdateProfileAsync_UpdatesFieldsAndReleasesOldAvatar()
+    {
+        // Arrange
+        _user.AvatarPath = "/uploads/profil/eski.jpg";
+        _userManager.Setup(m => m.FindByIdAsync("1")).ReturnsAsync(_user);
+        _userManager.Setup(m => m.UpdateAsync(_user)).ReturnsAsync(IdentityResult.Success);
+
+        // Act
+        var result = await _service.UpdateProfileAsync(1, new UpdateProfileRequest
+        {
+            FullName = "Emir Yılmaz", Title = "Baş Antrenör", Bio = "Biyografi", AvatarPath = "/uploads/profil/yeni.jpg"
+        });
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        _user.FullName.Should().Be("Emir Yılmaz");
+        _user.Title.Should().Be("Baş Antrenör");
+        _user.Email.Should().Be("admin@emircoaching.com"); // profil formu e-postaya dokunmaz
+        _uploadCleanup.Verify(c => c.DeleteUnusedAsync(It.Is<IEnumerable<string>>(p =>
+            p.SequenceEqual(new[] { "/uploads/profil/eski.jpg" }))), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateProfileAsync_WithEmptyName_ReturnsValidationError()
+    {
+        // Act
+        var result = await _service.UpdateProfileAsync(1, new UpdateProfileRequest { FullName = "" });
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.Validation);
+        _userManager.Verify(m => m.UpdateAsync(It.IsAny<AppUser>()), Times.Never);
+    }
+
+    // ---- ChangePasswordAsync ----
+
+    [Fact]
+    public async Task ChangePasswordAsync_WithCorrectPassword_RevokesOtherSessionsAndIssuesNewTokens()
+    {
+        // Arrange
+        var otherSession = StoredToken();
+        _userManager.Setup(m => m.FindByIdAsync("1")).ReturnsAsync(_user);
+        _userManager.Setup(m => m.ChangePasswordAsync(_user, Password, "Yeni-Sifre-456")).ReturnsAsync(IdentityResult.Success);
+        _refreshTokens.Setup(r => r.GetActiveByUserIdAsync(1)).ReturnsAsync([otherSession]);
+
+        // Act
+        var result = await _service.ChangePasswordAsync(1, new ChangePasswordRequest { CurrentPassword = Password, NewPassword = "Yeni-Sifre-456" }, Info);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value!.RefreshToken.Should().Be("yeni-refresh");
+        otherSession.RevokedAt.Should().NotBeNull();
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task ChangePasswordAsync_WithWrongCurrentPassword_ReturnsIdentityErrorAndKeepsSessions()
+    {
+        // Arrange
+        _userManager.Setup(m => m.FindByIdAsync("1")).ReturnsAsync(_user);
+        _userManager.Setup(m => m.ChangePasswordAsync(_user, "yanlis-sifre", "Yeni-Sifre-456"))
+            .ReturnsAsync(IdentityResult.Failed(new IdentityError { Code = "PasswordMismatch", Description = "Şifre hatalı." }));
+
+        // Act
+        var result = await _service.ChangePasswordAsync(1, new ChangePasswordRequest { CurrentPassword = "yanlis-sifre", NewPassword = "Yeni-Sifre-456" }, Info);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.Validation);
+        result.Errors.Should().Equal("Şifre hatalı.");
+        _refreshTokens.Verify(r => r.GetActiveByUserIdAsync(It.IsAny<int>()), Times.Never);
+        _refreshTokens.Verify(r => r.AddAsync(It.IsAny<RefreshToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ChangePasswordAsync_WithSamePassword_ReturnsValidationError()
+    {
+        // Act
+        var result = await _service.ChangePasswordAsync(1, new ChangePasswordRequest { CurrentPassword = Password, NewPassword = Password }, Info);
+
+        // Assert
+        result.Errors.Should().ContainSingle().Which.Should().Be("Yeni şifre mevcut şifreyle aynı olamaz.");
+        _userManager.Verify(m => m.ChangePasswordAsync(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
     }
 
     private RefreshToken StoredToken(DateTime? expiresAt = null, DateTime? revokedAt = null) => new()

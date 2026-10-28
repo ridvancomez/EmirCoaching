@@ -62,6 +62,19 @@ public class ContactMessageService(
         return Result.Success();
     }
 
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var check = BulkDelete.Validate(ids);
+        if (!check.IsSuccess)
+            return check;
+
+        if (!await unitOfWork.DeletePermanentlyAsync(unitOfWork.ContactMessages, ids))
+            return Result.NotFound("Seçilen mesajlardan biri bulunamadı.");
+
+        logger.LogInformation("{Count} iletişim mesajı kalıcı olarak silindi: {Ids}", ids.Distinct().Count(), ids.Distinct());
+        return Result.Success();
+    }
+
     public async Task<Result> UpdateStatusAsync(int id, ContactMessageStatus newStatus)
     {
         if (!Enum.IsDefined(newStatus))

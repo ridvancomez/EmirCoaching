@@ -159,6 +159,21 @@ public class BlogPostService(
         return Result.Success();
     }
 
+    public async Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids)
+    {
+        var loaded = await BulkDelete.LoadAsync(ids, unitOfWork.BlogPosts.GetByIdAsync, "Seçilen yazılardan biri bulunamadı.");
+        if (!loaded.IsSuccess)
+            return loaded;
+
+        foreach (var post in loaded.Value!)
+            unitOfWork.BlogPosts.Remove(post);
+        await unitOfWork.SaveChangesAsync();
+        await uploadCleanup.DeleteUnusedAsync(loaded.Value!.SelectMany(UploadPaths.Of));
+
+        logger.LogInformation("{Count} blog yazısı silindi: {Ids}", loaded.Value!.Count, loaded.Value!.Select(p => p.Id));
+        return Result.Success();
+    }
+
     public async Task<Result> PublishAsync(int id)
     {
         var post = await unitOfWork.BlogPosts.GetByIdAsync(id);

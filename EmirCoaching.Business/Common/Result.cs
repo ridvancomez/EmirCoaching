@@ -27,7 +27,8 @@ public class Result
     public static Result Invalid(IEnumerable<string> errors) => new(false, ResultErrorType.Validation, errors.ToList());
     public static Result Invalid(string error) => Invalid([error]);
     public static Result NotFound(string error = "Kayıt bulunamadı.") => new(false, ResultErrorType.NotFound, [error]);
-    public static Result Conflict(string error) => new(false, ResultErrorType.Conflict, [error]);
+    public static Result Conflict(string error) => Conflict([error]);
+    public static Result Conflict(IEnumerable<string> errors) => new(false, ResultErrorType.Conflict, errors.ToList());
     public static Result TooManyRequests(string error) => new(false, ResultErrorType.TooManyRequests, [error]);
     public static Result Unauthorized(string error) => new(false, ResultErrorType.Unauthorized, [error]);
 }

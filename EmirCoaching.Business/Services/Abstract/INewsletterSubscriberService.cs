@@ -11,4 +11,5 @@ public interface INewsletterSubscriberService
     // Admin
     Task<Result<PagedResult<NewsletterSubscriberResponse>>> GetPagedAsync(int page, int size);
     Task<Result> DeleteAsync(int id); // kalıcı silme (KVKK)
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids); // kalıcı, ya hepsi ya hiçbiri
 }

@@ -14,4 +14,9 @@ public interface IAuthService
     Task<Result> LogoutAsync(string? refreshToken);
 
     Task<Result<CurrentUserResponse>> GetCurrentUserAsync(int userId);
+
+    Task<Result> UpdateProfileAsync(int userId, UpdateProfileRequest request);
+
+    // Başarılıysa kullanıcının tüm oturumları kapatılır; bu oturum dönen yeni token'larla devam eder
+    Task<Result<AuthTokens>> ChangePasswordAsync(int userId, ChangePasswordRequest request, RequestInfo requestInfo);
 }

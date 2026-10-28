@@ -14,5 +14,6 @@ public interface IPackageService
     Task<Result<int>> CreateAsync(CreatePackageRequest request);
     Task<Result> UpdateAsync(UpdatePackageRequest request);
     Task<Result> DeleteAsync(int id);
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids); // ya hepsi ya hiçbiri
     Task<Result> ReorderModulesAsync(int packageId, List<int> moduleIds);
 }

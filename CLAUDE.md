@@ -100,6 +100,7 @@ GET    /api/v1/admin/packages/{id}
 POST   /api/v1/admin/packages                 // 201
 PUT    /api/v1/admin/packages/{id}            // 204
 DELETE /api/v1/admin/packages/{id}            // 204 (soft)
+POST   /api/v1/admin/packages/bulk-delete     // gövde: [3, 7, 12] → 204; ya hepsi ya hiçbiri
 PUT    /api/v1/admin/packages/{id}/modules/order   // gövde: [3, 1, 2]
 
 // Admin — diğer kaynaklar
@@ -131,6 +132,7 @@ POST   /api/v1/auth/refresh                   // Token refresh
 - `/api/v1/` prefix (versioning), admin için `/api/v1/admin/`
 - Resource adı entity'nin çoğulu (`DietFormSubmission` → `diet-form-submissions`); tek kayıtlı kaynaklar tekil (`site-settings`, `diet-program`)
 - Pasif/taslak kavramı olan kaynaklarda (paket, değişim `IsActive`; blog `IsPublished`) site uçları yalnızca aktif/yayındakileri döner, pasif kaydın site detayı 404'tür; admin uçları hepsini döner. Form kayıtları (iletişim, diyet başvurusu, bülten) KVKK gereği **kalıcı** silinir: `IPersonalDataRepository<T>.DeletePermanentlyAsync` kaydı bağlı onay kayıtlarıyla birlikte `ExecuteDelete` ile siler (soft delete'e dönüşmez); transaction `UnitOfWorkExtensions.DeletePermanentlyAsync`'te
+- **Toplu silme** (`POST .../bulk-delete`, gövde id dizisi, en fazla `BulkDelete.MaxCount` = 100): silme ucu olan her admin kaynağında var. Ya hepsi ya hiçbiri: biri bulunamazsa 404, birinin silme engeli varsa (`CheckDeleteAsync`) tüm engel mesajlarıyla 409 döner ve hiçbiri silinmez. `CrudService.DeleteManyAsync` tabanda; kendi akışı olan servis `BulkDelete.Validate` / `LoadAsync`'i kullanır, form kayıtları `UnitOfWorkExtensions.DeletePermanentlyAsync(repo, ids)` ile tek transaction'da kalıcı silinir
 - Paket güncellemesinde modül, kalem ve öne çıkan maddeler, değişim güncellemesinde ölçümler numarasıyla eşitlenir (`Common/ChildListSync.cs`): istekte `Id` dolu olan güncellenir, boş olan eklenir, listede olmayan silinir; başka üst kayda ait veya tekrar eden `Id` 400 döner
 - Site uçları slug'ı olan kaynakta slug (`/packages/{slug}`), olmayanda ID (`/transformations/{id}`), admin uçları her zaman ID ile çalışır; ID/slug path'te, filtreler query'de
 - Admin controller'ları `AdminControllerBase`'ten türer (`EmirCoaching.API/Common/AdminControllerBase.cs`): `[Authorize]` ve `[Area("Admin")]` orada, controller'da tekrar yazılmaz. Sınıf adı site controller'ıyla aynı olabilir (`Controllers/Admin/PackagesController`); örnek: paketler
@@ -517,7 +519,9 @@ Yalnızca admin paneli giriş yapar. Kullanıcılar ASP.NET Identity (`UserManag
 POST /api/v1/auth/login    { email, password } → 200 { accessToken, expiresAt } + cookie / 400 / 401 / 429
 POST /api/v1/auth/refresh  (cookie)            → 200 { accessToken, expiresAt } + yeni cookie / 401
 POST /api/v1/auth/logout   (cookie)            → 204, refresh token iptal, cookie silinir
-GET  /api/v1/auth/me       [Authorize]         → 200 { id, email, fullName, roles }
+GET  /api/v1/auth/me       [Authorize]         → 200 { id, email, fullName, title, bio, avatarUrl, roles }
+PUT  /api/v1/auth/me       [Authorize]         { fullName, title, bio, avatarPath } → 204 / 400
+POST /api/v1/auth/change-password [Authorize]  { currentPassword, newPassword } → 200 { accessToken, expiresAt } + yeni cookie / 400 / 429
 ```
 
 | Katman | Dosya |
@@ -526,6 +530,8 @@ GET  /api/v1/auth/me       [Authorize]         → 200 { id, email, fullName, ro
 | DataAccess | `IRefreshTokenRepository` → `uow.RefreshTokens` |
 | Business | `AuthService` (giriş/yenileme/çıkış), `JwtTokenService` (token üretimi), `Common/JwtOptions.cs`, `Dtos/AuthDtos.cs` |
 | API | `AuthController`, `Program.cs` (JwtBearer, varsayılan politika, CORS `AllowCredentials`) |
+
+**Şifre değiştirme** mevcut şifreyi ister; başarıda kullanıcının tüm refresh token'ları iptal edilir (diğer cihazlar çıkar) ve bu oturuma yeni token verilir. Profil fotoğrafı (`AvatarPath`) diğer görseller gibi yüklenir, değişince eskisi temizlenir.
 
 Controller'da kullanıcı kimliği: `CurrentUserId` (`ApiControllerBase`, token'daki `sub`).
 

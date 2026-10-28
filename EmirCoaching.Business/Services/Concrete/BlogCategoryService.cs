@@ -25,6 +25,6 @@ public class BlogCategoryService(
 
     protected override async Task<Result> CheckDeleteAsync(BlogCategory category) =>
         await UnitOfWork.BlogPosts.AnyInCategoryAsync(category.Id)
-            ? Result.Conflict("Bu kategoride yazılar var; önce yazıları başka kategoriye taşıyın.")
+            ? Result.Conflict($"'{category.Name}' kategorisinde yazılar var; önce yazıları başka kategoriye taşıyın.")
             : Result.Success();
 }

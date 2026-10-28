@@ -33,6 +33,11 @@ public class PackagesController(IPackageService packageService) : AdminControlle
     public async Task<IActionResult> Delete(int id) =>
         FromResult(await packageService.DeleteAsync(id));
 
+    // Ya hepsi ya hiçbiri: biri bulunamaz veya silinemezse hiçbiri silinmez; gövde: [3, 7, 12] → 204 / 400 / 404 / 409
+    [HttpPost("bulk-delete")]
+    public async Task<IActionResult> DeleteMany(List<int> ids) =>
+        FromResult(await packageService.DeleteManyAsync(ids));
+
     // Gövde: paketin tüm modül id'leri yeni sırayla, ör. [3, 1, 2] → 204 / 400 / 404
     [HttpPut("{id:int}/modules/order")]
     public async Task<IActionResult> ReorderModules(int id, List<int> moduleIds) =>

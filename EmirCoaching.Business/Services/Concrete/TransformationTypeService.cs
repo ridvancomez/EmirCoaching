@@ -27,6 +27,6 @@ public class TransformationTypeService(
 
     protected override async Task<Result> CheckDeleteAsync(TransformationType type) =>
         await UnitOfWork.Transformations.AnyWithTypeAsync(type.Id)
-            ? Result.Conflict("Bu tipte değişimler var; önce değişimlerin tipini değiştirin.")
+            ? Result.Conflict($"'{type.Name}' tipinde değişimler var; önce değişimlerin tipini değiştirin.")
             : Result.Success();
 }

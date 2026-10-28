@@ -33,4 +33,9 @@ public class VideoQuestionsController(IVideoQuestionService videoQuestionService
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) =>
         FromResult(await videoQuestionService.DeleteAsync(id));
+
+    // Ya hepsi ya hiçbiri: biri bulunamaz veya silinemezse hiçbiri silinmez; gövde: [3, 7, 12] → 204 / 400 / 404 / 409
+    [HttpPost("bulk-delete")]
+    public async Task<IActionResult> DeleteMany(List<int> ids) =>
+        FromResult(await videoQuestionService.DeleteManyAsync(ids));
 }

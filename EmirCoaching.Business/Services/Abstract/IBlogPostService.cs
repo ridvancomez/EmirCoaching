@@ -17,6 +17,7 @@ public interface IBlogPostService
     Task<Result<int>> CreateAsync(CreateBlogPostRequest request);
     Task<Result> UpdateAsync(UpdateBlogPostRequest request);
     Task<Result> DeleteAsync(int id);
+    Task<Result> DeleteManyAsync(IReadOnlyCollection<int> ids); // ya hepsi ya hiçbiri
     Task<Result> PublishAsync(int id);
     Task<Result> UnpublishAsync(int id); // taslağa döner; ilk yayın tarihi korunur
 }

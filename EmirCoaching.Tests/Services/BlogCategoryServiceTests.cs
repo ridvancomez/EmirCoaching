@@ -203,6 +203,66 @@ public class BlogCategoryServiceTests
         _uow.Verify(u => u.SaveChangesAsync(), Times.Never);
     }
 
+    // ---- DeleteManyAsync (ya hepsi ya hiçbiri) ----
+
+    [Fact]
+    public async Task DeleteManyAsync_WithDeletableCategories_RemovesAllWithSingleSave()
+    {
+        // Arrange
+        _categories.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new BlogCategory { Id = 1 });
+        _categories.Setup(r => r.GetByIdAsync(2)).ReturnsAsync(new BlogCategory { Id = 2 });
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 2]);
+
+        // Assert — tek SaveChanges tek transaction'dır
+        result.IsSuccess.Should().BeTrue();
+        _categories.Verify(r => r.Remove(It.IsAny<BlogCategory>()), Times.Exactly(2));
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteManyAsync_WhenOneIsBlocked_DeletesNoneAndNamesBlockedOne()
+    {
+        // Arrange — "Beslenme" kategorisinde yazı var
+        _categories.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new BlogCategory { Id = 1, Name = "Beslenme" });
+        _categories.Setup(r => r.GetByIdAsync(2)).ReturnsAsync(new BlogCategory { Id = 2, Name = "Uyku" });
+        _posts.Setup(r => r.AnyInCategoryAsync(1)).ReturnsAsync(true);
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 2]);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.Conflict);
+        result.Errors.Should().ContainSingle().Which.Should().StartWith("'Beslenme' kategorisinde yazılar var");
+        _categories.Verify(r => r.Remove(It.IsAny<BlogCategory>()), Times.Never);
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeleteManyAsync_WhenOneIsMissing_DeletesNone()
+    {
+        // Arrange — 2 numara yok
+        _categories.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new BlogCategory { Id = 1 });
+
+        // Act
+        var result = await _service.DeleteManyAsync([1, 2]);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.NotFound);
+        _categories.Verify(r => r.Remove(It.IsAny<BlogCategory>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeleteManyAsync_WithEmptyList_ReturnsValidationError()
+    {
+        // Act
+        var result = await _service.DeleteManyAsync([]);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.Validation);
+    }
+
     [Fact]
     public async Task DeleteAsync_WithMissingId_ReturnsNotFound()
     {
