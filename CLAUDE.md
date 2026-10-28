@@ -540,272 +540,89 @@ Controller'da kullanıcı kimliği: `CurrentUserId` (`ApiControllerBase`, token'
 
 ---
 
-## Unit Testing — Baştan Sona Kılavuz
+## Unit Testing
 
-Unit test henüz yapılmamış. Burada sistematik şekilde başlayacağız.
+`EmirCoaching.Tests` (xUnit + Moq + AwesomeAssertions), yalnızca Business'a referans verir. Çalıştırma: `dotnet test EmirCoaching.Tests`.
 
-### Framework & Tools Seçimi
+- **AwesomeAssertions**, FluentAssertions'ın ücretsiz çatalıdır (FluentAssertions 8+ ücretli lisanslı); API aynıdır (`x.Should().Be(...)`), `using AwesomeAssertions;`
+- Servis testlerinde veritabanı yok: `IUnitOfWork` ve repository'ler Moq ile taklit edilir
+- Repository testleri (`Repositories/`) gerçek ilişkisel davranış için SQLite in-memory kullanır (`Helpers/SqliteDatabase`: şema + seed `EnsureCreated` ile, her test sınıfı örneği boş veritabanı; `CreateContext()` her çağrıda yeni context). EF InMemory kullanılmaz: `ExecuteDelete`, filtreli unique index ve FK'yı desteklemez
 
-- **xUnit:** test framework (industry standard, Microsoft tarafından desteklenen)
-- **Moq:** dependency mocking (IRepository, IUnitOfWork, ILogger mock'lanır)
-- **FluentAssertions:** assertion yazımı ve okunabilirliği (Assert.AreEqual yerine `.Should().Be()`)
+### Proje yapısı
 
-### Proje Yapısı
+Klasörler test edilen kodu izler:
 
 ```
 EmirCoaching.Tests/
-├── Services/
-│   ├── PackageServiceTests.cs
-│   ├── BlogPostServiceTests.cs
-├── Repositories/
-│   ├── PackageRepositoryTests.cs
-├── Validators/
-│   ├── CreateBlogPostRequestValidatorTests.cs
+├── Common/       ChildListSync, StorageOptions, UploadPaths, SlugHelper (mock yok)
+├── Validators/   ValidationRules, Türkçe mesajlar, FieldNames kapsamı
+├── Services/     {Service}Tests.cs — her servis için bir dosya
+├── Repositories/ soft delete, query filter, kalıcı silme, sorgu sırası (SQLite)
+└── Helpers/      TestMapper, TestUserManager, TestSetup, SqliteDatabase
 ```
 
-### Kurulum: xUnit + Moq + FluentAssertions
+- `Helpers/TestMapper.Create()`: gerçek `MappingProfile`'ı DI ile kurar (`PublicUrlConverter` `StorageOptions`'ı DI'dan alır); `PublicBaseUrl = TestMapper.PublicBaseUrl`
+- `Helpers/TestUserManager.Create()`: `UserManager<AppUser>` sınıf olduğu için mock'u kurucuya `IUserStore` verilerek oluşturulur
+- `Helpers/TestSetup`: `[ModuleInitializer]` ile `TurkishValidation.Configure()` — mesajlar API'deki gibi Türkçe
+- Validator'lar gerçek sınıflarıyla verilir (`new CreateFaqRequestValidator()`), logger `NullLogger<T>.Instance`
+- Kural bekçisi testler: `TurkishMessagesTests.FieldNames_CoversEveryRequestProperty` (`FieldNames`'te karşılığı olmayan Request alanı) ve `UploadReferenceRepositoryTests.CoveredPathColumns_MatchEveryPathColumnInModel` (yeni `*Path` kolonu: `UploadReferenceRepository`'ye ve testteki listeye eklenir)
 
-**Package.csproj'a ekle:**
-```xml
-<ItemGroup>
-    <PackageReference Include="xunit" Version="2.6.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0" />
-    <PackageReference Include="Moq" Version="4.20.0" />
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
-</ItemGroup>
-```
-
-### AAA Pattern (Arrange-Act-Assert)
-
-Her test 3 bölümde yazılır:
+### Servis testi şablonu
 
 ```csharp
-[Fact]
-public async Task GetByIdAsync_WithValidId_ReturnsSuccessResult()
+public class BlogCategoryServiceTests
 {
-    // Arrange (setup)
-    int packageId = 1;
-    var package = new Package { Id = packageId, Name = "Test", IsDeleted = false };
-    _mockRepository.Setup(x => x.GetByIdAsync(packageId)).ReturnsAsync(package);
+    private readonly Mock<IUnitOfWork> _uow = new();
+    private readonly Mock<IBlogCategoryRepository> _categories = new();
+    private readonly BlogCategoryService _service;
 
-    // Act (test et)
-    var result = await _service.GetByIdAsync(packageId);
-
-    // Assert (kontrol et)
-    result.Success.Should().BeTrue();
-    result.Data.Should().NotBeNull();
-    _mockRepository.Verify(x => x.GetByIdAsync(packageId), Times.Once);
-}
-```
-
-### Örnek: Service Tests (xUnit + Moq + FluentAssertions)
-
-```csharp
-public class PackageServiceTests
-{
-    private readonly Mock<IUnitOfWork> _mockUow;
-    private readonly Mock<IRepository<Package>> _mockRepository;
-    private readonly Mock<ILogger<PackageService>> _mockLogger;
-    private readonly IMapper _mapper;
-    private readonly PackageService _service;
-
-    public PackageServiceTests()
+    // xUnit her test için sınıfı yeniden oluşturur: mock'lar testler arasında paylaşılmaz
+    public BlogCategoryServiceTests()
     {
-        // Mock'ları kur
-        _mockUow = new Mock<IUnitOfWork>();
-        _mockRepository = new Mock<IRepository<Package>>();
-        _mockLogger = new Mock<ILogger<PackageService>>();
-        
-        // AutoMapper setup
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
-        _mapper = config.CreateMapper();
-
-        // UnitOfWork'e mock'u bağla
-        _mockUow.Setup(x => x.Repository<Package>())
-            .Returns(_mockRepository.Object);
-
-        // Service'i yarat
-        _service = new PackageService(_mockUow.Object, _mockLogger.Object, _mapper);
+        _uow.Setup(u => u.BlogCategories).Returns(_categories.Object);   // servis kurucuda okuyorsa önce Setup
+        _service = new BlogCategoryService(_uow.Object, TestMapper.Create(),
+            new CreateBlogCategoryRequestValidator(), new UpdateBlogCategoryRequestValidator(),
+            NullLogger<BlogCategoryService>.Instance);
     }
 
     [Fact]
-    public async Task GetByIdAsync_WithValidId_ReturnsSuccessResult()
+    public async Task CreateAsync_WithExistingSlug_ReturnsConflictAndDoesNotSave()
     {
         // Arrange
-        var package = new Package
-        {
-            Id = 1,
-            Name = "Başlangıç Paketi",
-            Price = 3450,
-            IsDeleted = false
-        };
-        _mockRepository.Setup(x => x.GetByIdAsync(1))
-            .ReturnsAsync(package);
+        _categories.Setup(r => r.SlugExistsAsync("beslenme", null)).ReturnsAsync(true);
 
         // Act
-        var result = await _service.GetByIdAsync(1);
+        var result = await _service.CreateAsync(new CreateBlogCategoryRequest { Name = "Beslenme", Slug = "beslenme" });
 
         // Assert
-        result.Success.Should().BeTrue();
-        result.Data.Should().NotBeNull();
-        result.Data.Name.Should().Be("Başlangıç Paketi");
-        _mockRepository.Verify(x => x.GetByIdAsync(1), Times.Once);
-    }
-
-    [Fact]
-    public async Task GetByIdAsync_WithInvalidId_ReturnsFailureResult()
-    {
-        // Arrange
-        _mockRepository.Setup(x => x.GetByIdAsync(999))
-            .ReturnsAsync((Package)null);
-
-        // Act
-        var result = await _service.GetByIdAsync(999);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.Message.Should().Contain("not found");
-        result.Data.Should().BeNull();
-    }
-
-    [Fact]
-    public async Task GetByIdAsync_OnDatabaseException_ReturnsFailureAndLogsError()
-    {
-        // Arrange
-        _mockRepository.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
-            .ThrowsAsync(new Exception("Database error"));
-
-        // Act
-        var result = await _service.GetByIdAsync(1);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.Message.Should().Be("An error occurred");
-        _mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.IsAny<It.IsAnyType>(),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-            Times.Once);
-    }
-
-    [Fact]
-    public async Task CreateAsync_WithValidRequest_ReturnsSuccessResult()
-    {
-        // Arrange
-        var request = new CreatePackageRequest { Name = "Yeni Paket", Price = 5000 };
-        var validator = new CreatePackageRequestValidator();
-        var validationResult = await validator.ValidateAsync(request);
-
-        if (validationResult.IsValid)
-        {
-            var newPackage = new Package { Id = 2, Name = request.Name, Price = request.Price };
-            _mockRepository.Setup(x => x.AddAsync(It.IsAny<Package>()))
-                .Returns(Task.CompletedTask);
-            _mockUow.Setup(x => x.SaveChangesAsync())
-                .ReturnsAsync(1);
-        }
-
-        // Act
-        var result = await _service.CreateAsync(request);
-
-        // Assert
-        result.Success.Should().BeTrue();
-        result.Data.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task CreateAsync_WithInvalidRequest_ReturnsValidationError()
-    {
-        // Arrange — boş name ile geçersiz request
-        var request = new CreatePackageRequest { Name = "", Price = 5000 };
-
-        // Act
-        var result = await _service.CreateAsync(request);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.Errors.Should().NotBeEmpty();
+        result.ErrorType.Should().Be(ResultErrorType.Conflict);
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Never);
     }
 }
 ```
 
-### FluentAssertions Sık Kullanılan Assertion'lar
+- `Result` kontrolü: `result.IsSuccess`, `result.ErrorType`, `result.Errors`, `result.Value`
+- Veritabanının Id vermesi: `.Callback<Package>(p => p.Id = 5)`; eklenen entity'yi yakalamak: `.Callback<Package>(p => added = p)`
+- Setup yapılmayan async metot varsayılanı döner (`null`, `false`, `0`, boş `Task`)
 
-```csharp
-// Boolean
-result.Success.Should().BeTrue();
-result.Success.Should().BeFalse();
+### Senaryolar
 
-// Null checks
-result.Data.Should().BeNull();
-result.Data.Should().NotBeNull();
-
-// String checks
-result.Message.Should().Be("Expected message");
-result.Message.Should().Contain("not found");
-result.Message.Should().StartWith("Error:");
-
-// Collection checks
-result.Errors.Should().NotBeEmpty();
-result.Errors.Should().HaveCount(2);
-result.Errors.Should().Contain("Validation error");
-
-// Numeric
-result.Data.Id.Should().Be(1);
-result.Data.Price.Should().BeGreaterThan(0);
-
-// Type checks
-result.Data.Should().BeOfType<PackageResponse>();
-```
-
-### Test Naming Convention
-
-`[MethodName]_[Scenario]_[ExpectedResult]`
-
-✓ `CreateAsync_WithValidRequest_ReturnsSuccess`
-✓ `GetByIdAsync_WithInvalidId_ReturnsFailure`
-✓ `DeleteAsync_OnDatabaseError_LogsErrorAndReturnsFailure`
-✗ `Test1`, `ShouldWork`, `TestCreate`
-
-### Her Service Method'u İçin Minimum Senaryolar
+Her servis metodu için, uygulanabildiği kadar:
 
 ```
-✓ Happy Path: valid input → success + correct data
-✓ Not Found: id/entity yok → failure + proper message
-✓ Validation Error: invalid input → failure + error list
-✓ Exception: DB/service error → failure + logged error
-✓ Authorization (varsa): unauthorized user → failure + 401
+✓ Başarı: geçerli girdi → IsSuccess + doğru veri / doğru kayıt (Verify SaveChangesAsync Times.Once)
+✓ Bulunamadı: → ResultErrorType.NotFound, kayıt yapılmaz
+✓ Doğrulama: geçersiz girdi → ResultErrorType.Validation, kayıt yapılmaz (Times.Never)
+✓ İş kuralı: slug çakışması, silme engeli, IP sınırı → Conflict / TooManyRequests
+✓ Veritabanı hatası: servislerde try/catch yok → exception yukarı fırlar (ThrowAsync);
+  transaction açan yerde RollbackAsync çağrıldığı, CommitAsync çağrılmadığı doğrulanır
 ```
 
-### Mock Kurulum Patterns
+Kapsam dışı: controller'lar (ince katman; uçtan uca testler ayrı) ve `CrudService`'ten türeyip ek kuralı olmayan servisler (taban `BlogCategoryServiceTests` ile sınanır). Sıralama gibi sorgu davranışı repository'dedir, servis testinde değil.
 
-**Repository Mock'u:**
-```csharp
-_mockRepository.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
-    .ReturnsAsync((int id) => new Package { Id = id });
-```
+### İsimlendirme
 
-**Multiple Calls:**
-```csharp
-_mockRepository.SetupSequence(x => x.GetByIdAsync(It.IsAny<int>()))
-    .ReturnsAsync(new Package { Id = 1 })
-    .ReturnsAsync((Package)null); // 2. call null döner
-```
-
-**Verify — mock'un çağrılıp çağrılmadığını kontrol et:**
-```csharp
-_mockRepository.Verify(x => x.GetByIdAsync(1), Times.Once);
-_mockRepository.Verify(x => x.Update(It.IsAny<Package>()), Times.Never);
-```
-
-### Integration Test vs Unit Test
-
-**Unit Test:** Database mock'lanır, sadece service logic test edilir (bu döküman)
-**Integration Test:** Gerçek DB (InMemory EF Core), tüm katmanlar çalışır (sonraya)
+`[Metot]_[Senaryo]_[Beklenen]`: `CreateAsync_WithExistingSlug_ReturnsConflict`, `RefreshAsync_WithRevokedToken_RevokesAllUserSessions`. Test 1 şeyi sınar; aynı testi farklı girdilerle çalıştırmak için `[Theory]` + `[InlineData]`.
 
 ---
 
@@ -836,22 +653,38 @@ public async Task<Result<PackageResponse>> GetByIdAsync(int id)
 
 ### Complex Logic
 
+Yorum ne yapıldığını değil **neden** öyle yapıldığını anlatır (`PackageService.CreateAsync`, kısaltılmış):
+
 ```csharp
-public async Task<Result<PackageResponse>> CreateAsync(CreatePackageRequest request)
+public async Task<Result<int>> CreateAsync(CreatePackageRequest request)
 {
-    // Validation ve DTO'dan entity'ye mapping
-    var validator = new CreatePackageRequestValidator();
-    var validationResult = await validator.ValidateAsync(request);
-    if (!validationResult.IsValid)
-        return Result<PackageResponse>.FailureResult("Validation failed", 
-            validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+    var errors = await createValidator.GetErrorsAsync(request);
+    if (errors.Count > 0)
+        return Result<int>.Invalid(errors);
 
-    // Database'e kaydet
-    var entity = new Package { /* ... */ };
-    await _uow.Repository<Package>().AddAsync(entity);
-    await _uow.SaveChangesAsync();
+    if (await unitOfWork.Packages.SlugExistsAsync(request.Slug))
+        return Result<int>.Conflict(SlugInUse);
 
-    return Result<PackageResponse>.SuccessResult(_mapper.Map<PackageResponse>(entity));
+    var package = mapper.Map<Package>(request);
+    SyncChildren(package, request);
+
+    await unitOfWork.BeginTransactionAsync();
+    try
+    {
+        // "En Çok Tercih Edilen" her kategoride tektir; unique index ihlal edilmesin diye eskisi önce ayrı kaydedilir
+        await ReleaseFeaturedAsync(request.Location, request.IsFeatured, currentId: null);
+        await unitOfWork.Packages.AddAsync(package);
+        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.CommitAsync();
+    }
+    catch
+    {
+        await unitOfWork.RollbackAsync();
+        throw;
+    }
+
+    logger.LogInformation("Paket {Id} oluşturuldu", package.Id);
+    return Result<int>.Success(package.Id);
 }
 ```
 
