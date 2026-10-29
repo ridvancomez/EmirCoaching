@@ -1,0 +1,36 @@
+@inherits LayoutComponentBase
+
+@* MudBlazor'un tema, açılır menü, pencere ve bildirim altyapısı; layout'ta bir kez durur *@
+<MudThemeProvider Theme="AdminTheme.Theme" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Dense="false">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+                       OnClick="ToggleDrawer" aria-label="Menüyü aç/kapat" />
+        <a href="/" class="admin-logo">
+            <img src="images/logo.png" alt="Emir Coaching" width="162" height="24" />
+        </a>
+        <MudSpacer />
+        <UserMenu />
+    </MudAppBar>
+
+    @* Responsive: geniş ekranda sabit açık, mobilde üstte açılıp kapanan çekmece *@
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Variant="DrawerVariant.Responsive" Elevation="0">
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-6">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+}

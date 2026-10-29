@@ -1,0 +1,13 @@
+@* Sağ üstteki kullanıcı menüsü; ad ve çıkış, giriş akışı eklenince API'ye bağlanacak *@
+<MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+    <ActivatorContent>
+        <MudButton Variant="Variant.Text" Color="Color.Inherit"
+                   StartIcon="@Icons.Material.Outlined.AccountCircle" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+            Admin
+        </MudButton>
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem Href="/account" Icon="@Icons.Material.Outlined.ManageAccounts">Kullanıcı ayarları</MudMenuItem>
+        <MudMenuItem Icon="@Icons.Material.Outlined.Logout">Çıkış yap</MudMenuItem>
+    </ChildContent>
+</MudMenu>
