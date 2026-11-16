@@ -11,17 +11,17 @@ public class VideoQuestionsController(IVideoQuestionService videoQuestionService
 {
     // Pasifler dahil, sitedeki sırayla → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<VideoQuestionResponse>>> GetAll() =>
         FromResult(await videoQuestionService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<VideoQuestionResponse>> GetById(int id) =>
         FromResult(await videoQuestionService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateVideoQuestionRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateVideoQuestionRequest request) =>
         CreatedFromResult(await videoQuestionService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

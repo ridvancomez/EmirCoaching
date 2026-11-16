@@ -11,17 +11,17 @@ public class BlogCategoriesController(IBlogCategoryService blogCategoryService) 
 {
     // Pasifler dahil, sitedeki sırayla → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<BlogCategoryResponse>>> GetAll() =>
         FromResult(await blogCategoryService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<BlogCategoryResponse>> GetById(int id) =>
         FromResult(await blogCategoryService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateBlogCategoryRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateBlogCategoryRequest request) =>
         CreatedFromResult(await blogCategoryService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

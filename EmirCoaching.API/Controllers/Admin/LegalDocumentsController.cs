@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.Entities.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +14,17 @@ public class LegalDocumentsController(ILegalDocumentService legalDocumentService
 
     // Güncel sürüm → 200 / 404
     [HttpGet("{type}")]
-    public async Task<IActionResult> GetCurrent(LegalDocumentType type) =>
+    public async Task<ActionResult<LegalDocumentResponse>> GetCurrent(LegalDocumentType type) =>
         FromResult(await legalDocumentService.GetCurrentAsync(type));
 
     // Revizyon geçmişi (yeniden eskiye) → 200
     [HttpGet("{type}/revisions")]
-    public async Task<IActionResult> GetRevisions(LegalDocumentType type) =>
+    public async Task<ActionResult<IReadOnlyList<LegalDocumentRevisionResponse>>> GetRevisions(LegalDocumentType type) =>
         FromResult(await legalDocumentService.GetRevisionsAsync(type));
 
     // multipart/form-data: file (PDF) + note (değişiklik notu) → 200 + yeni sürüm / 400
     [HttpPost("{type}/versions")]
     [RequestSizeLimit(MaxRequestBytes)]
-    public async Task<IActionResult> UploadNewVersion(LegalDocumentType type, IFormFile file, [FromForm] string note) =>
+    public async Task<ActionResult<LegalDocumentResponse>> UploadNewVersion(LegalDocumentType type, IFormFile file, [FromForm] string note) =>
         FromResult(await legalDocumentService.UploadNewVersionAsync(type, file, note));
 }

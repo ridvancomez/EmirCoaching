@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.Entities.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,6 @@ public class SocialPostsController(ISocialPostService socialPostService) : ApiCo
 
     // Ana sayfadaki son postlar: ?platform=Instagram&count=3 (servis en fazla 12 döner)
     [HttpGet]
-    public async Task<IActionResult> GetActiveByPlatform(SocialPlatform platform, int count = DefaultCount) =>
+    public async Task<ActionResult<IReadOnlyList<SocialPostResponse>>> GetActiveByPlatform(SocialPlatform platform, int count = DefaultCount) =>
         FromResult(await socialPostService.GetActiveByPlatformAsync(platform, count));
 }

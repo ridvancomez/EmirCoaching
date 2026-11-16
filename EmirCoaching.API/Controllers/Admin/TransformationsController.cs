@@ -10,17 +10,17 @@ public class TransformationsController(ITransformationService transformationServ
 {
     // Pasifler dahil, yeniden eskiye → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<TransformationResponse>>> GetAll() =>
         FromResult(await transformationService.GetAllAsync());
 
     // Düzenleme formu: hikâye ve ölçümler dahil (pasif olsa da) → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<TransformationDetailResponse>> GetById(int id) =>
         FromResult(await transformationService.GetByIdAsync(id));
 
     // → 201 / 400
     [HttpPost]
-    public async Task<IActionResult> Create(CreateTransformationRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateTransformationRequest request) =>
         CreatedFromResult(await transformationService.CreateAsync(request), nameof(GetById));
 
     // Ölçümler gönderilen listeyle değiştirilir → 204 / 400 / 404

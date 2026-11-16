@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Common;
 using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.Entities.Common;
@@ -13,7 +14,7 @@ public class ContactMessagesController(IContactMessageService contactMessageServ
 
     // Yeniden eskiye, duruma göre filtre: ?status=Yeni&page=1&size=20 → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll(ContactMessageStatus? status, int page = 1, int size = DefaultPageSize) =>
+    public async Task<ActionResult<PagedResult<ContactMessageResponse>>> GetAll(ContactMessageStatus? status, int page = 1, int size = DefaultPageSize) =>
         FromResult(await contactMessageService.GetPagedAsync(status, page, size));
 
     // → 204 / 400 / 404

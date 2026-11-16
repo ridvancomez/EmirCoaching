@@ -18,12 +18,12 @@ public class AuthController(IAuthService authService) : ApiControllerBase
     // → 200 { accessToken, expiresAt } + cookie / 400 / 401
     [HttpPost("login")]
     [EnableRateLimiting(RateLimitPolicies.Login)]
-    public async Task<IActionResult> Login(LoginRequest request) =>
+    public async Task<ActionResult<AuthResponse>> Login(LoginRequest request) =>
         FromResult(await authService.LoginAsync(request, GetRequestInfo()), WriteTokens);
 
     // Cookie'deki refresh token ile yeni token çifti → 200 / 401
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh() =>
+    public async Task<ActionResult<AuthResponse>> Refresh() =>
         FromResult(await authService.RefreshAsync(Request.Cookies[RefreshCookieName], GetRequestInfo()), WriteTokens);
 
     // → 204; refresh token iptal edilir ve cookie silinir (access token süresi dolana kadar geçerli kalır)
@@ -38,7 +38,7 @@ public class AuthController(IAuthService authService) : ApiControllerBase
     // Giriş yapmış kullanıcı (admin paneli üst bilgisi) → 200 / 401
     [Authorize]
     [HttpGet("me")]
-    public async Task<IActionResult> Me() =>
+    public async Task<ActionResult<CurrentUserResponse>> Me() =>
         FromResult(await authService.GetCurrentUserAsync(CurrentUserId));
 
     // Kullanıcı ayarları: ad, unvan, biyografi, fotoğraf (blog yazar kartı) → 204 / 400 / 401
@@ -51,10 +51,10 @@ public class AuthController(IAuthService authService) : ApiControllerBase
     [Authorize]
     [HttpPost("change-password")]
     [EnableRateLimiting(RateLimitPolicies.Login)] // mevcut şifre denemesi kaba kuvvete açık olmasın
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request) =>
+    public async Task<ActionResult<AuthResponse>> ChangePassword(ChangePasswordRequest request) =>
         FromResult(await authService.ChangePasswordAsync(CurrentUserId, request, GetRequestInfo()), WriteTokens);
 
-    private OkObjectResult WriteTokens(AuthTokens tokens)
+    private ActionResult<AuthResponse> WriteTokens(AuthTokens tokens)
     {
         Response.Cookies.Append(RefreshCookieName, tokens.RefreshToken, RefreshCookieOptions(tokens.RefreshTokenExpiresAt));
         return Ok(new AuthResponse { AccessToken = tokens.AccessToken.Token, ExpiresAt = tokens.AccessToken.ExpiresAt });

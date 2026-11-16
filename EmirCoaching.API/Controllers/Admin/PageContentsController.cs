@@ -11,12 +11,12 @@ public class PageContentsController(IPageContentService pageContentService) : Ad
 {
     // Tüm sayfalar → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<PageContentResponse>>> GetAll() =>
         FromResult(await pageContentService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{pageKey}")]
-    public async Task<IActionResult> GetByPageKey(string pageKey) =>
+    public async Task<ActionResult<PageContentResponse>> GetByPageKey(string pageKey) =>
         FromResult(await pageContentService.GetByPageKeyAsync(pageKey));
 
     // → 204 / 400 / 404

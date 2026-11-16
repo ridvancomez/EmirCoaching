@@ -11,7 +11,7 @@ public class SiteSettingsController(ISiteSettingService siteSettingService) : Ad
 {
     // → 200
     [HttpGet]
-    public async Task<IActionResult> Get() =>
+    public async Task<ActionResult<SiteSettingResponse>> Get() =>
         FromResult(await siteSettingService.GetAsync());
 
     // → 204 / 400

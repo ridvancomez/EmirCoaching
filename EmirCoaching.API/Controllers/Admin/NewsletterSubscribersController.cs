@@ -1,4 +1,6 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +13,7 @@ public class NewsletterSubscribersController(INewsletterSubscriberService newsle
 
     // Yeniden eskiye: ?page=1&size=20 → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll(int page = 1, int size = DefaultPageSize) =>
+    public async Task<ActionResult<PagedResult<NewsletterSubscriberResponse>>> GetAll(int page = 1, int size = DefaultPageSize) =>
         FromResult(await newsletterSubscriberService.GetPagedAsync(page, size));
 
     // KVKK: kayıt onay kayıtlarıyla birlikte kalıcı silinir → 204 / 404

@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,5 +10,5 @@ namespace EmirCoaching.API.Controllers;
 public class DietProgramController(IDietProgramService dietProgramService) : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetActive() => FromResult(await dietProgramService.GetActiveAsync());
+    public async Task<ActionResult<DietProgramResponse>> GetActive() => FromResult(await dietProgramService.GetActiveAsync());
 }

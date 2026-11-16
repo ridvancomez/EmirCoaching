@@ -11,17 +11,17 @@ public class SiteStatsController(ISiteStatService siteStatService) : AdminContro
 {
     // Pasifler dahil, sitedeki sırayla → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<SiteStatResponse>>> GetAll() =>
         FromResult(await siteStatService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<SiteStatResponse>> GetById(int id) =>
         FromResult(await siteStatService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateSiteStatRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateSiteStatRequest request) =>
         CreatedFromResult(await siteStatService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

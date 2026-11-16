@@ -11,7 +11,7 @@ public class DietProgramController(IDietProgramService dietProgramService) : Adm
 {
     // Pasif olsa da döner → 200
     [HttpGet]
-    public async Task<IActionResult> Get() =>
+    public async Task<ActionResult<DietProgramResponse>> Get() =>
         FromResult(await dietProgramService.GetAsync());
 
     // "Nasıl Çalışır?" adımları ayrı: admin/diet-program-steps → 204 / 400

@@ -11,17 +11,17 @@ public class TestimonialsController(ITestimonialService testimonialService) : Ad
 {
     // Pasifler dahil, sitedeki sırayla; ?packageId= ile tek paketin yorumları → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll(int? packageId) =>
+    public async Task<ActionResult<IReadOnlyList<TestimonialResponse>>> GetAll(int? packageId) =>
         FromResult(await testimonialService.GetAllAsync(packageId));
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<TestimonialResponse>> GetById(int id) =>
         FromResult(await testimonialService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateTestimonialRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateTestimonialRequest request) =>
         CreatedFromResult(await testimonialService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

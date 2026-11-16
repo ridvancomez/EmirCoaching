@@ -1,4 +1,6 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.Entities.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,6 @@ public class LoginAttemptsController(ILoginAttemptService loginAttemptService) :
 
     // Yeniden eskiye, sonuca göre filtre: ?result=HataliSifre&page=1&size=20 → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll(LoginAttemptResult? result, int page = 1, int size = DefaultPageSize) =>
+    public async Task<ActionResult<PagedResult<LoginAttemptResponse>>> GetAll(LoginAttemptResult? result, int page = 1, int size = DefaultPageSize) =>
         FromResult(await loginAttemptService.GetPagedAsync(result, page, size));
 }

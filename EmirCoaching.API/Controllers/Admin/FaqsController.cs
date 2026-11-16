@@ -11,17 +11,17 @@ public class FaqsController(IFaqService faqService) : AdminControllerBase
 {
     // Pasifler dahil, sitedeki sırayla → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<FaqResponse>>> GetAll() =>
         FromResult(await faqService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<FaqResponse>> GetById(int id) =>
         FromResult(await faqService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateFaqRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateFaqRequest request) =>
         CreatedFromResult(await faqService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

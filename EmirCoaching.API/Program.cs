@@ -208,8 +208,12 @@ builder.Services.AddCors(options => options.AddPolicy(SiteCorsPolicy, policy =>
 // API belgesi (/openapi/v1.json) ve Swagger arayüzü (/swagger) — yalnızca geliştirmede açık
 builder.Services.AddOpenApi(options =>
 {
+    // 3.0: panel istemcisini üreten NSwag 3.1'i tam okuyamıyor
+    options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
     options.AddDocumentTransformer<OpenApiBearerTransformer>();
     options.AddOperationTransformer<OpenApiBearerTransformer>();
+    options.AddOperationTransformer<OpenApiClientTransformer>();
+    options.AddSchemaTransformer<OpenApiClientTransformer>();
 });
 
 var app = builder.Build();

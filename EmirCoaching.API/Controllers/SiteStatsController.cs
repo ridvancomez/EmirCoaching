@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,5 +10,5 @@ public class SiteStatsController(ISiteStatService siteStatService) : ApiControll
 {
     // Ana sayfadaki sayaçlar
     [HttpGet]
-    public async Task<IActionResult> GetAll() => FromResult(await siteStatService.GetAllAsync());
+    public async Task<ActionResult<IReadOnlyList<SiteStatResponse>>> GetAll() => FromResult(await siteStatService.GetAllAsync());
 }

@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.Entities.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,11 @@ public class LegalDocumentsController(ILegalDocumentService legalDocumentService
 {
     // Türün güncel sürümü: /legal-documents/Gizlilik
     [HttpGet("{type}")]
-    public async Task<IActionResult> GetCurrent(LegalDocumentType type) =>
+    public async Task<ActionResult<LegalDocumentResponse>> GetCurrent(LegalDocumentType type) =>
         FromResult(await legalDocumentService.GetCurrentAsync(type));
 
     // Gizlilik sayfasındaki "Revizyon Geçmişi"
     [HttpGet("{type}/revisions")]
-    public async Task<IActionResult> GetRevisions(LegalDocumentType type) =>
+    public async Task<ActionResult<IReadOnlyList<LegalDocumentRevisionResponse>>> GetRevisions(LegalDocumentType type) =>
         FromResult(await legalDocumentService.GetRevisionsAsync(type));
 }

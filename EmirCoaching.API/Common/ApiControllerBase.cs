@@ -10,22 +10,22 @@ namespace EmirCoaching.API.Common;
 [ApiController]
 public abstract class ApiControllerBase : ControllerBase
 {
-    // GET → 200 + veri
-    protected IActionResult FromResult<T>(Result<T> result) =>
+    // GET → 200 + veri. ActionResult<T>: T, OpenAPI belgesine yanıt tipi olarak yazılır (panel istemcisi bundan üretilir)
+    protected ActionResult<T> FromResult<T>(Result<T> result) =>
         result.IsSuccess ? Ok(result.Value) : Failure(result);
 
     // Başarıda yanıtı controller kurar (ör. cookie yazıp farklı bir DTO döner)
-    protected IActionResult FromResult<T>(Result<T> result, Func<T, IActionResult> onSuccess) =>
+    protected ActionResult<TResponse> FromResult<T, TResponse>(Result<T> result, Func<T, ActionResult<TResponse>> onSuccess) =>
         result.IsSuccess ? onSuccess(result.Value!) : Failure(result);
 
-    // PUT / DELETE → 204
+    // PUT / DELETE → 204 (OpenAPI'de 204 olarak görünmesi: OpenApiClientTransformer)
     protected IActionResult FromResult(Result result) =>
         result.IsSuccess ? NoContent() : Failure(result);
 
     // POST → 201 + Location (GET action'ı) + { id }
-    protected IActionResult CreatedFromResult(Result<int> result, string getActionName) =>
+    protected ActionResult<CreatedResponse> CreatedFromResult(Result<int> result, string getActionName) =>
         result.IsSuccess
-            ? CreatedAtAction(getActionName, new { id = result.Value }, new { id = result.Value })
+            ? CreatedAtAction(getActionName, new { id = result.Value }, new CreatedResponse(result.Value))
             : Failure(result);
 
     // Onay kayıtları (KVKK) için isteğin IP ve tarayıcı bilgisi

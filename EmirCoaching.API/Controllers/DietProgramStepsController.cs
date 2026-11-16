@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,5 +10,5 @@ public class DietProgramStepsController(IDietProgramStepService dietProgramStepS
 {
     // Diyet planı detay sayfasındaki "Nasıl Çalışır?" adımları
     [HttpGet]
-    public async Task<IActionResult> GetAll() => FromResult(await dietProgramStepService.GetAllAsync());
+    public async Task<ActionResult<IReadOnlyList<DietProgramStepResponse>>> GetAll() => FromResult(await dietProgramStepService.GetAllAsync());
 }

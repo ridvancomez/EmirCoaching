@@ -11,17 +11,17 @@ public class SocialPostsController(ISocialPostService socialPostService) : Admin
 {
     // Pasifler dahil, sitedeki sırayla → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<SocialPostResponse>>> GetAll() =>
         FromResult(await socialPostService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<SocialPostResponse>> GetById(int id) =>
         FromResult(await socialPostService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateSocialPostRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateSocialPostRequest request) =>
         CreatedFromResult(await socialPostService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

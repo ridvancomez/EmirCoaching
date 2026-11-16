@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,6 @@ public class UploadsController(IUploadService uploadService) : AdminControllerBa
     // multipart/form-data: file + isteğe bağlı folder (ör. "blog") → 200 { path, url } / 400
     [HttpPost("images")]
     [RequestSizeLimit(MaxRequestBytes)]
-    public async Task<IActionResult> UploadImage(IFormFile file, [FromForm] string? folder) =>
+    public async Task<ActionResult<UploadedFileResponse>> UploadImage(IFormFile file, [FromForm] string? folder) =>
         FromResult(await uploadService.UploadImageAsync(file, folder));
 }

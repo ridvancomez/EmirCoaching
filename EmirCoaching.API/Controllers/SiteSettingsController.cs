@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,5 +10,5 @@ namespace EmirCoaching.API.Controllers;
 public class SiteSettingsController(ISiteSettingService siteSettingService) : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get() => FromResult(await siteSettingService.GetAsync());
+    public async Task<ActionResult<SiteSettingResponse>> Get() => FromResult(await siteSettingService.GetAsync());
 }

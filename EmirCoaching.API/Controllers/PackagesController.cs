@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ public class PackagesController(IPackageService packageService) : ApiControllerB
 {
     // Paketler sayfası (yalnızca aktifler)
     [HttpGet]
-    public async Task<IActionResult> GetList() => FromResult(await packageService.GetListAsync());
+    public async Task<ActionResult<IReadOnlyList<PackageResponse>>> GetList() => FromResult(await packageService.GetListAsync());
 
     // Paket detay sayfası: modüller, öne çıkanlar, yorumlar
     [HttpGet("{slug}")]
-    public async Task<IActionResult> GetDetail(string slug) => FromResult(await packageService.GetDetailAsync(slug));
+    public async Task<ActionResult<PackageDetailResponse>> GetDetail(string slug) => FromResult(await packageService.GetDetailAsync(slug));
 }

@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Common;
 using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +13,17 @@ public class BlogPostsController(IBlogPostService blogPostService) : AdminContro
 
     // Taslaklar dahil, yeniden eskiye: ?categoryId=2&isPublished=false&page=1&size=20 → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll(int? categoryId, bool? isPublished, int page = 1, int size = DefaultPageSize) =>
+    public async Task<ActionResult<PagedResult<BlogPostResponse>>> GetAll(int? categoryId, bool? isPublished, int page = 1, int size = DefaultPageSize) =>
         FromResult(await blogPostService.GetAllPagedAsync(categoryId, isPublished, page, size));
 
     // Düzenleme formu (taslak olsa da) → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<BlogPostDetailResponse>> GetById(int id) =>
         FromResult(await blogPostService.GetByIdAsync(id));
 
     // Taslak olarak kaydedilir; yazar seçilmezse giriş yapan kullanıcı → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreateBlogPostRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateBlogPostRequest request) =>
         CreatedFromResult(await blogPostService.CreateAsync(request with { AuthorId = request.AuthorId ?? CurrentUserId }), nameof(GetById));
 
     // → 204 / 400 / 404 / 409

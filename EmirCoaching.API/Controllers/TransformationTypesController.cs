@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,5 +10,5 @@ public class TransformationTypesController(ITransformationTypeService transforma
 {
     // Değişimler sayfasındaki filtre sekmeleri
     [HttpGet]
-    public async Task<IActionResult> GetAll() => FromResult(await transformationTypeService.GetAllAsync());
+    public async Task<ActionResult<IReadOnlyList<TransformationTypeResponse>>> GetAll() => FromResult(await transformationTypeService.GetAllAsync());
 }

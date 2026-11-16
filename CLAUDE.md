@@ -205,11 +205,11 @@ Response: 204 No Content
 public class FaqsController(IFaqService faqService) : ApiControllerBase
 {
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<FaqResponse>> GetById(int id) =>
         FromResult(await faqService.GetByIdAsync(id));                              // 200 / 404
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateFaqRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateFaqRequest request) =>
         CreatedFromResult(await faqService.CreateAsync(request), nameof(GetById));  // 201 / 400 / 409
 
     [HttpPut("{id:int}")]
@@ -223,6 +223,8 @@ public class FaqsController(IFaqService faqService) : ApiControllerBase
 ```
 
 - PUT'ta id route'tan alınır ve `request with { Id = id }` ile gövdedekinin üzerine yazılır.
+- **Dönüş tipi:** veri dönen uç `Task<ActionResult<T>>` (T = servisin `Result<T>`'si), oluşturma `Task<ActionResult<CreatedResponse>>`, veri dönmeyen (204) `Task<IActionResult>`. Tip OpenAPI belgesine buradan yazılır; admin paneli istemcisini bu belgeden üretir, `IActionResult` ile veri dönen uç panelde tipsiz kalır.
+- **OpenAPI belgesi** (`/openapi/v1.json`, 3.0): `OpenApiClientTransformer` her uca `{Area}{Controller}_{Action}` operationId'si verir (panelde `AdminSiteStatsClient.GetAllAsync`), 204/201 yanıtlarını düzeltir, enum'lara değer + `x-enumNames` ekler.
 
 ### Pagination & Filtering
 

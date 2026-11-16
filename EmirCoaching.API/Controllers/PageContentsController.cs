@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,6 @@ public class PageContentsController(IPageContentService pageContentService) : Ap
 {
     // Sayfa başlık alanı (hero) içeriği
     [HttpGet("{pageKey}")]
-    public async Task<IActionResult> GetByPageKey(string pageKey) =>
+    public async Task<ActionResult<PageContentResponse>> GetByPageKey(string pageKey) =>
         FromResult(await pageContentService.GetByPageKeyAsync(pageKey));
 }

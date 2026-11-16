@@ -11,17 +11,17 @@ public class DietProgramStepsController(IDietProgramStepService dietProgramStepS
 {
     // Sitedeki sırayla → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<DietProgramStepResponse>>> GetAll() =>
         FromResult(await dietProgramStepService.GetAllAsync());
 
     // → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<DietProgramStepResponse>> GetById(int id) =>
         FromResult(await dietProgramStepService.GetByIdAsync(id));
 
     // → 201 / 400
     [HttpPost]
-    public async Task<IActionResult> Create(CreateDietProgramStepRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreateDietProgramStepRequest request) =>
         CreatedFromResult(await dietProgramStepService.CreateAsync(request), nameof(GetById));
 
     // → 204 / 400 / 404

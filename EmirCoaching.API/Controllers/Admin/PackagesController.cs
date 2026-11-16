@@ -10,17 +10,17 @@ public class PackagesController(IPackageService packageService) : AdminControlle
 {
     // Pasifler dahil tüm paketler → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
+    public async Task<ActionResult<IReadOnlyList<PackageResponse>>> GetAll() =>
         FromResult(await packageService.GetAllAsync());
 
     // Düzenleme formu: modüller, kalemler, öne çıkanlar → 200 / 404
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id) =>
+    public async Task<ActionResult<PackageDetailResponse>> GetById(int id) =>
         FromResult(await packageService.GetByIdAsync(id));
 
     // → 201 / 400 / 409
     [HttpPost]
-    public async Task<IActionResult> Create(CreatePackageRequest request) =>
+    public async Task<ActionResult<CreatedResponse>> Create(CreatePackageRequest request) =>
         CreatedFromResult(await packageService.CreateAsync(request), nameof(GetById));
 
     // Modüller ve öne çıkanlar gönderilen listeyle değiştirilir → 204 / 400 / 404 / 409

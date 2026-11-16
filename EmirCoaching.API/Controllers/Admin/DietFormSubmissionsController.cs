@@ -1,4 +1,5 @@
 using EmirCoaching.API.Common;
+using EmirCoaching.Business.Common;
 using EmirCoaching.Business.Dtos;
 using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.Entities.Common;
@@ -13,7 +14,7 @@ public class DietFormSubmissionsController(IDietFormSubmissionService dietFormSu
 
     // Yeniden eskiye, duruma göre filtre: ?status=Yeni&page=1&size=20 → 200
     [HttpGet]
-    public async Task<IActionResult> GetAll(DietFormStatus? status, int page = 1, int size = DefaultPageSize) =>
+    public async Task<ActionResult<PagedResult<DietFormSubmissionResponse>>> GetAll(DietFormStatus? status, int page = 1, int size = DefaultPageSize) =>
         FromResult(await dietFormSubmissionService.GetPagedAsync(status, page, size));
 
     // Yeni dışındaki durumlarda kişi yeniden başvurabilir → 204 / 400 / 404
