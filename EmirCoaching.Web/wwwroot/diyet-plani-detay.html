@@ -39,8 +39,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -50,6 +56,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>
@@ -194,14 +203,18 @@
         </div>
       </article>
 
+      <!-- Diyet planı ayrı bir ürün değil; tüm koçluk paketlerinin parçası -->
       <aside class="program-ucret" aria-labelledby="program-ucret-label">
-        <p id="program-ucret-label" class="program-ucret__label">PROGRAM ÜCRETİ</p>
-        <p class="program-ucret__price">₺ 1.950</p>
-        <p class="program-ucret__note">Tek seferlik ödeme / 4 haftalık program</p>
+        <p id="program-ucret-label" class="program-ucret__label">TÜM PAKETLERE DAHİL</p>
+        <p class="program-ucret__price program-ucret__price--text">Ek ücret yok</p>
+        <p class="program-ucret__note">Seçtiğin koçluk paketiyle birlikte hazırlanır.</p>
         <hr class="program-ucret__divider">
-        <a href="diyet-formu.html" class="program-ucret__button" title="Diyet formunu doldurarak koçluk paketine ekle">Koçluk
-          Paketine Ekle</a>
-        <p class="program-ucret__secure">Güvenli ödeme altyapısı ile 256-bit SSL korumalı.</p>
+        <ul class="program-ucret__packages">
+          <li><a href="paketler.html#temel-paket" class="program-ucret__package" title="Başlangıç &amp; Deneme paketini incele"><span>Başlangıç &amp; Deneme</span><span class="program-ucret__package-time">3 Aylık</span></a></li>
+          <li><a href="paketler.html#orta-paket" class="program-ucret__package" title="Dönüşüm Protokolü paketini incele"><span>Dönüşüm Protokolü</span><span class="program-ucret__package-time">6 Aylık</span></a></li>
+          <li><a href="paketler.html#premium-paket" class="program-ucret__package" title="VIP Yaşam Tarzı paketini incele"><span>VIP Yaşam Tarzı</span><span class="program-ucret__package-time">12 Aylık</span></a></li>
+        </ul>
+        <a href="paketler.html" class="program-ucret__button" title="Koçluk paketlerini incele">Paketleri İncele</a>
       </aside>
     </section>
 
@@ -215,14 +228,14 @@
               <iconify-icon icon="mdi:clipboard-text" mode="svg" noobserver></iconify-icon>
             </span>
             <h3 class="nasil-calisir__step-title">1. Formu Doldur</h3>
-            <p class="nasil-calisir__step-text">Hedeflerini ve beslenme alışkanlıklarını içeren detaylı formu doldur.</p>
+            <p class="nasil-calisir__step-text">Paketini aldıktan sonra koçun WhatsApp'tan danışan bilgi formunu gönderir; hedeflerini ve beslenme alışkanlıklarını orada paylaşırsın.</p>
           </li>
           <li class="nasil-calisir__step">
             <span class="nasil-calisir__icon" aria-hidden="true">
               <iconify-icon icon="mdi:silverware-fork-knife" mode="svg" noobserver></iconify-icon>
             </span>
             <h3 class="nasil-calisir__step-title">2. Planın Hazırlanır</h3>
-            <p class="nasil-calisir__step-text">Uzman koçumuz verilerini analiz ederek sana özel planını 24 saat içinde hazırlar.</p>
+            <p class="nasil-calisir__step-text">Formun ve tahlillerin ulaşınca uzmanımız planını 48 saat içinde hazırlar.</p>
           </li>
           <li class="nasil-calisir__step">
             <span class="nasil-calisir__icon" aria-hidden="true">

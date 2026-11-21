@@ -40,8 +40,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -51,6 +57,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>

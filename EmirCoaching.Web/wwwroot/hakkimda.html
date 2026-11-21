@@ -39,8 +39,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link navbar__menu-link--active" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -50,6 +56,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>
@@ -154,16 +163,44 @@
       </div>
     </section>
 
-    <!-- ==================== Perdenin Arkası (video) ==================== -->
-    <section class="perde-arkasi container" aria-labelledby="perde-arkasi-title">
-      <div class="perde-arkasi__poster">
-        <div class="perde-arkasi__content">
-          <button type="button" class="perde-arkasi__play" aria-label="Tanıtım videosunu oynat"
-            title="Tanıtım videosunu oynat" data-video-src="" data-video-open>
-            <span class="perde-arkasi__play-icon" aria-hidden="true"></span>
+    <!-- ==================== Perdenin Arkası: tanıtım videosu + sertifikalar ====================
+         Ana sayfadaki koç bölümüyle aynı bileşen (coach__media, coach__certs) -->
+    <section class="perde-arkasi coach coach--hakkimda container" aria-labelledby="perde-arkasi-title">
+      <div class="coach__inner">
+        <div class="coach__media">
+          <img src="images/hakkimda-video.png" alt="İbrahim Emir'in tanıtım videosundan bir kare" title="Emir Coaching tanıtım videosu"
+            width="1238" height="664" class="coach__poster" loading="lazy">
+          <button type="button" class="coach__play" title="Tanıtım videosunu oynat" aria-label="Tanıtım videosunu oynat"
+            data-video-src="" data-video-open>
+            <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
           </button>
-          <h2 id="perde-arkasi-title" class="perde-arkasi__title">Perdenin Arkası</h2>
-          <p class="perde-arkasi__subtitle">Antrenman kültürümüzü izleyin</p>
+          <div class="coach__label">
+            <img src="images/yazar-ibrahim-emir-kucuk.jpg" alt="İbrahim Emir" title="İbrahim Emir" width="52" height="52"
+              class="coach__avatar" loading="lazy">
+            <span class="coach__label-text"><strong class="coach__name">İbrahim Emir</strong><span class="coach__role">Online Fitness &amp; Beslenme Koçu · 8+ yıl</span></span>
+          </div>
+        </div>
+
+        <div class="coach__content">
+          <h2 id="perde-arkasi-title" class="home-title">Eğitim ve <span class="home-title__accent">SERTİFİKALAR</span></h2>
+          <ul class="coach__certs" aria-label="Sertifikalar">
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-tvgfbf.png" alt="Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu logosu" title="Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">2. Kademe Temel Antrenör Belgesi</strong><span class="coach__cert-meta">TVGFBF · 2021</span></span>
+            </li>
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-fmi.png" alt="Fitness Movement Institute logosu" title="Fitness Movement Institute" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">Nefes, Nörolojik Düzenleme ve Postür Eğitimi</strong><span class="coach__cert-meta">FMI · EREPS Seviye 4 · 2022</span></span>
+            </li>
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-fmi.png" alt="Fitness Movement Institute logosu" title="Fitness Movement Institute" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">Personal Trainer EQF Level 4</strong><span class="coach__cert-meta">FMI · 2023</span></span>
+            </li>
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-biopeak.png" alt="Biopeak logosu" title="Biopeak" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">Shoulder Performance Specialist</strong><span class="coach__cert-meta">Biopeak · 2024</span></span>
+            </li>
+          </ul>
         </div>
       </div>
     </section>

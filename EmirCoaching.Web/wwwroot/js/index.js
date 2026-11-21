@@ -148,6 +148,8 @@
     var navbar = document.querySelector(".navbar");
     var GAP = 200; // ms: bu süreden kısa aralıklı tekerlek olayları aynı hareket sayılır
     var EPS = 2;
+    // Uzun bölümün sonuna gelince alt kenarı da görünsün diye 40px daha inilir, sonra sonraki bölüme geçilir
+    var END_ROOM = 40;
     var busy = false;
     var settling = false;
     var lastNative = false;
@@ -174,7 +176,7 @@
 
         if (i === 0) {
           var heroTall = r.height - window.innerHeight > window.innerHeight * 0.25;
-          return { top: 0, bottom: heroTall ? clamp(top + r.height - window.innerHeight) : 0, tall: heroTall };
+          return { top: 0, bottom: heroTall ? clamp(top + r.height - window.innerHeight + END_ROOM) : 0, tall: heroTall };
         }
 
         if (r.height <= room) {
@@ -188,7 +190,7 @@
           return { top: clamp(top - nav), bottom: clamp(top - nav), tall: false };
         }
 
-        return { top: clamp(top - nav), bottom: clamp(top + r.height - window.innerHeight), tall: true };
+        return { top: clamp(top - nav), bottom: clamp(top + r.height - window.innerHeight + END_ROOM), tall: true };
       });
     }
 
@@ -594,7 +596,132 @@
     });
   }
 
+  // Danışan yorumları: tek yorum görünür, yandaki oklar ve alttaki noktalar arasında geçiş.
+  // Son yorumdan sonra başa döner. Kendiliğinden 6 sn'de bir ilerler; fare üstündeyken,
+  // klavye odağı içindeyken, sekme arka plandayken ve "hareketi azalt" tercihinde durur.
+  function initReviewsCarousel() {
+    var root = document.querySelector("[data-reviews]");
+
+    if (!root) {
+      return;
+    }
+
+    var track = root.querySelector("[data-reviews-track]");
+    var items = track ? track.children : [];
+
+    if (!items.length) {
+      return;
+    }
+
+    var count = items.length;
+    var currentIndex = 0;
+
+    function goTo(index) {
+      currentIndex = (index + count) % count;
+      track.style.transform = "translateX(-" + currentIndex * 100 + "%)";
+
+      Array.prototype.forEach.call(items, function (item, i) {
+        item.inert = i !== currentIndex;
+      });
+
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle("home-dot--active", i === currentIndex);
+      });
+    }
+
+    var dots = generateDots(
+      root.querySelector("[data-reviews-dots]"),
+      count,
+      "home-dot",
+      "home-dot--active",
+      goTo
+    );
+
+    dots.forEach(function (dot, i) {
+      dot.title = (i + 1) + ". yoruma git";
+      dot.setAttribute("aria-label", (i + 1) + ". yoruma git");
+    });
+
+    var AUTOPLAY_MS = 6000;
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var timer = null;
+    var hovered = false;
+    var focused = false;
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    // Her çağrıda sayaç baştan başlar; elle geçişten hemen sonra kaymasın
+    function start() {
+      stop();
+
+      if (hovered || focused || document.hidden || reduceMotion.matches) {
+        return;
+      }
+
+      timer = setInterval(function () {
+        goTo(currentIndex + 1);
+      }, AUTOPLAY_MS);
+    }
+
+    root.querySelector("[data-reviews-prev]").addEventListener("click", function () {
+      goTo(currentIndex - 1);
+      start();
+    });
+
+    root.querySelector("[data-reviews-next]").addEventListener("click", function () {
+      goTo(currentIndex + 1);
+      start();
+    });
+
+    dots.forEach(function (dot) {
+      dot.addEventListener("click", start);
+    });
+
+    // Yalnızca fare: dokunmatikte dokunuş "hover" sayılıp dönüşü kalıcı durdurmasın
+    root.addEventListener("pointerenter", function (event) {
+      if (event.pointerType === "mouse") {
+        hovered = true;
+        stop();
+      }
+    });
+
+    root.addEventListener("pointerleave", function (event) {
+      if (event.pointerType === "mouse") {
+        hovered = false;
+        start();
+      }
+    });
+
+    // Klavye odağı (focus-visible); fareyle tıklanan ok odak alsa da dönüş durmaz
+    root.addEventListener("focusin", function (event) {
+      if (event.target.matches(":focus-visible")) {
+        focused = true;
+        stop();
+      }
+    });
+
+    root.addEventListener("focusout", function (event) {
+      if (!root.contains(event.relatedTarget)) {
+        focused = false;
+        start();
+      }
+    });
+
+    document.addEventListener("visibilitychange", start);
+
+    if (reduceMotion.addEventListener) {
+      reduceMotion.addEventListener("change", start);
+    }
+
+    goTo(0);
+    start();
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    initReviewsCarousel();
     initProgramSlider();
     initProgramFlip();
     initStoryCarousel();

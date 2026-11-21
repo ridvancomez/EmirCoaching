@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="description"
-    content="Kişiye özel diyet planın için formu doldur: kişisel bilgilerin, beslenme alışkanlıkların ve yaşam tarzına göre uzman diyetisyen planını 24 saat içinde hazırlasın.">
+    content="Seçtiğin koçluk paketi için kişisel ve iletişim bilgilerini bırak, ödemeni Shopier'de güvenle tamamla; koçun WhatsApp'tan sana ulaşsın.">
 
   <link rel="preload" href="fonts/geologica/geologica-v5-latin_latin-ext-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/inter/inter-v20-latin_latin-ext-regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -39,8 +39,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -50,6 +56,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>
@@ -146,8 +155,37 @@
 
     <!-- ==================== Diyet Formu ==================== -->
     <section class="diyet-form container" aria-label="Diyet formu">
+      <!-- Satın alma akışı: Paket Detay "Satın Al" → bu form (?paket=…&yer=…) → "Bilgilerin alındı" → Shopier.
+           JS varken form 2 adımlı sihirbaz olur (js/diyet-formu.js); JS yoksa tüm bölümler alt alta görünür. -->
       <form id="diyet-form" class="diyet-form__form" novalidate>
-        <fieldset class="diyet-form__section">
+        <div class="diyet-form__section diyet-form__paket">
+          <div class="diyet-form__field">
+            <label for="paket" class="diyet-form__label">Seçilen Paket</label>
+            <div class="diyet-form__select-wrap">
+              <select id="paket" name="paket" class="diyet-form__input diyet-form__select" required>
+                <option value="" disabled selected>Paket seçin</option>
+                <optgroup label="Salonda">
+                  <option value="temel-salonda">Başlangıç &amp; Deneme · 3 Aylık · ₺8.999</option>
+                  <option value="orta-salonda">Dönüşüm Protokolü · 6 Aylık · ₺15.999</option>
+                  <option value="premium-salonda">VIP Yaşam Tarzı · 12 Aylık · ₺27.999</option>
+                </optgroup>
+                <optgroup label="Evde">
+                  <option value="temel-evde">Başlangıç &amp; Deneme (Evde) · 3 Aylık · ₺5.999</option>
+                  <option value="orta-evde">Dönüşüm Protokolü (Evde) · 6 Aylık · ₺10.999</option>
+                  <option value="premium-evde">VIP Yaşam Tarzı (Evde) · 12 Aylık · ₺18.999</option>
+                </optgroup>
+              </select>
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="diyet-form__select-icon" aria-hidden="true"></iconify-icon>
+            </div>
+          </div>
+        </div>
+
+        <ol class="diyet-form__steps" aria-label="Form adımları">
+          <li class="diyet-form__step"><span class="diyet-form__step-num" aria-hidden="true">1</span><span class="diyet-form__step-name">Kişisel</span></li>
+          <li class="diyet-form__step"><span class="diyet-form__step-num" aria-hidden="true">2</span><span class="diyet-form__step-name">İletişim</span></li>
+        </ol>
+
+        <fieldset class="diyet-form__section" data-step="1">
           <legend class="diyet-form__legend">
             <span class="diyet-form__badge" aria-hidden="true">1</span>
             <h2 class="diyet-form__title">Kişisel Bilgiler</h2>
@@ -195,7 +233,7 @@
           </div>
         </fieldset>
 
-        <fieldset class="diyet-form__section">
+        <fieldset class="diyet-form__section" data-step="2">
           <legend class="diyet-form__legend">
             <span class="diyet-form__badge" aria-hidden="true">2</span>
             <h2 class="diyet-form__title">İletişim Bilgileri</h2>
@@ -210,72 +248,6 @@
                 <label for="telefon" class="diyet-form__label">Telefon Numarası</label>
                 <input type="tel" id="telefon" name="telefon" class="diyet-form__input" placeholder="05xx xxx xx xx" autocomplete="tel" inputmode="tel" pattern="\+?[0-9 ()\-]{10,20}" required>
               </div>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="diyet-form__section">
-          <legend class="diyet-form__legend">
-            <span class="diyet-form__badge" aria-hidden="true">3</span>
-            <h2 class="diyet-form__title">Beslenme Alışkanlıkları</h2>
-          </legend>
-          <div class="diyet-form__fields">
-            <div class="diyet-form__field">
-              <label for="ogun-sayisi" class="diyet-form__label">Günlük Öğün Sayısı</label>
-              <div class="diyet-form__select-wrap">
-                <select id="ogun-sayisi" name="ogun-sayisi" class="diyet-form__input diyet-form__select" required>
-                  <option value="" disabled selected>Seçiniz...</option>
-                  <option value="2">2 öğün</option>
-                  <option value="3">3 öğün</option>
-                  <option value="4">4 öğün</option>
-                  <option value="5">5 öğün</option>
-                  <option value="6">6 öğün</option>
-                </select>
-                <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="diyet-form__select-icon" aria-hidden="true"></iconify-icon>
-              </div>
-            </div>
-            <div class="diyet-form__field">
-              <label for="alerjiler" class="diyet-form__label">Besin Alerjileri / İntoleranslar</label>
-              <textarea id="alerjiler" name="alerjiler" class="diyet-form__input diyet-form__textarea" rows="2" placeholder="Örn: Laktoz, Glüten, Fıstık... Yoksa boş bırakın."></textarea>
-            </div>
-            <div class="diyet-form__field">
-              <label for="tuketilmeyenler" class="diyet-form__label">Kesinlikle Tüketmediğiniz Besinler</label>
-              <textarea id="tuketilmeyenler" name="tuketilmeyenler" class="diyet-form__input diyet-form__textarea diyet-form__input--single" rows="1" placeholder="Örn: Mantar, brokoli, balık..."></textarea>
-            </div>
-            <div class="diyet-form__field">
-              <label for="takviyeler" class="diyet-form__label">Aktif Takviye Kullanımı</label>
-              <input type="text" id="takviyeler" name="takviyeler" class="diyet-form__input" placeholder="Örn: Whey Protein, Kreatin, Omega-3...">
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="diyet-form__section">
-          <legend class="diyet-form__legend">
-            <span class="diyet-form__badge" aria-hidden="true">4</span>
-            <h2 class="diyet-form__title">Yaşam Tarzı</h2>
-          </legend>
-          <div class="diyet-form__fields">
-            <div class="diyet-form__field">
-              <label for="uyku" class="diyet-form__label">Uyku Düzeni (Saat/Gün)</label>
-              <input type="number" id="uyku" name="uyku" class="diyet-form__input" placeholder="Örn: 7" min="0" max="24" step="0.5" inputmode="decimal">
-            </div>
-            <div class="diyet-form__field">
-              <label for="aktivite" class="diyet-form__label">Günlük Aktivite Seviyesi (İş/Günlük Yaşam)</label>
-              <div class="diyet-form__select-wrap">
-                <select id="aktivite" name="aktivite" class="diyet-form__input diyet-form__select" required>
-                  <option value="" disabled selected>Seçiniz...</option>
-                  <option value="hareketsiz">Hareketsiz (masa başı)</option>
-                  <option value="az-aktif">Az aktif</option>
-                  <option value="orta">Orta derece aktif</option>
-                  <option value="aktif">Aktif</option>
-                  <option value="cok-aktif">Çok aktif</option>
-                </select>
-                <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="diyet-form__select-icon" aria-hidden="true"></iconify-icon>
-              </div>
-            </div>
-            <div class="diyet-form__field">
-              <label for="su" class="diyet-form__label">Günlük Su Tüketimi (Litre)</label>
-              <input type="number" id="su" name="su" class="diyet-form__input" placeholder="Örn: 2.5" min="0" max="10" step="0.1" inputmode="decimal">
             </div>
           </div>
         </fieldset>
@@ -307,11 +279,36 @@
           </div>
         </div>
 
-        <button type="submit" class="diyet-form__submit" title="Diyet formunu gönder">
-          <iconify-icon icon="bi:send" mode="svg" noobserver class="diyet-form__submit-icon" aria-hidden="true"></iconify-icon>
-          <span>Formu Gönder</span>
-        </button>
+        <div class="diyet-form__nav">
+          <button type="button" class="diyet-form__back" title="Önceki adıma dön" data-step-prev hidden>
+            <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+            <span>Geri</span>
+          </button>
+          <button type="button" class="diyet-form__submit diyet-form__next" title="Sonraki adıma geç" data-step-next hidden>
+            <span>İleri</span>
+            <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+          </button>
+          <button type="submit" class="diyet-form__submit" title="Bilgilerini gönder ve ödeme adımına geç">
+            <iconify-icon icon="bi:send" mode="svg" noobserver class="diyet-form__submit-icon" aria-hidden="true"></iconify-icon>
+            <span>Gönder ve Ödemeye Geç</span>
+          </button>
+        </div>
       </form>
+
+      <!-- Form gönderilince: ödeme Shopier'de, yeni sekmede (kullanıcı tıklar; pop-up engeline takılmaz).
+           Backend: buton href'ine seçilen paketin Shopier ürün linkini basar. -->
+      <div class="diyet-form__done" id="diyet-form-done" tabindex="-1" hidden>
+        <span class="diyet-form__done-icon" aria-hidden="true">
+          <iconify-icon icon="ph:check-bold" mode="svg" noobserver></iconify-icon>
+        </span>
+        <h2 class="diyet-form__done-title">Bilgilerin Alındı</h2>
+        <p class="diyet-form__done-text">Son adım: <strong class="diyet-form__done-paket">Dönüşüm Protokolü</strong> paketinin ödemesini Shopier'de tamamla.</p>
+        <a href="https://www.shopier.com/" class="diyet-form__submit diyet-form__pay" title="Ödemeyi Shopier'de tamamla (yeni sekmede açılır)" target="_blank" rel="noopener">
+          <iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver class="diyet-form__submit-icon" aria-hidden="true"></iconify-icon>
+          <span>Ödemeyi Shopier'de Tamamla</span>
+        </a>
+        <p class="diyet-form__done-note">Ödemen tamamlanınca koçun WhatsApp'tan sana ulaşır; danışan bilgi formunu ve tahlil rehberini oradan gönderir.</p>
+      </div>
     </section>
 
     <!-- ==================== CTA ==================== -->

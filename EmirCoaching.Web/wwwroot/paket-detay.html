@@ -19,7 +19,7 @@
 </head>
 
 <!-- Backend notu: Evde kategorisindeki paketlerde <body class="tema-evde"> basılır; sayfadaki mavi vurgular
-     yeşile döner (style.css "Paket Detay — Evde teması"). Başka fark yoktur. Önizleme: paket-detay-evde.html -->
+     yeşile döner (style.css "Paket Detay — Evde teması"). Başka fark yoktur. Önizleme: alternatif-sayfalar/paket-detay-evde.html -->
 <body>
 
   <header class="navbar">
@@ -41,8 +41,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -52,6 +58,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>
@@ -189,6 +198,7 @@
                 <span>Supplement Planlaması</span>
               </li>
             </ul>
+            <a href="diyet-plani-detay.html" class="modul-card__link" title="Kişiye özel beslenme planının nasıl hazırlandığını incele">Beslenme planı nasıl hazırlanır? <span aria-hidden="true">→</span></a>
           </article>
           <article class="modul-card" aria-labelledby="modul-3-title">
             <header class="modul-card__header">
@@ -258,7 +268,7 @@
       <aside class="fiyat-karti" aria-labelledby="fiyat-karti-title">
         <h2 id="fiyat-karti-title" class="fiyat-karti__title">Dönüşüm Protokolü</h2>
         <p class="fiyat-karti__subtitle">6 Aylık Dönüşüm Programı</p>
-        <p class="fiyat-karti__price">₺ 8.250</p>
+        <p class="fiyat-karti__price">₺ 15.999</p>
         <ul class="fiyat-karti__list">
           <li class="fiyat-karti__item">
             <iconify-icon icon="mdi:star-outline" mode="svg" noobserver class="fiyat-karti__star" aria-hidden="true"></iconify-icon>
@@ -293,14 +303,39 @@
             <span>Detaylı Gelişim Raporları</span>
           </li>
         </ul>
-        <a href="https://www.shopier.com/" class="hero__button hero__button--secondary fiyat-karti__button fiyat-karti__button--shopier"
-          title="Dönüşüm Protokolü paketini Shopier üzerinden satın alın" target="_blank" rel="noopener">
+        <!-- Satın Al → bilgi formu (paket seçili gelir); ödeme formdan sonra Shopier'de -->
+        <a href="diyet-formu.html?paket=orta&amp;yer=salonda" class="hero__button hero__button--secondary fiyat-karti__button fiyat-karti__button--shopier"
+          title="Dönüşüm Protokolü paketi için bilgi formuna geç">
           <span>Satın Al</span>
         </a>
         <p class="fiyat-karti__note">Kredi kartı ile taksit imkanı mevcuttur.</p>
       </aside>
     </section>
 
+
+    <!-- ==================== Güvence şeridi (ana sayfadakiyle aynı) ==================== -->
+    <section class="guvence container" aria-label="Ödeme ve iletişim güvenceleri">
+      <div class="assurance">
+        <ul class="assurance__list">
+          <li class="assurance__item">
+            <span class="assurance__icon"><iconify-icon icon="solar:shield-check-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="assurance__body"><strong class="assurance__title">Güvenli ödeme</strong><span class="assurance__text">Shopier altyapısı; kart bilgin bizde saklanmaz.</span></span>
+          </li>
+          <li class="assurance__item">
+            <span class="assurance__icon"><iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="assurance__body"><strong class="assurance__title">Birebir WhatsApp</strong><span class="assurance__text">Sorunu aracı olmadan doğrudan koçuna yazarsın.</span></span>
+          </li>
+          <li class="assurance__item">
+            <span class="assurance__icon"><iconify-icon icon="solar:undo-left-round-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="assurance__body"><strong class="assurance__title">İade ve iptal koşulları</strong><span class="assurance__text">Satın almadan önce tamamını okuyabilirsin.</span></span>
+          </li>
+        </ul>
+        <div class="assurance__legal">
+          <a href="#" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
+          <a href="#" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
+        </div>
+      </div>
+    </section>
 
     <!-- ==================== Öğrenci Yorumları ==================== -->
     <section class="yorumlar container" aria-labelledby="yorumlar-title">
@@ -516,6 +551,7 @@
   </div>
 
   <script src="js/main.js"></script>
+  <script src="js/paket-detay.js"></script>
   <script src="js/paket-detay-moduller.js"></script>
 </body>
 

@@ -245,7 +245,7 @@
     ".hata-404-linkler__title", ".gizlilik-belgeler__title",
     // Kartlar ve bloklar
     ".program__left", ".program__right", ".story__row", ".qa__slider", ".faq__item",
-    ".paketler-card", ".beslenme__box", ".modul-card", ".paket-detay__total", ".fiyat-karti",
+    ".beslenme__box", ".modul-card", ".paket-detay__total", ".fiyat-karti",
     ".uygunluk__card", ".yorum-card", ".blog-featured__card", ".blog-card",
     ".oneri-card", ".yazar-bio", ".sosyal-card", ".sayilar__grid",
     ".program-detay__card", ".nasil-calisir__step", ".hata-404-linkler__card",
@@ -324,9 +324,69 @@
     });
   }
 
+  // Hide on scroll (headroom): aşağı kaydırınca navbar gizlenir, yukarı kaydırınca geri gelir.
+  // Sayfanın en üstünde, menü/modal açıkken, navbar içinde klavye odağı varken veya fare
+  // navbar'ın üstündeyken (ör. Paketler açılır menüsü) gizlenmez.
+  function initHideOnScroll() {
+    var navbar = document.querySelector(".navbar");
+
+    if (!navbar) {
+      return;
+    }
+
+    var HIDDEN = "navbar--hidden";
+    var MIN_DELTA = 8;
+    var lastY = window.scrollY;
+    var ticking = false;
+
+    function mustStay() {
+      return (
+        lockedModalCount > 0 ||
+        document.body.classList.contains("mobile-drawer-is-open") ||
+        navbar.matches(":hover") ||
+        (navbar.contains(document.activeElement) && document.activeElement !== document.body)
+      );
+    }
+
+    function update() {
+      ticking = false;
+
+      var y = window.scrollY;
+      var delta = y - lastY;
+      // Navbar'ın kendi yüksekliği + üst boşluğu kadar inilmeden gizleme
+      var topZone = navbar.offsetTop + navbar.offsetHeight;
+
+      if (y <= topZone || mustStay()) {
+        navbar.classList.remove(HIDDEN);
+        lastY = y;
+        return;
+      }
+
+      if (Math.abs(delta) < MIN_DELTA) {
+        return;
+      }
+
+      navbar.classList.toggle(HIDDEN, delta > 0);
+      lastY = y;
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+
+    // Klavyeyle navbar'a gelinirse görünür olsun
+    navbar.addEventListener("focusin", function () {
+      navbar.classList.remove(HIDDEN);
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initReveal();
     initMobileDrawer();
+    initHideOnScroll();
     initContactModal();
     initContactSuccessModal();
   });

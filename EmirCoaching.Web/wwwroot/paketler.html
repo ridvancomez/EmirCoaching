@@ -39,8 +39,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--active navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -50,6 +56,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>
@@ -148,126 +157,238 @@
       </div>
     </section>
 
-    <!-- ==================== Paket Kartları ==================== -->
-    <section class="paketler-cards container" aria-label="Koçluk paketleri">
-      <article id="temel-paket" class="paketler-card" data-category="salonda" aria-labelledby="temel-paket-title">
-        <header class="paketler-card__header">
-          <h2 id="temel-paket-title" class="paketler-card__title"><a href="paket-detay.html" class="paketler-card__link" title="Başlangıç &amp; Deneme paketinin detaylarını incele">BAŞLANGIÇ &amp; DENEME</a></h2>
-          <p class="paketler-card__duration">SÜRE: 3 AY</p>
-          <p class="paketler-card__price">₺ 3.450</p>
-        </header>
-        <ul class="paketler-card__features">
-          <li class="paketler-card__feature">Kişiye özel antrenman planlaması</li>
-          <li class="paketler-card__feature">Kalorisi hesaplanmış beslenme planı</li>
-          <li class="paketler-card__feature">Kan tahlili analizi &amp; revize</li>
-          <li class="paketler-card__feature">Haftalık durum değerlendirmesi</li>
-          <li class="paketler-card__feature">Birebir WhatsApp iletişimi</li>
-          <!-- Zoom görüşmesi 6 ve 12 aylık paketlerde; içermeyen pakette kilitli satır (Paket Detay'daki gibi) -->
-          <li class="paketler-card__feature paketler-card__feature--highlight paketler-card__feature--kilitli">
-            <span><span class="paketler-card__feature-etiket">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi</span>
-          </li>
-        </ul>
-        <a href="https://www.shopier.com/" class="paketler-card__button" title="Başlangıç &amp; Deneme paketini Shopier üzerinden satın al" target="_blank" rel="noopener">Satın Al</a>
-      </article>
+    <!-- ==================== Paket Kartları (ana sayfadaki paket tasarımı) ====================
+         Filtre (Tümü / Evde / Salonda) grupları gösterir/gizler; dar ekranda her grup ayrı carousel. -->
+    <section class="paketler-cards paket-gruplari container" aria-label="Koçluk paketleri">
+      <div class="paket-grup" data-category="salonda" role="group" aria-labelledby="salonda-grup-title">
+        <h2 id="salonda-grup-title" class="paket-grup__title">Salonda Paketler</h2>
+        <div class="packages__slider" data-pkg-slider>
+          <div class="packages__nav">
+            <p class="packages__counter" aria-live="polite"><b data-pkg-current>1</b> / 3</p>
+            <div class="packages__arrows">
+              <button type="button" class="round-arrow" data-pkg-prev title="Önceki salon paket" aria-label="Önceki salon paket">
+                <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+              <button type="button" class="round-arrow" data-pkg-next title="Sonraki salon paket" aria-label="Sonraki salon paket">
+                <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+            </div>
+          </div>
+          <div class="packages__track" data-pkg-track>
+          <article id="temel-paket" class="pkg pkg--1" aria-labelledby="temel-paket-title">
+            <div class="pkg__top">
+              <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity"><svg class="pkg__rank" width="28" height="15" viewBox="0 0 28 15" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="temel-paket-title" class="pkg__name"><a href="paket-detay.html?paket=temel&amp;yer=salonda" class="pkg__name-link" title="Başlangıç & Deneme paketinin detaylarını incele">Başlangıç &amp; Deneme</a></h3></div>
+                <span class="pkg__duration">3 Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">₺8.999</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>₺3.000</b></p>
+              <ul class="pkg__list">
+              <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+              <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+              <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+              <li class="pkg__item pkg__item--locked"><iconify-icon icon="mdi:lock-outline" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+              </ul>
+              <div class="pkg__actions">
+                <a href="paket-detay.html?paket=temel&amp;yer=salonda" class="pkg__buy" title="Başlangıç & Deneme paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="https://wa.me/905453712515" class="pkg__ask" title="Başlangıç & Deneme paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
+          <article id="orta-paket" class="pkg pkg--2" aria-labelledby="orta-paket-title">
+            <span class="pkg__badge">En Çok Tercih Edilen</span>
+            <div class="pkg__top">
+              <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity"><svg class="pkg__rank" width="28" height="23" viewBox="0 0 28 23" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="orta-paket-title" class="pkg__name"><a href="paket-detay.html?paket=orta&amp;yer=salonda" class="pkg__name-link" title="Dönüşüm Protokolü paketinin detaylarını incele">Dönüşüm Protokolü</a></h3></div>
+                <span class="pkg__duration">6 Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">₺15.999</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>₺2.667</b></p>
+              <ul class="pkg__list">
+              <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+              <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+              <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+              <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+              </ul>
+              <div class="pkg__actions">
+                <a href="paket-detay.html?paket=orta&amp;yer=salonda" class="pkg__buy" title="Dönüşüm Protokolü paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="https://wa.me/905453712515" class="pkg__ask" title="Dönüşüm Protokolü paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
+          <article id="premium-paket" class="pkg pkg--3" aria-labelledby="premium-paket-title">
+            <div class="pkg__top">
+              <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity"><svg class="pkg__rank" width="28" height="48" viewBox="0 0 28 48" aria-hidden="true"><path d="M14 .5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L14 13.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/><g transform="translate(0 17)"><path d="M3 11 L14 2 L25 11" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 29 L14 20 L25 29" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></g></svg><h3 id="premium-paket-title" class="pkg__name"><a href="paket-detay.html?paket=premium&amp;yer=salonda" class="pkg__name-link" title="VIP Yaşam Tarzı paketinin detaylarını incele">VIP Yaşam Tarzı</a></h3></div>
+                <span class="pkg__duration">12 Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">₺27.999</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>₺2.333</b></p>
+              <ul class="pkg__list">
+              <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+              <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+              <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+              <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+              </ul>
+              <div class="pkg__actions">
+                <a href="paket-detay.html?paket=premium&amp;yer=salonda" class="pkg__buy" title="VIP Yaşam Tarzı paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="https://wa.me/905453712515" class="pkg__ask" title="VIP Yaşam Tarzı paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
+          </div>
+          <div class="packages__dots" data-pkg-dots></div>
+        </div>
+      </div>
 
-      <article id="orta-paket" class="paketler-card paketler-card--featured" data-category="salonda" aria-labelledby="orta-paket-title">
-        <span class="paketler-card__badge">En Çok Tercih Edilen</span>
-        <header class="paketler-card__header">
-          <h2 id="orta-paket-title" class="paketler-card__title"><a href="paket-detay.html" class="paketler-card__link" title="Dönüşüm Protokolü paketinin detaylarını incele">DÖNÜŞÜM PROTOKOLÜ</a></h2>
-          <p class="paketler-card__duration">SÜRE: 6 AY</p>
-          <p class="paketler-card__price">₺ 8.250</p>
-        </header>
-        <ul class="paketler-card__features">
-          <li class="paketler-card__feature">Kişiye özel antrenman planlaması</li>
-          <li class="paketler-card__feature">Kalorisi hesaplanmış beslenme planı</li>
-          <li class="paketler-card__feature">Kan tahlili analizi &amp; revize</li>
-          <li class="paketler-card__feature">Haftalık durum değerlendirmesi</li>
-          <li class="paketler-card__feature">Birebir WhatsApp iletişimi</li>
-          <li class="paketler-card__feature paketler-card__feature--highlight paketler-card__feature--ozel">
-            <span><span class="paketler-card__feature-etiket">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi</span>
-          </li>
-        </ul>
-        <a href="https://www.shopier.com/" class="paketler-card__button" title="Dönüşüm Protokolü paketini Shopier üzerinden satın al" target="_blank" rel="noopener">Satın Al</a>
-      </article>
+      <div class="paket-grup" data-category="evde" role="group" aria-labelledby="evde-grup-title">
+        <h2 id="evde-grup-title" class="paket-grup__title">Evde Paketler</h2>
+        <div class="packages__slider" data-pkg-slider>
+          <div class="packages__nav">
+            <p class="packages__counter" aria-live="polite"><b data-pkg-current>1</b> / 3</p>
+            <div class="packages__arrows">
+              <button type="button" class="round-arrow" data-pkg-prev title="Önceki evde paket" aria-label="Önceki evde paket">
+                <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+              <button type="button" class="round-arrow" data-pkg-next title="Sonraki evde paket" aria-label="Sonraki evde paket">
+                <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+            </div>
+          </div>
+          <div class="packages__track" data-pkg-track>
+          <article id="evde-temel-paket" class="pkg pkg--1" aria-labelledby="evde-temel-paket-title">
+            <div class="pkg__top">
+              <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity"><svg class="pkg__rank" width="28" height="15" viewBox="0 0 28 15" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="evde-temel-paket-title" class="pkg__name"><a href="paket-detay.html?paket=temel&amp;yer=evde" class="pkg__name-link" title="Başlangıç & Deneme (evde) paketinin detaylarını incele">Başlangıç &amp; Deneme</a></h3></div>
+                <span class="pkg__duration">3 Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">₺5.999</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>₺2.000</b></p>
+              <ul class="pkg__list">
+              <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+              <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+              <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+              <li class="pkg__item pkg__item--locked"><iconify-icon icon="mdi:lock-outline" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+              </ul>
+              <div class="pkg__actions">
+                <a href="paket-detay.html?paket=temel&amp;yer=evde" class="pkg__buy" title="Başlangıç & Deneme (evde) paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="https://wa.me/905453712515" class="pkg__ask" title="Başlangıç & Deneme (evde) paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
+          <article id="evde-orta-paket" class="pkg pkg--2" aria-labelledby="evde-orta-paket-title">
+            <span class="pkg__badge">En Çok Tercih Edilen</span>
+            <div class="pkg__top">
+              <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity"><svg class="pkg__rank" width="28" height="23" viewBox="0 0 28 23" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="evde-orta-paket-title" class="pkg__name"><a href="paket-detay.html?paket=orta&amp;yer=evde" class="pkg__name-link" title="Dönüşüm Protokolü (evde) paketinin detaylarını incele">Dönüşüm Protokolü</a></h3></div>
+                <span class="pkg__duration">6 Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">₺10.999</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>₺1.833</b></p>
+              <ul class="pkg__list">
+              <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+              <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+              <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+              <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+              </ul>
+              <div class="pkg__actions">
+                <a href="paket-detay.html?paket=orta&amp;yer=evde" class="pkg__buy" title="Dönüşüm Protokolü (evde) paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="https://wa.me/905453712515" class="pkg__ask" title="Dönüşüm Protokolü (evde) paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
+          <article id="evde-premium-paket" class="pkg pkg--3" aria-labelledby="evde-premium-paket-title">
+            <div class="pkg__top">
+              <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity"><svg class="pkg__rank" width="28" height="48" viewBox="0 0 28 48" aria-hidden="true"><path d="M14 .5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L14 13.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/><g transform="translate(0 17)"><path d="M3 11 L14 2 L25 11" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 29 L14 20 L25 29" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></g></svg><h3 id="evde-premium-paket-title" class="pkg__name"><a href="paket-detay.html?paket=premium&amp;yer=evde" class="pkg__name-link" title="VIP Yaşam Tarzı (evde) paketinin detaylarını incele">VIP Yaşam Tarzı</a></h3></div>
+                <span class="pkg__duration">12 Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">₺18.999</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>₺1.583</b></p>
+              <ul class="pkg__list">
+              <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+              <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+              <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+              <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+              <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+              </ul>
+              <div class="pkg__actions">
+                <a href="paket-detay.html?paket=premium&amp;yer=evde" class="pkg__buy" title="VIP Yaşam Tarzı (evde) paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="https://wa.me/905453712515" class="pkg__ask" title="VIP Yaşam Tarzı (evde) paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
+          </div>
+          <div class="packages__dots" data-pkg-dots></div>
+        </div>
+      </div>
+    </section>
 
-      <article id="premium-paket" class="paketler-card" data-category="salonda" aria-labelledby="premium-paket-title">
-        <header class="paketler-card__header">
-          <h2 id="premium-paket-title" class="paketler-card__title"><a href="paket-detay.html" class="paketler-card__link" title="VIP Yaşam Tarzı paketinin detaylarını incele">VIP YAŞAM TARZI</a></h2>
-          <p class="paketler-card__duration">SÜRE: 12 AY</p>
-          <p class="paketler-card__price">₺ 14.900</p>
-        </header>
-        <ul class="paketler-card__features">
-          <li class="paketler-card__feature">Kişiye özel antrenman planlaması</li>
-          <li class="paketler-card__feature">Kalorisi hesaplanmış beslenme planı</li>
-          <li class="paketler-card__feature">Kan tahlili analizi &amp; revize</li>
-          <li class="paketler-card__feature">Haftalık durum değerlendirmesi</li>
-          <li class="paketler-card__feature">Birebir WhatsApp iletişimi</li>
-          <li class="paketler-card__feature paketler-card__feature--highlight paketler-card__feature--ozel">
-            <span><span class="paketler-card__feature-etiket">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi</span>
+    <!-- ==================== Güvence şeridi (ana sayfadakiyle aynı) ==================== -->
+    <section class="guvence container" aria-label="Ödeme ve iletişim güvenceleri">
+      <div class="assurance">
+        <ul class="assurance__list">
+          <li class="assurance__item">
+            <span class="assurance__icon"><iconify-icon icon="solar:shield-check-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="assurance__body"><strong class="assurance__title">Güvenli ödeme</strong><span class="assurance__text">Shopier altyapısı; kart bilgin bizde saklanmaz.</span></span>
+          </li>
+          <li class="assurance__item">
+            <span class="assurance__icon"><iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="assurance__body"><strong class="assurance__title">Birebir WhatsApp</strong><span class="assurance__text">Sorunu aracı olmadan doğrudan koçuna yazarsın.</span></span>
+          </li>
+          <li class="assurance__item">
+            <span class="assurance__icon"><iconify-icon icon="solar:undo-left-round-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="assurance__body"><strong class="assurance__title">İade ve iptal koşulları</strong><span class="assurance__text">Satın almadan önce tamamını okuyabilirsin.</span></span>
           </li>
         </ul>
-        <a href="https://www.shopier.com/" class="paketler-card__button" title="VIP Yaşam Tarzı paketini Shopier üzerinden satın al" target="_blank" rel="noopener">Satın Al</a>
-      </article>
-
-      <!-- Evde kartları: aynı 3 paket, yeşil tema (paketler-card--evde) -->
-      <article id="evde-temel-paket" class="paketler-card paketler-card--evde" data-category="evde" aria-labelledby="evde-temel-paket-title">
-        <header class="paketler-card__header">
-          <h2 id="evde-temel-paket-title" class="paketler-card__title"><a href="paket-detay-evde.html" class="paketler-card__link" title="Başlangıç &amp; Deneme (evde) paketinin detaylarını incele">BAŞLANGIÇ &amp; DENEME</a></h2>
-          <p class="paketler-card__duration">SÜRE: 3 AY</p>
-          <p class="paketler-card__price">₺ 3.450</p>
-        </header>
-        <ul class="paketler-card__features">
-          <li class="paketler-card__feature">Kişiye özel antrenman planlaması</li>
-          <li class="paketler-card__feature">Kalorisi hesaplanmış beslenme planı</li>
-          <li class="paketler-card__feature">Kan tahlili analizi &amp; revize</li>
-          <li class="paketler-card__feature">Haftalık durum değerlendirmesi</li>
-          <li class="paketler-card__feature">Birebir WhatsApp iletişimi</li>
-          <!-- Zoom görüşmesi 6 ve 12 aylık paketlerde; içermeyen pakette kilitli satır (Paket Detay'daki gibi) -->
-          <li class="paketler-card__feature paketler-card__feature--highlight paketler-card__feature--kilitli">
-            <span><span class="paketler-card__feature-etiket">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi</span>
-          </li>
-        </ul>
-        <a href="https://www.shopier.com/" class="paketler-card__button" title="Başlangıç &amp; Deneme (evde) paketini Shopier üzerinden satın al" target="_blank" rel="noopener">Satın Al</a>
-      </article>
-
-      <article id="evde-orta-paket" class="paketler-card paketler-card--evde paketler-card--featured" data-category="evde" aria-labelledby="evde-orta-paket-title">
-        <span class="paketler-card__badge">En Çok Tercih Edilen</span>
-        <header class="paketler-card__header">
-          <h2 id="evde-orta-paket-title" class="paketler-card__title"><a href="paket-detay-evde.html" class="paketler-card__link" title="Dönüşüm Protokolü (evde) paketinin detaylarını incele">DÖNÜŞÜM PROTOKOLÜ</a></h2>
-          <p class="paketler-card__duration">SÜRE: 6 AY</p>
-          <p class="paketler-card__price">₺ 8.250</p>
-        </header>
-        <ul class="paketler-card__features">
-          <li class="paketler-card__feature">Kişiye özel antrenman planlaması</li>
-          <li class="paketler-card__feature">Kalorisi hesaplanmış beslenme planı</li>
-          <li class="paketler-card__feature">Kan tahlili analizi &amp; revize</li>
-          <li class="paketler-card__feature">Haftalık durum değerlendirmesi</li>
-          <li class="paketler-card__feature">Birebir WhatsApp iletişimi</li>
-          <li class="paketler-card__feature paketler-card__feature--highlight paketler-card__feature--ozel">
-            <span><span class="paketler-card__feature-etiket">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi</span>
-          </li>
-        </ul>
-        <a href="https://www.shopier.com/" class="paketler-card__button" title="Dönüşüm Protokolü (evde) paketini Shopier üzerinden satın al" target="_blank" rel="noopener">Satın Al</a>
-      </article>
-
-      <article id="evde-premium-paket" class="paketler-card paketler-card--evde" data-category="evde" aria-labelledby="evde-premium-paket-title">
-        <header class="paketler-card__header">
-          <h2 id="evde-premium-paket-title" class="paketler-card__title"><a href="paket-detay-evde.html" class="paketler-card__link" title="VIP Yaşam Tarzı (evde) paketinin detaylarını incele">VIP YAŞAM TARZI</a></h2>
-          <p class="paketler-card__duration">SÜRE: 12 AY</p>
-          <p class="paketler-card__price">₺ 14.900</p>
-        </header>
-        <ul class="paketler-card__features">
-          <li class="paketler-card__feature">Kişiye özel antrenman planlaması</li>
-          <li class="paketler-card__feature">Kalorisi hesaplanmış beslenme planı</li>
-          <li class="paketler-card__feature">Kan tahlili analizi &amp; revize</li>
-          <li class="paketler-card__feature">Haftalık durum değerlendirmesi</li>
-          <li class="paketler-card__feature">Birebir WhatsApp iletişimi</li>
-          <li class="paketler-card__feature paketler-card__feature--highlight paketler-card__feature--ozel">
-            <span><span class="paketler-card__feature-etiket">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi</span>
-          </li>
-        </ul>
-        <a href="https://www.shopier.com/" class="paketler-card__button" title="VIP Yaşam Tarzı (evde) paketini Shopier üzerinden satın al" target="_blank" rel="noopener">Satın Al</a>
-      </article>
+        <div class="assurance__legal">
+          <a href="#" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
+          <a href="#" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== Beslenme Programı ==================== -->
@@ -473,6 +594,7 @@
 
   <script src="js/main.js"></script>
   <script src="js/card-filter.js"></script>
+  <script src="js/paket-slider.js"></script>
   <script src="js/paketler.js"></script>
 </body>
 

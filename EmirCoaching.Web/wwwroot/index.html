@@ -39,8 +39,14 @@
           <li class="navbar__menu-item">
             <a href="index.html" class="navbar__menu-link navbar__menu-link--active" title="Ana Sayfa">Ana Sayfa</a>
           </li>
-          <li class="navbar__menu-item">
-            <a href="paketler.html" class="navbar__menu-link" title="Paketler sayfasına git">Paketler</a>
+          <li class="navbar__menu-item navbar__menu-item--dropdown">
+            <a href="paketler.html" class="navbar__menu-link navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
+              <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
+            <ul class="navbar__dropdown" aria-label="Paketler">
+              <li><a href="paketler.html#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
+              <li><a href="paketler.html#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
+              <li><a href="paketler.html#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+            </ul>
           </li>
           <li class="navbar__menu-item">
             <a href="hakkimda.html" class="navbar__menu-link" title="Hakkımda sayfasına git">Hakkımda</a>
@@ -50,6 +56,9 @@
           </li>
           <li class="navbar__menu-item">
             <a href="iletisim.html" class="navbar__menu-link" title="İletişim sayfasına git">İletişim</a>
+          </li>
+          <li class="navbar__menu-item">
+            <a href="blog.html" class="navbar__menu-link" title="Blog sayfasına git">Blog</a>
           </li>
         </ul>
       </nav>
@@ -105,7 +114,7 @@
   </aside>
 
   <main>
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero hero--home" aria-labelledby="hero-title">
       <div class="hero__media">
         <img src="images/slider.png" alt="Emir Coaching danışanlarının dönüşüm fotoğrafları"
           title="Emir Coaching danışan dönüşümleri" width="1440" height="897" class="hero__media-img">
@@ -131,414 +140,105 @@
               <span>WhatsApp İletişim</span>
             </a>
           </div>
-
-
-        </div>
-        <ul class="hero__stats">
-          <li class="hero__stat">
-            <span class="hero__stat-value">100+</span>
-            <span class="hero__stat-label">Mutlu Danışan</span>
-          </li>
-          <li class="hero__stat">
-            <span class="hero__stat-value">95%</span>
-            <span class="hero__stat-label">Başarı Oranı</span>
-          </li>
-          <li class="hero__stat">
-            <span class="hero__stat-value">8+</span>
-            <span class="hero__stat-label">Yıllık Deneyim</span>
-          </li>
-          <li class="hero__stat">
-            <span class="hero__stat-value">3</span>
-            <span class="hero__stat-label">Paket Seçeneği</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="social" aria-labelledby="social-title">
-      <div class="container">
-        <div class="social__header">
-          <div class="social__intro">
-            <h2 id="social-title" class="social__title">Bizi sosyal Medyadan Tanıyın</h2>
-            <p class="social__description">
-              Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan,
-              onun giriş bölümü, hayattır; böylece bir şey olabilir.
-            </p>
-          </div>
-
-          <div class="social__buttons">
-            <a href="https://youtube.com/" class="social__button social__button--youtube"
-              title="Youtube kanalımızı ziyaret edin">
-              <iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-              <span>Youtube</span>
-            </a>
-            <a href="https://instagram.com/" class="social__button social__button--instagram"
-              title="Instagram hesabımızı ziyaret edin">
-              <iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-              <span>Instagram</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="social__content">
-          <div class="social__youtube">
-            <img src="images/home_youtube1.png" alt="Emir Coaching Youtube video içeriği"
-              title="Emir Coaching Youtube video içeriği" width="650" height="444" class="social__youtube-img">
-
-            <span class="social__youtube-play" aria-hidden="true">
-              <iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver></iconify-icon>
-            </span>
-
-            <div class="social__youtube-overlay">
-              <h3 class="social__youtube-overlay-title">Kardionun Önemi</h3>
-              <p class="social__youtube-overlay-desc">
-                Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı
-                olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.
-              </p>
-            </div>
-          </div>
-
-          <div class="social__instagram">
-            <div class="social__instagram-media social__instagram-media--main">
-              <img src="images/home_instagram1.png" alt="Emir Coaching Instagram gönderisi"
-                title="Emir Coaching Instagram gönderisi" width="333" height="458"
-                class="social__instagram-img social__instagram-img--main">
-
-              <div class="instagram-overlay">
-                <div class="instagram-overlay__icons">
-                  <div class="instagram-overlay__icons-left">
-                    <span class="instagram-overlay__icon icon-heart">
-                      <iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </span>
-                    <span class="instagram-overlay__icon instagram-overlay__icon--tooltip icon-comment"
-                      data-tooltip="Yorum Yap">
-                      <iconify-icon icon="fa6-regular:comment" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </span>
-                    <span class="instagram-overlay__icon instagram-overlay__icon--tooltip icon-share"
-                      data-tooltip="Paylaş">
-                      <iconify-icon icon="fa6-regular:paper-plane" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </span>
-                  </div>
-                  <span
-                    class="instagram-overlay__icon instagram-overlay__icon--tooltip instagram-overlay__icon--save icon-save"
-                    data-tooltip="Kaydet">
-                    <iconify-icon icon="fa6-regular:bookmark" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                  </span>
-                </div>
-
-                <p class="instagram-overlay__likes">4891 Likes</p>
-                <p class="instagram-overlay__caption">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  tempor incididunt ut labore et dolore.</p>
-                <p class="instagram-overlay__hashtag">#YourHashtag</p>
-              </div>
-            </div>
-
-            <div class="social__instagram-side">
-              <div class="social__instagram-media social__instagram-media--small">
-                <img src="images/home_instagram2.png" alt="Emir Coaching Instagram gönderisi"
-                  title="Emir Coaching Instagram gönderisi" width="313" height="241"
-                  class="social__instagram-img social__instagram-img--small">
-
-                <div class="instagram-overlay">
-                  <div class="instagram-overlay__icons">
-                    <div class="instagram-overlay__icons-left">
-                      <span class="instagram-overlay__icon icon-heart">
-                        <iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                      </span>
-                      <span class="instagram-overlay__icon instagram-overlay__icon--tooltip icon-comment"
-                        data-tooltip="Yorum Yap">
-                        <iconify-icon icon="fa6-regular:comment" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                      </span>
-                      <span class="instagram-overlay__icon instagram-overlay__icon--tooltip icon-share"
-                        data-tooltip="Paylaş">
-                        <iconify-icon icon="fa6-regular:paper-plane" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                      </span>
-                    </div>
-                    <span
-                      class="instagram-overlay__icon instagram-overlay__icon--tooltip instagram-overlay__icon--save icon-save"
-                      data-tooltip="Kaydet">
-                      <iconify-icon icon="fa6-regular:bookmark" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </span>
-                  </div>
-
-                  <p class="instagram-overlay__likes">4891 Likes</p>
-                  <p class="instagram-overlay__caption">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    tempor incididunt ut labore et dolore.</p>
-                  <p class="instagram-overlay__hashtag">#YourHashtag</p>
-                </div>
-              </div>
-              <div class="social__instagram-media social__instagram-media--small">
-                <img src="images/home_instagram3.png" alt="Emir Coaching Instagram gönderisi"
-                  title="Emir Coaching Instagram gönderisi" width="313" height="241"
-                  class="social__instagram-img social__instagram-img--small">
-
-                <div class="instagram-overlay">
-                  <div class="instagram-overlay__icons">
-                    <div class="instagram-overlay__icons-left">
-                      <span class="instagram-overlay__icon icon-heart">
-                        <iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                      </span>
-                      <span class="instagram-overlay__icon instagram-overlay__icon--tooltip icon-comment"
-                        data-tooltip="Yorum Yap">
-                        <iconify-icon icon="fa6-regular:comment" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                      </span>
-                      <span class="instagram-overlay__icon instagram-overlay__icon--tooltip icon-share"
-                        data-tooltip="Paylaş">
-                        <iconify-icon icon="fa6-regular:paper-plane" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                      </span>
-                    </div>
-                    <span
-                      class="instagram-overlay__icon instagram-overlay__icon--tooltip instagram-overlay__icon--save icon-save"
-                      data-tooltip="Kaydet">
-                      <iconify-icon icon="fa6-regular:bookmark" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </span>
-                  </div>
-
-                  <p class="instagram-overlay__likes">4891 Likes</p>
-                  <p class="instagram-overlay__caption">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    tempor incididunt ut labore et dolore.</p>
-                  <p class="instagram-overlay__hashtag">#YourHashtag</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <section class="program" aria-labelledby="program-title">
-      <div class="program-overlay"></div>
-      <div class="program-overlay2"></div>
-      <div class="program-overlay3"></div>
-      <div class="program-overlay4"></div>
+    <section class="process" id="nasil-calisir" aria-labelledby="process-title">
       <div class="container">
-        <div class="program__row">
-          <div class="program__left">
-            <h2 id="program-title" class="program__title">Sen Sadece Kurallara Uy,Sonucu Sisteme Bırak.</h2>
-
-            <div class="program__video">
-              <img src="images/home_youtube2.png" alt="Emir Coaching aşamalar videosu"
-                title="Emir Coaching aşamalar videosu" width="507" height="346" class="program__video-img">
-              <span class="program__video-play" aria-hidden="true">
-                <iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver></iconify-icon>
-              </span>
-              <div class="program__left-bottom">
-                <div class="program__video-caption">Aşamalar İçin İzle</div>
-                <p class="program__description">
-                  Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı
-                  olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.
-                </p>
-              </div>
-            </div>
-            <a href="paketler.html" title="Tüm paketleri görüntüle" class="program__link">Tüm Planları Görüntüle</a>
+        <div class="process__header">
+          <div class="process__intro">
+            <h2 id="process-title" class="home-title">Satın aldıktan sonra <span class="home-title__accent">NE OLUYOR?</span></h2>
+            <p class="home-lead">Belirsizlik yok. Ödemeden programına kadar her adım belli, her adımda yanındayız.</p>
           </div>
-
-          <div class="program__right">
-            <div class="program__slider">
-              <div class="program__slider-viewport">
-                <div class="program__slider-track">
-                  <div class="program__slide">
-                    <div class="program__card program__card--pricing">
-                      <img src="images/home_packet.png" alt="Emir Coaching paket görseli"
-                        title="Emir Coaching paket görseli" width="329" height="568" class="program__pricing-img">
-
-                        <div class="program__pricing-scrim-two" aria-hidden="true"></div>
-                      <div class="program__pricing-scrim" aria-hidden="true"></div>
-
-                      <div class="program__pricing-overlay">
-                        <span class="program__pricing-name">Başlangıç &amp; Deneme</span>
-                        <span class="program__pricing-label">Toplam Fiyat</span>
-                        <span class="program__pricing-value">₺ 3.450</span>
-                        <a href="https://www.shopier.com/" class="program__buy-btn" title="Başlangıç &amp; Deneme paketini Shopier üzerinden satın al" target="_blank" rel="noopener"><iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver></iconify-icon> Satın Al</a>
-                        <button type="button" class="program__flip-btn" data-program-flip>Paket İçeriğini Göster <iconify-icon icon="fa6-solid:rotate" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
-                      </div>
-                    </div>
-
-                    <div class="program__card program__card--details">
-                      <h3 class="program__details-title">Bu Pakette Neler Var</h3>
-
-                      <ul class="program__list">
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kişiye Özel Antrenman</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kalori &amp; Beslenme Planı</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kan Tahlili Analizi &amp; Revize</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Haftalık Form Kontrolleri</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>WhatsApp Birebir İletişim</span>
-                        </li>
-                        <!-- Zoom görüşmesi 6 ve 12 aylık paketlerde; içermeyen pakette kilitli satır -->
-                        <li class="program__list-item program__list-item--kilitli">
-                          <span class="program__list-icon"><iconify-icon icon="mdi:lock-outline" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span><span class="program__list-etiket">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi</span>
-                        </li>
-                      </ul>
-
-                      <div class="program__badges">
-                        <div class="program__badge">
-                          <iconify-icon icon="bi:shield-check" mode="svg" noobserver width="18" height="18" class="program__badge-icon" aria-hidden="true"></iconify-icon>
-                          <span>Bilimsel &amp; Güvenilir</span>
-                        </div>
-                        <div class="program__badge">
-                          <iconify-icon icon="ph:barbell-bold" mode="svg" noobserver width="18" height="18" class="program__badge-icon program__badge-icon--dumbbell" aria-hidden="true"></iconify-icon>
-                          <span>Kişiye Özel</span>
-                        </div>
-                      </div>
-
-                      <button type="button" class="program__flip-btn program__flip-btn--back" data-program-flip>Fiyata Dön <iconify-icon icon="fa6-solid:rotate-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
-                    </div>
-                  </div>
-                  <div class="program__slide">
-                    <div class="program__card program__card--pricing">
-                      <img src="images/home_packet.png" alt="Emir Coaching paket görseli"
-                        title="Emir Coaching paket görseli" width="329" height="568" class="program__pricing-img">
-
-                        <div class="program__pricing-scrim-two" aria-hidden="true"></div>
-                      <div class="program__pricing-scrim" aria-hidden="true"></div>
-
-                      <div class="program__pricing-overlay">
-                        <span class="program__pricing-name">Dönüşüm Protokolü</span>
-                        <span class="program__pricing-label">Toplam Fiyat</span>
-                        <span class="program__pricing-value">₺ 8.250</span>
-                        <a href="https://www.shopier.com/" class="program__buy-btn" title="Dönüşüm Protokolü paketini Shopier üzerinden satın al" target="_blank" rel="noopener"><iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver></iconify-icon> Satın Al</a>
-                        <button type="button" class="program__flip-btn" data-program-flip>Paket İçeriğini Göster <iconify-icon icon="fa6-solid:rotate" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
-                      </div>
-                    </div>
-
-                    <div class="program__card program__card--details">
-                      <h3 class="program__details-title">Bu Pakette Neler Var</h3>
-
-                      <ul class="program__list">
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kişiye Özel Antrenman</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kalori &amp; Beslenme Planı</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kan Tahlili Analizi &amp; Revize</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Haftalık Form Kontrolleri</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>WhatsApp Birebir İletişim</span>
-                        </li>
-                        <li class="program__list-item program__list-item--ozel">
-                          <span class="program__list-icon"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span><span class="program__list-etiket">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi</span>
-                        </li>
-                      </ul>
-
-                      <div class="program__badges">
-                        <div class="program__badge">
-                          <iconify-icon icon="bi:shield-check" mode="svg" noobserver width="18" height="18" class="program__badge-icon" aria-hidden="true"></iconify-icon>
-                          <span>Bilimsel &amp; Güvenilir</span>
-                        </div>
-                        <div class="program__badge">
-                          <iconify-icon icon="ph:barbell-bold" mode="svg" noobserver width="18" height="18" class="program__badge-icon program__badge-icon--dumbbell" aria-hidden="true"></iconify-icon>
-                          <span>Kişiye Özel</span>
-                        </div>
-                      </div>
-
-                      <button type="button" class="program__flip-btn program__flip-btn--back" data-program-flip>Fiyata Dön <iconify-icon icon="fa6-solid:rotate-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
-                    </div>
-                  </div>
-                  <div class="program__slide">
-                    <div class="program__card program__card--pricing">
-                      <img src="images/home_packet.png" alt="Emir Coaching paket görseli"
-                        title="Emir Coaching paket görseli" width="329" height="568" class="program__pricing-img">
-
-                        <div class="program__pricing-scrim-two" aria-hidden="true"></div>
-                      <div class="program__pricing-scrim" aria-hidden="true"></div>
-
-                      <div class="program__pricing-overlay">
-                        <span class="program__pricing-name">VIP Yaşam Tarzı</span>
-                        <span class="program__pricing-label">Toplam Fiyat</span>
-                        <span class="program__pricing-value">₺ 14.900</span>
-                        <a href="https://www.shopier.com/" class="program__buy-btn" title="VIP Yaşam Tarzı paketini Shopier üzerinden satın al" target="_blank" rel="noopener"><iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver></iconify-icon> Satın Al</a>
-                        <button type="button" class="program__flip-btn" data-program-flip>Paket İçeriğini Göster <iconify-icon icon="fa6-solid:rotate" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
-                      </div>
-                    </div>
-
-                    <div class="program__card program__card--details">
-                      <h3 class="program__details-title">Bu Pakette Neler Var</h3>
-
-                      <ul class="program__list">
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kişiye Özel Antrenman</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kalori &amp; Beslenme Planı</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Kan Tahlili Analizi &amp; Revize</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>Haftalık Form Kontrolleri</span>
-                        </li>
-                        <li class="program__list-item">
-                          <span class="program__list-icon"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span>WhatsApp Birebir İletişim</span>
-                        </li>
-                        <li class="program__list-item program__list-item--ozel">
-                          <span class="program__list-icon"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-                          <span><span class="program__list-etiket">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi</span>
-                        </li>
-                      </ul>
-
-                      <div class="program__badges">
-                        <div class="program__badge">
-                          <iconify-icon icon="bi:shield-check" mode="svg" noobserver width="18" height="18" class="program__badge-icon" aria-hidden="true"></iconify-icon>
-                          <span>Bilimsel &amp; Güvenilir</span>
-                        </div>
-                        <div class="program__badge">
-                          <iconify-icon icon="ph:barbell-bold" mode="svg" noobserver width="18" height="18" class="program__badge-icon program__badge-icon--dumbbell" aria-hidden="true"></iconify-icon>
-                          <span>Kişiye Özel</span>
-                        </div>
-                      </div>
-
-                      <button type="button" class="program__flip-btn program__flip-btn--back" data-program-flip>Fiyata Dön <iconify-icon icon="fa6-solid:rotate-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <a href="#paketler" class="home-outline-btn" title="Paketleri incele">Paketleri İncele</a>
+        </div>
+        <ol class="process__steps">
+          <li class="process__step" style="--step:0">
+            <div class="process__step-top">
+              <span class="process__icon"><iconify-icon icon="solar:clipboard-list-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="process__number" aria-hidden="true">01</span>
             </div>
-
-            <div class="program__slider-nav">
-              <button type="button" class="program__slider-arrow program__slider-arrow--prev"
-                title="Önceki slide'a geç">
-                <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-              </button>
-
-              <div class="program__slider-dots"></div>
-
-              <button type="button" class="program__slider-arrow program__slider-arrow--next"
-                title="Sonraki slide'a geç">
-                <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-              </button>
+            <h3 class="process__step-title">Form + Kan Tahlili</h3>
+            <p class="process__step-text">Ödemeden sonra koçun WhatsApp'tan danışan bilgi formunu ve tahlil rehberini gönderir. Formu doldurur, tahlillerini iletirsin.</p>
+            <span class="process__step-time">Gün 1</span>
+          </li>
+          <li class="process__step" style="--step:1">
+            <div class="process__step-top">
+              <span class="process__icon"><iconify-icon icon="solar:clock-circle-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="process__number" aria-hidden="true">02</span>
             </div>
+            <h3 class="process__step-title">48 Saatte Program</h3>
+            <p class="process__step-text">Tahlil sonuçların ve hedefine göre kişiye özel antrenman ve beslenme programın hazırlanır.</p>
+            <span class="process__step-time">En geç 48 saat</span>
+          </li>
+          <li class="process__step" style="--step:2">
+            <div class="process__step-top">
+              <span class="process__icon"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="process__number" aria-hidden="true">03</span>
+            </div>
+            <h3 class="process__step-title">Haftalık Takip</h3>
+            <p class="process__step-text">Haftalık form kontrolleri (tartı + fotoğraf) ve WhatsApp üzerinden birebir iletişim.</p>
+            <span class="process__step-time">Her hafta</span>
+          </li>
+          <li class="process__step" style="--step:3">
+            <div class="process__step-top">
+              <span class="process__icon"><iconify-icon icon="solar:refresh-circle-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="process__number" aria-hidden="true">04</span>
+            </div>
+            <h3 class="process__step-title">Revize</h3>
+            <p class="process__step-text">Gelişimine göre program anında güncellenir; plato evresine girmene izin verilmez.</p>
+            <span class="process__step-time">İhtiyaç oldukça</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="coach" aria-labelledby="coach-title">
+      <div class="container coach__inner">
+        <div class="coach__media">
+          <img src="images/hakkimda-video.png" alt="İbrahim Emir'in tanıtım videosundan bir kare" title="Emir Coaching tanıtım videosu"
+            width="1238" height="664" class="coach__poster" loading="lazy">
+          <button type="button" class="coach__play" title="Tanıtım videosunu oynat" aria-label="Tanıtım videosunu oynat"
+            data-video-src="" data-video-open>
+            <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+          </button>
+          <div class="coach__label">
+            <img src="images/yazar-ibrahim-emir-kucuk.jpg" alt="İbrahim Emir" title="İbrahim Emir" width="52" height="52"
+              class="coach__avatar" loading="lazy">
+            <span class="coach__label-text"><strong class="coach__name">İbrahim Emir</strong><span class="coach__role">Online Fitness &amp; Beslenme Koçu · 8+ yıl</span></span>
           </div>
+        </div>
+
+        <div class="coach__content">
+          <h2 id="coach-title" class="home-title">Bir salondan, <span class="home-title__accent">BİNLERCE</span> dönüşüme</h2>
+          <div class="coach__story">
+            <p>Gerçek değişim geçici motivasyonlarla değil, sürdürülebilir sistemlerle başlar. Emircoaching olarak, fiziksel potansiyelinizi ortaya çıkarmak için bilimsel temelli bir yaklaşım sunuyoruz.</p>
+            <p>Buraya 2-3 satırlık kişisel hikaye gelecek: nasıl başladın, neden online koçluk, danışana neyi farklı veriyorsun.</p>
+          </div>
+          <ul class="coach__certs" aria-label="Sertifikalar">
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-tvgfbf.png" alt="Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu logosu" title="Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">2. Kademe Temel Antrenör Belgesi</strong><span class="coach__cert-meta">TVGFBF · 2021</span></span>
+            </li>
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-fmi.png" alt="Fitness Movement Institute logosu" title="Fitness Movement Institute" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">Nefes, Nörolojik Düzenleme ve Postür Eğitimi</strong><span class="coach__cert-meta">FMI · EREPS Seviye 4 · 2022</span></span>
+            </li>
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-fmi.png" alt="Fitness Movement Institute logosu" title="Fitness Movement Institute" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">Personal Trainer EQF Level 4</strong><span class="coach__cert-meta">FMI · 2023</span></span>
+            </li>
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="images/sertifika-biopeak.png" alt="Biopeak logosu" title="Biopeak" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">Shoulder Performance Specialist</strong><span class="coach__cert-meta">Biopeak · 2024</span></span>
+            </li>
+          </ul>
+          <a href="hakkimda.html" class="coach__more" title="Hikayemin tamamını oku">
+            <iconify-icon icon="ph:user-bold" mode="svg" noobserver aria-hidden="true" class="coach__more-icon"></iconify-icon>
+            <span class="coach__more-body"><strong class="coach__cert-title">Hikayemin Tamamı</strong><span class="coach__cert-meta">Nasıl başladım, nasıl çalışıyorum</span></span>
+            <iconify-icon icon="ph:arrow-right-bold" mode="svg" noobserver aria-hidden="true" class="coach__more-arrow"></iconify-icon>
+          </a>
         </div>
       </div>
     </section>
@@ -640,199 +340,173 @@
       </div>
     </section>
 
-    <section class="qa" aria-label="Program hakkında video cevaplar">
+    <section class="packages" id="paketler" aria-labelledby="packages-title">
       <div class="container">
-        <div class="qa__slider">
-          <div class="qa__slider-viewport">
-            <div class="qa__slider-track">
-              <div class="qa__slide">
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru1.png" alt="Program kimler için uygun sorusuna video cevap 1" title="Program kimler için uygun sorusuna video cevap 1" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru2.png" alt="Program kimler için uygun sorusuna video cevap 2" title="Program kimler için uygun sorusuna video cevap 2" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="qa__slide">
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru1.png" alt="Program kimler için uygun sorusuna video cevap 1" title="Program kimler için uygun sorusuna video cevap 1" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru2.png" alt="Program kimler için uygun sorusuna video cevap 2" title="Program kimler için uygun sorusuna video cevap 2" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="qa__slide">
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru1.png" alt="Program kimler için uygun sorusuna video cevap 1" title="Program kimler için uygun sorusuna video cevap 1" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru2.png" alt="Program kimler için uygun sorusuna video cevap 2" title="Program kimler için uygun sorusuna video cevap 2" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="qa__slide">
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru1.png" alt="Program kimler için uygun sorusuna video cevap 1" title="Program kimler için uygun sorusuna video cevap 1" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru2.png" alt="Program kimler için uygun sorusuna video cevap 2" title="Program kimler için uygun sorusuna video cevap 2" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="qa__slide">
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru1.png" alt="Program kimler için uygun sorusuna video cevap 1" title="Program kimler için uygun sorusuna video cevap 1" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="qa__card">
-                  <div class="qa__card-text">
-                    <h3 class="qa__card-title">Program kimler için uygun?</h3>
-                    <p class="qa__card-desc">
-                      Programımız hem yeni başlayanlar hem de orta/ileri seviye sporcular için uygundur. Hedefin, mevcut form seviyen ve günlük rutinine göre tamamen kişiselleştirilmiş bir plan oluşturuyoruz. İster yağ kaybı, ister kas kazanımı, ister daha fit ve sağlıklı bir yaşam hedefle; süreç boyunca sana özel bir yol haritası ile ilerliyoruz.
-                    </p>
-                  </div>
-                  <div class="qa__card-media">
-                    <img src="images/soru2.png" alt="Program kimler için uygun sorusuna video cevap 2" title="Program kimler için uygun sorusuna video cevap 2" width="294" height="388" class="qa__card-img">
-                    <button type="button" class="qa__play" title="Videoyu oynat">
-                      <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="packages__header">
+          <h2 id="packages-title" class="home-title">Sana uygun <span class="home-title__accent">PAKETİ</span> seç</h2>
+          <p class="home-lead">Üç paketin içeriği aynı temele dayanır; fark süre ve birebir Zoom görüşmesinde.</p>
         </div>
 
-        <div class="qa__nav">
-          <button type="button" class="qa__arrow qa__arrow--prev" title="Önceki slide'a geç">
-            <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-          </button>
+        <div class="packages__slider" data-pkg-slider>
+          <div class="packages__nav">
+            <p class="packages__counter" aria-live="polite"><b data-pkg-current>1</b> / 3</p>
+            <div class="packages__arrows">
+              <button type="button" class="round-arrow" data-pkg-prev title="Önceki paket" aria-label="Önceki paket">
+                <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+              <button type="button" class="round-arrow" data-pkg-next title="Sonraki paket" aria-label="Sonraki paket">
+                <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+            </div>
+          </div>
+          <div class="packages__track" data-pkg-track>
+            <article class="pkg pkg--1" aria-labelledby="pkg-1-title">
+              <div class="pkg__top">
+                <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+                <div class="pkg__top-row">
+                  <div class="pkg__identity"><svg class="pkg__rank" width="28" height="15" viewBox="0 0 28 15" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="pkg-1-title" class="pkg__name"><a href="paketler.html#temel-paket" class="pkg__name-link" title="Başlangıç & Deneme paketinin detaylarını incele">Başlangıç &amp; Deneme</a></h3></div>
+                  <span class="pkg__duration">3 Aylık</span>
+                </div>
+              </div>
+              <div class="pkg__body">
+                <p class="pkg__price"><span class="pkg__total">₺8.999</span><span class="pkg__total-label">toplam</span></p>
+                <p class="pkg__monthly">ayda ≈ <b>₺3.000</b></p>
+                <ul class="pkg__list">
+                <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+                <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+                <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+                <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+                <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+                <li class="pkg__item pkg__item--locked"><iconify-icon icon="mdi:lock-outline" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+                </ul>
+                <div class="pkg__actions">
+                  <a href="paket-detay.html?paket=temel&amp;yer=salonda" class="pkg__buy" title="Başlangıç & Deneme paketini incele ve satın al">
+                    <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                  <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                  <a href="https://wa.me/905453712515" class="pkg__ask" title="Başlangıç & Deneme paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                    <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+                </div>
+              </div>
+            </article>
+            <article class="pkg pkg--2" aria-labelledby="pkg-2-title">
+              <span class="pkg__badge">En Çok Tercih Edilen</span>
+              <div class="pkg__top">
+                <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+                <div class="pkg__top-row">
+                  <div class="pkg__identity"><svg class="pkg__rank" width="28" height="23" viewBox="0 0 28 23" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="pkg-2-title" class="pkg__name"><a href="paketler.html#orta-paket" class="pkg__name-link" title="Dönüşüm Protokolü paketinin detaylarını incele">Dönüşüm Protokolü</a></h3></div>
+                  <span class="pkg__duration">6 Aylık</span>
+                </div>
+              </div>
+              <div class="pkg__body">
+                <p class="pkg__price"><span class="pkg__total">₺15.999</span><span class="pkg__total-label">toplam</span></p>
+                <p class="pkg__monthly">ayda ≈ <b>₺2.667</b></p>
+                <ul class="pkg__list">
+                <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+                <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+                <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+                <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+                <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+                <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+                </ul>
+                <div class="pkg__actions">
+                  <a href="paket-detay.html?paket=orta&amp;yer=salonda" class="pkg__buy" title="Dönüşüm Protokolü paketini incele ve satın al">
+                    <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                  <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                  <a href="https://wa.me/905453712515" class="pkg__ask" title="Dönüşüm Protokolü paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                    <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+                </div>
+              </div>
+            </article>
+            <article class="pkg pkg--3" aria-labelledby="pkg-3-title">
+              <div class="pkg__top">
+                <img src="images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+                <div class="pkg__top-row">
+                  <div class="pkg__identity"><svg class="pkg__rank" width="28" height="48" viewBox="0 0 28 48" aria-hidden="true"><path d="M14 .5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L14 13.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/><g transform="translate(0 17)"><path d="M3 11 L14 2 L25 11" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 29 L14 20 L25 29" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></g></svg><h3 id="pkg-3-title" class="pkg__name"><a href="paketler.html#premium-paket" class="pkg__name-link" title="VIP Yaşam Tarzı paketinin detaylarını incele">VIP Yaşam Tarzı</a></h3></div>
+                  <span class="pkg__duration">12 Aylık</span>
+                </div>
+              </div>
+              <div class="pkg__body">
+                <p class="pkg__price"><span class="pkg__total">₺27.999</span><span class="pkg__total-label">toplam</span></p>
+                <p class="pkg__monthly">ayda ≈ <b>₺2.333</b></p>
+                <ul class="pkg__list">
+                <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
+                <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
+                <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
+                <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
+                <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
+                <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
+                </ul>
+                <div class="pkg__actions">
+                  <a href="paket-detay.html?paket=premium&amp;yer=salonda" class="pkg__buy" title="VIP Yaşam Tarzı paketini incele ve satın al">
+                    <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                  <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                  <a href="https://wa.me/905453712515" class="pkg__ask" title="VIP Yaşam Tarzı paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                    <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="packages__dots" data-pkg-dots></div>
+        </div>
 
-          <div class="qa__dots"></div>
+        <div class="reviews" data-reviews aria-roledescription="carousel" aria-label="Danışan yorumları">
+          <button type="button" class="round-arrow reviews__arrow reviews__arrow--prev" data-reviews-prev title="Önceki yorum" aria-label="Önceki yorum">
+            <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+          <div class="reviews__viewport">
+            <div class="reviews__track" data-reviews-track>
+              <figure class="reviews__item" aria-roledescription="slide" aria-label="1 / 3">
+                <iconify-icon icon="ri:double-quotes-l" mode="svg" noobserver aria-hidden="true" class="reviews__mark"></iconify-icon>
+                <blockquote class="reviews__quote">İlk ayda 6 kilo verdim ama asıl kazancım, neyi neden yaptığımı öğrenmek oldu.</blockquote>
+                <figcaption class="reviews__author"><b>A.K.</b> · Dönüşüm Protokolü, 6 ay</figcaption>
+              </figure>
+              <figure class="reviews__item" aria-roledescription="slide" aria-label="2 / 3">
+                <iconify-icon icon="ri:double-quotes-l" mode="svg" noobserver aria-hidden="true" class="reviews__mark"></iconify-icon>
+                <blockquote class="reviews__quote">Programı hayatıma göre kurdu; ilk kez bir beslenme planını üç ay boyunca bırakmadan sürdürebildim.</blockquote>
+                <figcaption class="reviews__author"><b>M.Y.</b> · Başlangıç &amp; Deneme, 3 ay</figcaption>
+              </figure>
+              <figure class="reviews__item" aria-roledescription="slide" aria-label="3 / 3">
+                <iconify-icon icon="ri:double-quotes-l" mode="svg" noobserver aria-hidden="true" class="reviews__mark"></iconify-icon>
+                <blockquote class="reviews__quote">Her hafta form kontrolü olunca bırakmak aklıma bile gelmedi. Bir yıl sonra bambaşka biriyim.</blockquote>
+                <figcaption class="reviews__author"><b>E.D.</b> · VIP Yaşam Tarzı, 12 ay</figcaption>
+              </figure>
+            </div>
+          </div>
+          <button type="button" class="round-arrow reviews__arrow reviews__arrow--next" data-reviews-next title="Sonraki yorum" aria-label="Sonraki yorum">
+            <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
+          <div class="reviews__dots" data-reviews-dots></div>
+        </div>
 
-          <button type="button" class="qa__arrow qa__arrow--next" title="Sonraki slide'a geç">
-            <iconify-icon icon="fa6-solid:chevron-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-          </button>
+        <div class="assurance">
+          <ul class="assurance__list">
+            <li class="assurance__item">
+              <span class="assurance__icon"><iconify-icon icon="solar:shield-check-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="assurance__body"><strong class="assurance__title">Güvenli ödeme</strong><span class="assurance__text">Shopier altyapısı; kart bilgin bizde saklanmaz.</span></span>
+            </li>
+            <li class="assurance__item">
+              <span class="assurance__icon"><iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="assurance__body"><strong class="assurance__title">Birebir WhatsApp</strong><span class="assurance__text">Sorunu aracı olmadan doğrudan koçuna yazarsın.</span></span>
+            </li>
+            <li class="assurance__item">
+              <span class="assurance__icon"><iconify-icon icon="solar:undo-left-round-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="assurance__body"><strong class="assurance__title">İade ve iptal koşulları</strong><span class="assurance__text">Satın almadan önce tamamını okuyabilirsin.</span></span>
+            </li>
+          </ul>
+          <div class="assurance__legal">
+            <a href="#" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
+            <a href="#" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="faq" aria-label="Sıkça Sorulan Sorular">
-      <div class="faq-overlay-triangle"></div>
       <div class="container">
+        <h2 class="faq__title">
+          <span class="faq__title-line">SIKÇA</span>
+          <span class="faq__title-line faq__title-line--accent">SORULAN</span>
+          <span class="faq__title-line">SORULAR</span>
+        </h2>
+
         <div class="faq__row">
           <div class="faq__intro">
-            <h2 class="faq__title">
-              <span class="faq__title-line">SIKÇA</span>
-              <span class="faq__title-line faq__title-line--accent">SORULAN</span>
-              <span class="faq__title-line">SORULAR</span>
-            </h2>
-
             <p class="faq__desc">
               Sana en şeffaf şekilde bilgileri vermek istiyoruz. Aklına takılan bütün soruların cevabını buradan bulabilirsin.
             </p>
@@ -963,6 +637,71 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="social" aria-labelledby="social-title">
+      <div class="container">
+        <div class="social__card">
+          <div class="social__intro">
+            <div class="social__profile">
+              <span class="social__avatar" aria-hidden="true"><span>E</span></span>
+              <span class="social__handle"><strong>@emircoaching</strong><span>Antrenman, beslenme ve danışan dönüşümleri</span></span>
+            </div>
+            <h2 id="social-title" class="social__title">Bizi takip et</h2>
+            <p class="social__text">Her hafta yeni içerik: antrenman teknikleri, beslenme ipuçları ve gerçek dönüşümler.</p>
+            <div class="social__buttons">
+              <a href="https://youtube.com/" class="social__button social__button--youtube" title="YouTube kanalımızı ziyaret edin" target="_blank" rel="noopener">
+                <iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>YouTube</span></a>
+              <a href="https://instagram.com/" class="social__button social__button--instagram" title="Instagram hesabımızı ziyaret edin" target="_blank" rel="noopener">
+                <iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Instagram</span></a>
+            </div>
+          </div>
+          <div class="social__previews">
+            <a href="https://youtube.com/" class="social__item social__item--youtube" title="Kardionun Önemi videosunu izle" target="_blank" rel="noopener">
+              <img src="images/home_youtube1.png" alt="Emir Coaching YouTube videosu: Kardionun Önemi" title="Kardionun Önemi"
+                width="650" height="444" class="social__item-img" loading="lazy">
+              <span class="social__badge social__badge--youtube"><iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="social__play" aria-hidden="true"><iconify-icon icon="ph:play-fill" mode="svg" noobserver></iconify-icon></span>
+              <span class="social__video-title">Kardionun Önemi</span>
+            </a>
+          <a href="https://instagram.com/" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
+            <img src="images/home_instagram1.png" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
+              width="333" height="458" class="social__item-img" loading="lazy">
+            <span class="social__badge"><iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>4.891</span>
+          </a>
+          <a href="https://instagram.com/" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
+            <img src="images/home_instagram2.png" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
+              width="333" height="458" class="social__item-img" loading="lazy">
+            <span class="social__badge"><iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>4.891</span>
+          </a>
+          <a href="https://instagram.com/" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
+            <img src="images/home_instagram3.png" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
+              width="333" height="458" class="social__item-img" loading="lazy">
+            <span class="social__badge"><iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>4.891</span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta cta--home" aria-labelledby="cta-title">
+      <div class="cta__triangle" aria-hidden="true"></div>
+      <div class="container cta__inner">
+        <h2 id="cta-title" class="cta__title">HANGİ PAKETİN SANA UYGUN OLDUĞUNDAN EMİN DEĞİL MİSİN?</h2>
+        <p class="cta__text">Hedeflerini bizimle paylaş, senin için en doğru başlangıç noktasını birlikte belirleyelim.</p>
+        <div class="cta__actions">
+          <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
+            data-contact-trigger>Hemen Başla</button>
+          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+            title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
+            <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+            <span>WhatsApp İletişim</span>
+          </a>
         </div>
       </div>
     </section>
@@ -1117,9 +856,22 @@
     </div>
   </div>
 
+  <div class="video-modal" id="video-modal" aria-hidden="true">
+    <div class="video-modal__overlay" data-video-close></div>
+    <div class="video-modal__box" role="dialog" aria-modal="true" aria-label="Tanıtım videosu">
+      <button type="button" class="video-modal__close" title="Kapat" aria-label="Kapat" data-video-close>
+        <iconify-icon icon="fa6-solid:xmark" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+      </button>
+      <div class="video-modal__frame">
+        <p class="video-modal__placeholder">Tanıtım videosu yakında eklenecek.</p>
+      </div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
-  <script src="js/stats-counter.js"></script>
+  <script src="js/paket-slider.js"></script>
   <script src="js/index.js"></script>
+  <script src="js/hakkimda.js"></script>
 </body>
 
 </html>
