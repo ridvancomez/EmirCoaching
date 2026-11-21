@@ -39,7 +39,7 @@ public class DietProgramServiceTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        program.Price.Should().Be(1500);
+        program.DietitianFullName.Should().Be("Ayşe Demir");
         _uploadCleanup.Verify(c => c.DeleteUnusedAsync(It.Is<IEnumerable<string>>(p =>
             p.SequenceEqual(new[] { "/uploads/diyet/eski.jpg" }))), Times.Once);
     }
@@ -67,8 +67,6 @@ public class DietProgramServiceTests
     private static UpdateDietProgramRequest Request() => new()
     {
         Title = "Kişiye Özel Diyet",
-        Price = 1500,
-        DurationWeeks = 4,
         DietitianTitle = "Dyt.",
         DietitianFullName = "Ayşe Demir",
         IsActive = true

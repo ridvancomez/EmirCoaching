@@ -298,8 +298,6 @@ public static class SeedData
         {
             Id = 1,
             Title = "Kişiye Özel Diyet Planı",
-            Price = 1950m,
-            DurationWeeks = 4,
             DietitianTitle = "Uzm. Dr.",
             DietitianFullName = "Ceyda Güler",
             DietitianPhotoPath = "/images/uzman-ceyda.jpg",
@@ -311,12 +309,13 @@ public static class SeedData
             new DietProgramStep
             {
                 Id = 1, SortOrder = 1, Icon = DietProgramStepIcon.FormuDoldur, Title = "Formu Doldur",
-                Description = "Hedeflerini ve beslenme alışkanlıklarını içeren detaylı formu doldur.", CreatedAt = SeedDate
+                Description = "Paketini aldıktan sonra koçun WhatsApp'tan danışan bilgi formunu gönderir; hedeflerini ve " +
+                              "beslenme alışkanlıklarını orada paylaşırsın.", CreatedAt = SeedDate
             },
             new DietProgramStep
             {
                 Id = 2, SortOrder = 2, Icon = DietProgramStepIcon.PlanHazirlanir, Title = "Planın Hazırlanır",
-                Description = "Uzman koçumuz verilerini analiz ederek sana özel planını 24 saat içinde hazırlar.",
+                Description = "Formun ve tahlillerin ulaşınca uzmanımız planını 48 saat içinde hazırlar.",
                 CreatedAt = SeedDate
             },
             new DietProgramStep

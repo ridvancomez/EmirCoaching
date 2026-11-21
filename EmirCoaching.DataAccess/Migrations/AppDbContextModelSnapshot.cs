@@ -485,18 +485,11 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("DurationWeeks")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -518,10 +511,8 @@ namespace EmirCoaching.DataAccess.Migrations
                             DietitianFullName = "Ceyda Güler",
                             DietitianPhotoPath = "/images/uzman-ceyda.jpg",
                             DietitianTitle = "Uzm. Dr.",
-                            DurationWeeks = 4,
                             IsActive = true,
                             IsDeleted = false,
-                            Price = 1950m,
                             Title = "Kişiye Özel Diyet Planı"
                         });
                 });
@@ -571,7 +562,7 @@ namespace EmirCoaching.DataAccess.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Hedeflerini ve beslenme alışkanlıklarını içeren detaylı formu doldur.",
+                            Description = "Paketini aldıktan sonra koçun WhatsApp'tan danışan bilgi formunu gönderir; hedeflerini ve beslenme alışkanlıklarını orada paylaşırsın.",
                             Icon = 1,
                             IsDeleted = false,
                             SortOrder = 1,
@@ -581,7 +572,7 @@ namespace EmirCoaching.DataAccess.Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Uzman koçumuz verilerini analiz ederek sana özel planını 24 saat içinde hazırlar.",
+                            Description = "Formun ve tahlillerin ulaşınca uzmanımız planını 48 saat içinde hazırlar.",
                             Icon = 2,
                             IsDeleted = false,
                             SortOrder = 2,
