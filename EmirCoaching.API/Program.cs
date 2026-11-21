@@ -71,6 +71,7 @@ builder.Services.AddScoped<ISiteStatService, SiteStatService>();
 builder.Services.AddScoped<ISiteSettingService, SiteSettingService>();
 builder.Services.AddScoped<ISocialLinkService, SocialLinkService>();
 builder.Services.AddScoped<ISocialPostService, SocialPostService>();
+builder.Services.AddScoped<ICertificateService, CertificateService>();
 builder.Services.AddScoped<IPageContentService, PageContentService>();
 builder.Services.AddScoped<IDietProgramService, DietProgramService>();
 builder.Services.AddScoped<IDietProgramStepService, DietProgramStepService>();

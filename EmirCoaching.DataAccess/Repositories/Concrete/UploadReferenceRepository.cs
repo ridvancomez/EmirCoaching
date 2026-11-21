@@ -17,6 +17,7 @@ public class UploadReferenceRepository(AppDbContext context) : IUploadReferenceR
             .Concat(context.Transformations.Select(x => x.BeforeSquarePath))
             .Concat(context.Transformations.Select(x => x.AfterSquarePath))
             .Concat(context.SocialPosts.Select(x => (string?)x.ImagePath))
+            .Concat(context.Certificates.Select(x => (string?)x.LogoPath))
             .Concat(context.PageContents.Select(x => x.BackgroundImagePath))
             .Concat(context.DietPrograms.Select(x => x.DietitianPhotoPath))
             .Concat(context.Users.Select(x => x.AvatarPath))

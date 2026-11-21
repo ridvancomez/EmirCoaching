@@ -23,6 +23,7 @@ public class UploadReferenceRepositoryTests : IDisposable
         "Transformation.BeforeSquarePath",
         "Transformation.AfterSquarePath",
         "SocialPost.ImagePath",
+        "Certificate.LogoPath",
         "PageContent.BackgroundImagePath",
         "DietProgram.DietitianPhotoPath",
         "AppUser.AvatarPath",

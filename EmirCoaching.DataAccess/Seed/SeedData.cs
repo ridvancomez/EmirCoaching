@@ -54,6 +54,7 @@ public static class SeedData
         SeedSocialLinks(builder);
         SeedPageContents(builder);
         SeedDietProgram(builder);
+        SeedCertificates(builder);
         SeedRoles(builder);
     }
 
@@ -323,6 +324,24 @@ public static class SeedData
                 Id = 3, SortOrder = 3, Icon = DietProgramStepIcon.WhatsApp, Title = "WhatsApp'tan Ulaşılır",
                 Description = "Planın sana WhatsApp üzerinden iletilir ve destek sürecimiz başlar.", CreatedAt = SeedDate
             });
+    }
+
+    // Front-end index.html / hakkimda.html koç bölümü sertifika kartları
+    private static void SeedCertificates(ModelBuilder builder)
+    {
+        const string fmi = "Fitness Movement Institute";
+        builder.Entity<Certificate>().HasData(
+            Cert(1, "2. Kademe Temel Antrenör Belgesi", "TVGFBF",
+                "Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu", null, 2021, "sertifika-tvgfbf.png"),
+            Cert(2, "Nefes, Nörolojik Düzenleme ve Postür Eğitimi", "FMI", fmi, "EREPS Seviye 4", 2022, "sertifika-fmi.png"),
+            Cert(3, "Personal Trainer EQF Level 4", "FMI", fmi, null, 2023, "sertifika-fmi.png"),
+            Cert(4, "Shoulder Performance Specialist", "Biopeak", "Biopeak", null, 2024, "sertifika-biopeak.png"));
+
+        static Certificate Cert(int id, string title, string issuer, string issuerFullName, string? detail, int year, string logo) => new()
+        {
+            Id = id, Title = title, Issuer = issuer, IssuerFullName = issuerFullName, Detail = detail, Year = year,
+            LogoPath = $"/images/{logo}", SortOrder = id, IsActive = true, CreatedAt = SeedDate
+        };
     }
 
     private static void SeedRoles(ModelBuilder builder)

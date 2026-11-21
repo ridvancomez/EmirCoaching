@@ -91,6 +91,7 @@ GET    /api/v1/packages                       // aktif paketler
 GET    /api/v1/packages/{slug}                // paket detay
 GET    /api/v1/blog-posts?category=&page=&size=
 GET    /api/v1/testimonials/home              // ana sayfa yorumları (ShowOnHome), paket adı + süre
+GET    /api/v1/certificates                   // aktif sertifikalar (koç bölümü, Hakkımda)
 POST   /api/v1/diet-form-submissions          // form → 204
 POST   /api/v1/contact-messages
 POST   /api/v1/newsletter-subscribers
@@ -107,7 +108,7 @@ PUT    /api/v1/admin/packages/{id}/modules/order   // gövde: [3, 1, 2]
 // Admin — diğer kaynaklar
 // Tam CRUD (GET, GET {id}, POST, PUT {id}, DELETE {id}):
 //   blog-categories, transformation-types, transformations (pasifler dahil), testimonials (?packageId=), faqs,
-//   site-stats, social-links, social-posts, diet-program-steps ("Nasıl Çalışır?" adımları)
+//   site-stats, social-links, social-posts, certificates, diet-program-steps ("Nasıl Çalışır?" adımları)
 GET    /api/v1/admin/blog-posts?categoryId=&isPublished=&page=&size=   // taslaklar dahil
 POST   /api/v1/admin/blog-posts               // taslak; AuthorId yoksa giriş yapan kullanıcı
 POST   /api/v1/admin/blog-posts/{id}/publish  // 204

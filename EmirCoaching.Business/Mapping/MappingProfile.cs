@@ -82,6 +82,10 @@ public class MappingProfile : Profile
         CreateMap<SocialLink, SocialLinkResponse>();
         MapRequests<CreateSocialLinkRequest, UpdateSocialLinkRequest, SocialLink>();
 
+        CreateMap<Certificate, CertificateResponse>()
+            .ForMember(d => d.LogoUrl, o => o.ConvertUsing<RequiredPublicUrlConverter, string>(s => s.LogoPath));
+        MapRequests<CreateCertificateRequest, UpdateCertificateRequest, Certificate>();
+
         CreateMap<SocialPost, SocialPostResponse>()
             .ForMember(d => d.ImageUrl, o => o.ConvertUsing<RequiredPublicUrlConverter, string>(s => s.ImagePath));
         MapRequests<CreateSocialPostRequest, UpdateSocialPostRequest, SocialPost>()

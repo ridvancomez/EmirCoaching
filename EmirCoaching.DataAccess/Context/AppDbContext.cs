@@ -29,6 +29,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<SiteSetting> SiteSettings { get; set; }
     public DbSet<SocialLink> SocialLinks { get; set; }
     public DbSet<SocialPost> SocialPosts { get; set; }
+    public DbSet<Certificate> Certificates { get; set; }
     public DbSet<PageContent> PageContents { get; set; }
     public DbSet<DietProgram> DietPrograms { get; set; }
     public DbSet<DietProgramStep> DietProgramSteps { get; set; }

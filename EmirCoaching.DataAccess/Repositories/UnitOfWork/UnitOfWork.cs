@@ -29,6 +29,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork, IDisposable
     public ISiteSettingRepository SiteSettings => Get(() => new SiteSettingRepository(context));
     public ISocialLinkRepository SocialLinks => Get(() => new SocialLinkRepository(context));
     public ISocialPostRepository SocialPosts => Get(() => new SocialPostRepository(context));
+    public ICertificateRepository Certificates => Get(() => new CertificateRepository(context));
     public IPageContentRepository PageContents => Get(() => new PageContentRepository(context));
     public IDietProgramRepository DietPrograms => Get(() => new DietProgramRepository(context));
     public IDietProgramStepRepository DietProgramSteps => Get(() => new DietProgramStepRepository(context));

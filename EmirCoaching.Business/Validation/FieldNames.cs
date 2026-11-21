@@ -108,6 +108,12 @@ public static class FieldNames
         ["DietitianPhotoPath"] = "Diyetisyen fotoğrafı",
         ["RecommendedPackageId"] = "Önerilen paket",
 
+        // Sertifikalar
+        ["Issuer"] = "Kurum (kısa ad)",
+        ["IssuerFullName"] = "Kurumun tam adı",
+        ["Detail"] = "Ek bilgi",
+        ["LogoPath"] = "Logo",
+
         // Formlar
         ["Gender"] = "Cinsiyet",
         ["Age"] = "Yaş",

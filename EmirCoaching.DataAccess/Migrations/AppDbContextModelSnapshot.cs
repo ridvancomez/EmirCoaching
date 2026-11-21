@@ -253,6 +253,119 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.ToTable("BlogTags");
                 });
 
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.Certificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Detail")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Issuer")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("IssuerFullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("LogoPath")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Certificates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Issuer = "TVGFBF",
+                            IssuerFullName = "Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu",
+                            LogoPath = "/images/sertifika-tvgfbf.png",
+                            SortOrder = 1,
+                            Title = "2. Kademe Temel Antrenör Belgesi",
+                            Year = 2021
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Detail = "EREPS Seviye 4",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Issuer = "FMI",
+                            IssuerFullName = "Fitness Movement Institute",
+                            LogoPath = "/images/sertifika-fmi.png",
+                            SortOrder = 2,
+                            Title = "Nefes, Nörolojik Düzenleme ve Postür Eğitimi",
+                            Year = 2022
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Issuer = "FMI",
+                            IssuerFullName = "Fitness Movement Institute",
+                            LogoPath = "/images/sertifika-fmi.png",
+                            SortOrder = 3,
+                            Title = "Personal Trainer EQF Level 4",
+                            Year = 2023
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Issuer = "Biopeak",
+                            IssuerFullName = "Biopeak",
+                            LogoPath = "/images/sertifika-biopeak.png",
+                            SortOrder = 4,
+                            Title = "Shoulder Performance Specialist",
+                            Year = 2024
+                        });
+                });
+
             modelBuilder.Entity("EmirCoaching.Entities.Entities.ConsentRecord", b =>
                 {
                     b.Property<int>("Id")

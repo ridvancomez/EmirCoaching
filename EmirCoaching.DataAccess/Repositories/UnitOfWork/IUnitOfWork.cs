@@ -28,6 +28,7 @@ public interface IUnitOfWork : IAsyncDisposable
     ISiteSettingRepository SiteSettings { get; }
     ISocialLinkRepository SocialLinks { get; }
     ISocialPostRepository SocialPosts { get; }
+    ICertificateRepository Certificates { get; }
     IPageContentRepository PageContents { get; }
     IDietProgramRepository DietPrograms { get; }
     IDietProgramStepRepository DietProgramSteps { get; }
