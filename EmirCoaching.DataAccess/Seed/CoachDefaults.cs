@@ -3,7 +3,7 @@ namespace EmirCoaching.DataAccess.Seed;
 // Front-end index.html koç bölümünün ilk metinleri; ilk admin oluşturulurken ve migration'da kullanılır
 public static class CoachDefaults
 {
-    public const string Title = "Online Fitness & Beslenme Koçu";
+    public const string Title = "Baş Antrenör";
     public const string Experience = "8+ yıl";
     public const string VideoCoverPath = "/images/hakkimda-video.png";
 

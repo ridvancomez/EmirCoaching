@@ -20,7 +20,6 @@ public class UpdateProfileRequestValidator : AbstractValidator<UpdateProfileRequ
         RuleFor(x => x.Title).MaximumLength(100);
         RuleFor(x => x.Bio).MaximumLength(1000);
         RuleFor(x => x.AvatarPath).SitePath();
-        RuleFor(x => x.CoachTitle).MaximumLength(100);
         RuleFor(x => x.CoachExperience).MaximumLength(50);
         RuleFor(x => x.CoachStory).MaximumLength(2000);
         RuleFor(x => x.CoachVideoUrl!).HttpsUrl().When(x => !string.IsNullOrWhiteSpace(x.CoachVideoUrl));

@@ -23,7 +23,7 @@ public record BlogPostResponse
 public record BlogAuthorResponse
 {
     public string FullName { get; init; } = string.Empty;
-    public string? Title { get; init; }
+    public string? Title { get; init; } // yalnızca yazar koçsa dolu; boşsa sitede unvan satırı gösterilmez
     public string? Bio { get; init; }
     public string? AvatarUrl { get; init; }
 }

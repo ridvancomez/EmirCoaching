@@ -742,6 +742,78 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Faqs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Answer = "Evet, programın temel taşı kan tahlilinizdir. Tahlil sonuçlarınız detaylıca analiz edilerek hormon, vitamin ve mineral seviyelerinize tam uyumlu kişiselleştirilmiş bir beslenme ve takviye protokolü hazırlanır.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "Kan tahlili yaptırmak zorunlu mu, süreç nasıl işliyor?",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Answer = "Kesinlikle. Evde sahip olduğunuz ekipmanlara (dumbbell, direnç bandı vb.) veya tamamen kendi vücut ağırlığınıza özel antrenman programı hazırlanır. Doğru mekanik ve tükeniş prensibiyle evde de maksimum gelişim sağlanır.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "Spor salonuna gitmiyorum, evde antrenman paketi yeterli verimi sağlar mı?",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Answer = "Asla. Bütçenize, günlük yaşam akışınıza, sevdiğiniz/sevemediğiniz gıdalara ve tahlil sonuçlarınıza özel kalori ve makro hesaplaması yapılarak tamamen sürdürülebilir bir liste oluşturulur.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "Hazırlanan beslenme programı matbu (standart) bir liste mi olacak?",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Answer = "Haftalık düzenli form kontrolleri (tartı ve fotoğraf analizi) ile gelişiminiz takip edilir. Ayrıca WhatsApp üzerinden bizzat birebir iletişim kurarak sorularınızı anında iletebilirsiniz.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "Süreç boyunca iletişim ve takip nasıl yapılıyor?",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Answer = "Gelişiminize ve haftalık form kontrollerinize göre ihtiyaç duyulan anlarda programınız anında revize edilir. Vücudunuzun plato evresine girmesine izin verilmeden sürekli gelişim hedeflenir.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "Antrenman veya beslenme programım ne sıklıkla güncelleniyor?",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Answer = "6 ve 12 Aylık paket alan danışanlarıma özel olarak süreç boyunca her Cumartesi 20 dakikalık birebir Zoom görüşmesi yapılır. Bu görüşmelerde haftalık gelişim analizi, antrenman/beslenme revizyonları ve zihinsel motivasyon takibi yüz yüze gerçekleştirilir.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "6 ve 12 Aylık paketlerdeki VIP Zoom görüşmesi nedir?",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Answer = "Ödeme tamamlandıktan sonra tarafınıza detaylı danışan bilgi formu ve tahlil rehberi iletilir. Form ve tahliller tamamlanıp bana ulaştıktan sonraki 48 saat içinde programınız hazırlanır ve süreciniz başlar.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Group = 0,
+                            IsDeleted = false,
+                            Question = "Paketi satın aldıktan sonra süreç ne zaman başlar?",
+                            SortOrder = 7
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.LegalDocument", b =>
@@ -3757,10 +3829,6 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<string>("CoachStory")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("CoachTitle")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CoachVideoCoverPath")
                         .HasMaxLength(300)

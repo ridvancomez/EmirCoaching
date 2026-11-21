@@ -527,7 +527,7 @@ POST /api/v1/auth/login    { email, password } → 200 { accessToken, expiresAt 
 POST /api/v1/auth/refresh  (cookie)            → 200 { accessToken, expiresAt } + yeni cookie / 401
 POST /api/v1/auth/logout   (cookie)            → 204, refresh token iptal, cookie silinir
 GET  /api/v1/auth/me       [Authorize]         → 200 { id, email, fullName, title, bio, avatarUrl, isCoach, coach*, roles }
-PUT  /api/v1/auth/me       [Authorize]         { fullName, title, bio, avatarPath, coachTitle, coachExperience, coachStory, coachVideoUrl, coachVideoCoverPath } → 204 / 400
+PUT  /api/v1/auth/me       [Authorize]         { fullName, title, bio, avatarPath, coachExperience, coachStory, coachVideoUrl, coachVideoCoverPath } → 204 / 400
 POST /api/v1/auth/change-password [Authorize]  { currentPassword, newPassword } → 200 { accessToken, expiresAt } + yeni cookie / 400 / 429
 ```
 

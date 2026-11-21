@@ -4,7 +4,7 @@ namespace EmirCoaching.Business.Dtos;
 public record CoachProfileResponse
 {
     public string FullName { get; init; } = string.Empty;
-    public string? Title { get; init; }       // "Online Fitness & Beslenme Koçu"
+    public string? Title { get; init; }       // AppUser.Title: "Baş Antrenör"
     public string? Experience { get; init; }  // "8+ yıl"
     public IReadOnlyList<string> StoryParagraphs { get; init; } = [];
     public string? AvatarUrl { get; init; }

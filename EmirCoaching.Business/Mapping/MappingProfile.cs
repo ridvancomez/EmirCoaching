@@ -36,7 +36,6 @@ public class MappingProfile : Profile
             .ForMember(d => d.AvatarUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.AvatarPath))
             .ForMember(d => d.CoachVideoCoverUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.CoachVideoCoverPath));
         CreateMap<AppUser, CoachProfileResponse>()
-            .ForMember(d => d.Title, o => o.MapFrom(s => s.CoachTitle))
             .ForMember(d => d.Experience, o => o.MapFrom(s => s.CoachExperience))
             .ForMember(d => d.StoryParagraphs, o => o.MapFrom(s => CoachStory.Paragraphs(s.CoachStory)))
             .ForMember(d => d.VideoUrl, o => o.MapFrom(s => s.CoachVideoUrl))
@@ -45,7 +44,9 @@ public class MappingProfile : Profile
         CreateMap<UpdateProfileRequest, AppUser>(); // yalnızca aynı adlı alanlar: ad, unvan, biyografi, fotoğraf
 
         // Blog
+        // Unvan yalnızca koçun yazılarında görünür ("Baş Antrenör"); diğer yazarlarda satır hiç gösterilmez
         CreateMap<AppUser, BlogAuthorResponse>()
+            .ForMember(d => d.Title, o => o.MapFrom(s => s.IsCoach ? s.Title : null))
             .ForMember(d => d.AvatarUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.AvatarPath));
         CreateMap<BlogPost, BlogPostResponse>()
             .ForMember(d => d.CoverImageUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.CoverImagePath));

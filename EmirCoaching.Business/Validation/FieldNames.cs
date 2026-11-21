@@ -118,7 +118,6 @@ public static class FieldNames
         ["TimeLabel"] = "Süre etiketi",
 
         // Koç bölümü (profil)
-        ["CoachTitle"] = "Koç unvanı",
         ["CoachExperience"] = "Deneyim",
         ["CoachStory"] = "Koç hikâyesi",
         ["CoachVideoUrl"] = "Tanıtım videosu bağlantısı",

@@ -28,17 +28,16 @@ public class CoachProfileServiceTests
         // Arrange
         _users.Setup(r => r.GetCoachAsync()).ReturnsAsync(new AppUser
         {
-            FullName = "İbrahim Emir", Title = "Kurucu & Baş Antrenör", IsCoach = true,
-            CoachTitle = "Online Fitness & Beslenme Koçu", CoachExperience = "8+ yıl",
+            FullName = "İbrahim Emir", Title = "Baş Antrenör", IsCoach = true, CoachExperience = "8+ yıl",
             CoachStory = "Birinci.\n\nİkinci.", CoachVideoCoverPath = "/uploads/koc/kapak.jpg"
         });
 
         // Act
         var result = await _service.GetAsync();
 
-        // Assert — blog yazar unvanı değil, koç unvanı
+        // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Value!.Title.Should().Be("Online Fitness & Beslenme Koçu");
+        result.Value!.Title.Should().Be("Baş Antrenör");
         result.Value.StoryParagraphs.Should().Equal("Birinci.", "İkinci.");
         result.Value.VideoCoverUrl.Should().Be($"{TestMapper.PublicBaseUrl}/uploads/koc/kapak.jpg");
     }

@@ -40,6 +40,24 @@ public class BlogPostServiceTests
             _uploadCleanup.Object, NullLogger<BlogPostService>.Instance);
     }
 
+    // ---- Okuma ----
+
+    [Theory]
+    [InlineData(true, "Baş Antrenör")]
+    [InlineData(false, null)]
+    public async Task GetByIdAsync_ShowsAuthorTitleOnlyForCoach(bool isCoach, string? expectedTitle)
+    {
+        // Arrange — koç olmayan yazarın kendi unvanı olsa da kartta unvan satırı gösterilmez
+        var author = new AppUser { FullName = "Yazar", Title = "Baş Antrenör", IsCoach = isCoach };
+        _posts.Setup(r => r.GetDetailByIdAsync(1)).ReturnsAsync(new BlogPost { Id = 1, Author = author });
+
+        // Act
+        var result = await _service.GetByIdAsync(1);
+
+        // Assert
+        result.Value!.Author!.Title.Should().Be(expectedTitle);
+    }
+
     // ---- CreateAsync ----
 
     [Fact]

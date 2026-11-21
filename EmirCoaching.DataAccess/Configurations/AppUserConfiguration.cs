@@ -8,7 +8,6 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
 {
     public void Configure(EntityTypeBuilder<AppUser> builder)
     {
-        builder.Property(x => x.CoachTitle).HasMaxLength(100);
         builder.Property(x => x.CoachExperience).HasMaxLength(50);
         builder.Property(x => x.CoachStory).HasMaxLength(2000);
         builder.Property(x => x.CoachVideoUrl).HasMaxLength(300);
