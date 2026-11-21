@@ -3298,6 +3298,9 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasPrecision(2, 1)
                         .HasColumnType("decimal(2,1)");
 
+                    b.Property<bool>("ShowOnHome")
+                        .HasColumnType("bit");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 

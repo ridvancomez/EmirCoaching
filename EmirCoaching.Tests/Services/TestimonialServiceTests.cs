@@ -29,6 +29,23 @@ public class TestimonialServiceTests
     }
 
     [Fact]
+    public async Task GetHomeAsync_ReturnsPackageNameAndDuration()
+    {
+        // Arrange — carousel'de "A.K. · Dönüşüm Protokolü, 6 ay"
+        var package = new Package { Id = 2, Name = "Dönüşüm Protokolü", DurationMonths = 6 };
+        _testimonials.Setup(r => r.GetHomeAsync())
+            .ReturnsAsync([new Testimonial { Id = 1, Name = "A.K.", ShowOnHome = true, PackageId = 2, Package = package }]);
+
+        // Act
+        var result = await _service.GetHomeAsync();
+
+        // Assert
+        var testimonial = result.Value!.Should().ContainSingle().Subject;
+        testimonial.PackageName.Should().Be("Dönüşüm Protokolü");
+        testimonial.PackageDurationMonths.Should().Be(6);
+    }
+
+    [Fact]
     public async Task CreateAsync_WithExistingPackage_Saves()
     {
         // Arrange

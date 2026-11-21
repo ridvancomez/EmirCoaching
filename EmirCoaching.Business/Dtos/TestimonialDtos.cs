@@ -10,7 +10,10 @@ public record TestimonialResponse
     public decimal Rating { get; init; }
     public int SortOrder { get; init; }
     public bool IsActive { get; init; }
+    public bool ShowOnHome { get; init; }
     public int PackageId { get; init; }
+    public string PackageName { get; init; } = string.Empty; // Package.Name
+    public int PackageDurationMonths { get; init; }          // Package.DurationMonths
 }
 
 public record CreateTestimonialRequest
@@ -20,6 +23,7 @@ public record CreateTestimonialRequest
     public decimal Rating { get; init; } // 0–5, 0.5 adımlarla
     public int SortOrder { get; init; }
     public bool IsActive { get; init; }
+    public bool ShowOnHome { get; init; } // ana sayfa yorum carousel'i
     public int PackageId { get; init; } // yorum bu paketin detay sayfasında gösterilir
 }
 

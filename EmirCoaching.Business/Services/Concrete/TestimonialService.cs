@@ -22,6 +22,10 @@ public class TestimonialService(
         Result<IReadOnlyList<TestimonialResponse>>.Success(
             Mapper.Map<List<TestimonialResponse>>(await UnitOfWork.Testimonials.GetOrderedAsync(packageId)));
 
+    public async Task<Result<IReadOnlyList<TestimonialResponse>>> GetHomeAsync() =>
+        Result<IReadOnlyList<TestimonialResponse>>.Success(
+            Mapper.Map<List<TestimonialResponse>>(await UnitOfWork.Testimonials.GetHomeAsync()));
+
     protected override Task<IReadOnlyList<Testimonial>> ListAsync() => UnitOfWork.Testimonials.GetOrderedAsync();
 
     protected override async Task<Result> CheckAsync(CreateTestimonialRequest request, int? id) =>

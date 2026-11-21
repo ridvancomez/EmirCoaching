@@ -6,4 +6,7 @@ public interface ITestimonialRepository : IActiveSortedRepository<Testimonial>
 {
     // Admin listesi: pasifler dahil, packageId verilirse yalnızca o paketin yorumları
     Task<IReadOnlyList<Testimonial>> GetOrderedAsync(int? packageId);
+
+    // Ana sayfa carousel'i: aktif, ShowOnHome işaretli ve paketi aktif olanlar, paketiyle birlikte
+    Task<IReadOnlyList<Testimonial>> GetHomeAsync();
 }

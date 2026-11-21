@@ -4,6 +4,7 @@ namespace EmirCoaching.Entities.Entities;
 
 /// <summary>
 /// Paket detay sayfasındaki "Öğrenci Yorumları" kartı. Her yorum bir pakete aittir; paketle birlikte silinir.
+/// ShowOnHome işaretliyse ana sayfadaki yorum carousel'inde de çıkar ("A.K. · Dönüşüm Protokolü, 6 ay").
 /// </summary>
 public class Testimonial : BaseEntity, ISortable, IActivatable
 {
@@ -15,6 +16,7 @@ public class Testimonial : BaseEntity, ISortable, IActivatable
 
     public int SortOrder { get; set; }
     public bool IsActive { get; set; }
+    public bool ShowOnHome { get; set; }
 
     public int PackageId { get; set; }
     public Package Package { get; set; } = null!;

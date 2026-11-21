@@ -90,6 +90,7 @@ Site (herkese açık) ve admin uçları ayrı controller'lardadır:
 GET    /api/v1/packages                       // aktif paketler
 GET    /api/v1/packages/{slug}                // paket detay
 GET    /api/v1/blog-posts?category=&page=&size=
+GET    /api/v1/testimonials/home              // ana sayfa yorumları (ShowOnHome), paket adı + süre
 POST   /api/v1/diet-form-submissions          // form → 204
 POST   /api/v1/contact-messages
 POST   /api/v1/newsletter-subscribers

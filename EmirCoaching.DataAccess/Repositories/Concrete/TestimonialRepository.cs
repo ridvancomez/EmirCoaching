@@ -11,7 +11,16 @@ public class TestimonialRepository(AppDbContext context)
 {
     public async Task<IReadOnlyList<Testimonial>> GetOrderedAsync(int? packageId) =>
         await Set.AsNoTracking()
+            .Include(x => x.Package)
             .WhereIf(packageId.HasValue, x => x.PackageId == packageId)
+            .Ordered()
+            .ToListAsync();
+
+    public async Task<IReadOnlyList<Testimonial>> GetHomeAsync() =>
+        await Set.AsNoTracking()
+            .Include(x => x.Package)
+            .ActiveOnly()
+            .Where(x => x.ShowOnHome && x.Package.IsActive)
             .Ordered()
             .ToListAsync();
 }
