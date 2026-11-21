@@ -7,7 +7,6 @@ namespace EmirCoaching.Business.Services.Abstract;
 public interface IFileStorageService
 {
     Task<string> SaveImageAsync(IFormFile file, string? folder);
-    Task<string> SavePdfAsync(IFormFile file, string? folder);
     Task DeleteAsync(string filePath);
 
     // Son değişikliği verilen tarihten eski tüm yüklemeler (/uploads/...); günlük temizlik için

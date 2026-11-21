@@ -32,7 +32,8 @@ public enum LegalDocumentType
     Cerez = 2,
     IptalIade = 3,
     TicariIleti = 4,
-    Gizlilik = 5
+    Gizlilik = 5,
+    MesafeliSatis = 6
 }
 
 /// <summary>"Bize Yazın" mesajlarının admin panelindeki takip durumu.</summary>

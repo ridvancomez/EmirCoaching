@@ -3,9 +3,11 @@ using EmirCoaching.Entities.Common;
 namespace EmirCoaching.Entities.Entities;
 
 /// <summary>
-/// Yasal metnin bir sürümü (KVKK, açık rıza, çerez, iptal/iade, ticari ileti, gizlilik).
-/// Yeni sürüm yüklenince Version otomatik artar (sitede "v3"), PublishedAt otomatik atanır ve
-/// Note ile birlikte LegalDocumentRevision tablosuna da işlenir. Eski onaylar eski sürüme bağlı kalır.
+/// Yasal metnin bir sürümü (KVKK, açık rıza, çerez, iptal/iade, ticari ileti, gizlilik, mesafeli satış).
+/// İçerik panelde zengin metin editörüyle (CKEditor) girilir ve ContentHtml'de tutulur; FilePath yalnızca
+/// ilk (seed) sürümlerin PDF'leri içindir. Yeni sürüm yayınlanınca Version otomatik artar (sitede "v3"),
+/// PublishedAt otomatik atanır ve Note ile birlikte LegalDocumentRevision tablosuna da işlenir.
+/// Eski onaylar eski sürüme bağlı kalır.
 /// </summary>
 public class LegalDocument : BaseEntity
 {

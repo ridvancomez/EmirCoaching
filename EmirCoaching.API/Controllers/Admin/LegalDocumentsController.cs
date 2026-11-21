@@ -6,12 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmirCoaching.API.Controllers.Admin;
 
-// Yasal metinler düzenlenmez: her değişiklik yeni bir PDF sürümüdür (eski onaylar eski sürüme bağlı kalır)
+// Yasal metinler düzenlenmez: her değişiklik yeni bir sürümdür (eski onaylar eski sürüme bağlı kalır)
 [Route("api/v1/admin/legal-documents")]
 public class LegalDocumentsController(ILegalDocumentService legalDocumentService) : AdminControllerBase
 {
-    private const long MaxRequestBytes = 11 * 1024 * 1024; // PDF en fazla 10 MB + form alanları
-
     // Güncel sürüm → 200 / 404
     [HttpGet("{type}")]
     public async Task<ActionResult<LegalDocumentResponse>> GetCurrent(LegalDocumentType type) =>
@@ -22,9 +20,8 @@ public class LegalDocumentsController(ILegalDocumentService legalDocumentService
     public async Task<ActionResult<IReadOnlyList<LegalDocumentRevisionResponse>>> GetRevisions(LegalDocumentType type) =>
         FromResult(await legalDocumentService.GetRevisionsAsync(type));
 
-    // multipart/form-data: file (PDF) + note (değişiklik notu) → 200 + yeni sürüm / 400
+    // { contentHtml, note } → 200 + yeni sürüm / 400
     [HttpPost("{type}/versions")]
-    [RequestSizeLimit(MaxRequestBytes)]
-    public async Task<ActionResult<LegalDocumentResponse>> UploadNewVersion(LegalDocumentType type, IFormFile file, [FromForm] string note) =>
-        FromResult(await legalDocumentService.UploadNewVersionAsync(type, file, note));
+    public async Task<ActionResult<LegalDocumentResponse>> PublishNewVersion(LegalDocumentType type, PublishLegalDocumentRequest request) =>
+        FromResult(await legalDocumentService.PublishNewVersionAsync(type, request));
 }

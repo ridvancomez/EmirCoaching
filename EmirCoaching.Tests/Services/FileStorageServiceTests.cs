@@ -133,28 +133,6 @@ public class FileStorageServiceTests : IDisposable
         await act.Should().ThrowAsync<ArgumentException>().WithMessage("Geçersiz klasör adı.");
     }
 
-    // ---- SavePdfAsync ----
-
-    [Fact]
-    public async Task SavePdfAsync_WithValidPdf_Saves()
-    {
-        // Act
-        var path = await _service.SavePdfAsync(File("kvkk.pdf", Pdf), "yasal-metinler");
-
-        // Assert
-        path.Should().MatchRegex(@"^/uploads/yasal-metinler/[0-9a-f]{32}\.pdf$");
-    }
-
-    [Fact]
-    public async Task SavePdfAsync_WithImage_Throws()
-    {
-        // Act
-        var act = () => _service.SavePdfAsync(File("foto.jpg", Jpeg), "yasal-metinler");
-
-        // Assert
-        await act.Should().ThrowAsync<ArgumentException>();
-    }
-
     // ---- DeleteAsync ----
 
     [Fact]

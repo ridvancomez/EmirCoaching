@@ -64,7 +64,7 @@ Entity asla HTTP yanıtında dışarı çıkmaz — DTO kullanılır.
 - Yüklenen dosyalar (`wwwroot/uploads`) burada durur; DB'de göreli yol tutulur, yanıtta `Storage:PublicBaseUrl` ile tam URL döner
   - Response'ta alan adı `*Url` (`CoverImageUrl`), Request'te `*Path` (`CoverImagePath`); çeviri `MappingProfile`'da `PublicUrlConverter` / `RequiredPublicUrlConverter` ile
   - Yalnızca `/uploads/...` yolları API adresini alır; sitenin kendi görselleri (`/images/...`) göreli kalır
-  - Yükleme akışı: panel görseli önce `POST /api/v1/admin/uploads/images` ile yükler (multipart `file` + isteğe bağlı `folder`; jpg/jpeg/png/webp, en fazla 5 MB, içerik imzası kontrol edilir) → `{ path, url }`; sonra kayıt isteğinin `*Path` alanına yazar. PDF yalnızca yasal metin ucundan yüklenir
+  - Yükleme akışı: panel görseli önce `POST /api/v1/admin/uploads/images` ile yükler (multipart `file` + isteğe bağlı `folder`; jpg/jpeg/png/webp, en fazla 5 MB, içerik imzası kontrol edilir) → `{ path, url }`; sonra kayıt isteğinin `*Path` alanına yazar. Yasal metinler PDF değil HTML'dir; yalnızca seed sürümleri PDF
   - Görsel temizliği (`IUploadCleanupService`): görseli değişen veya silinen kaydın eski dosyası, silinmemiş başka hiçbir kayıt kullanmıyorsa kaydettikten **sonra** silinir (`UploadPaths.Of(entity)` eski yolları bulur). `CrudService`'te `ReleaseUploadsAsync` ezilir; kendi akışı olan serviste `DeleteUnusedAsync` doğrudan çağrılır. Yasal metin PDF'leri (eski sürümler dahil) hiç silinmez
   - Hangi dosyanın kullanıldığı `DataAccess/Repositories/Concrete/UploadReferenceRepository.cs`'ten okunur: **yeni bir `*Path` kolonu eklenince oraya da eklenir**, yoksa o kolonun dosyaları temizlikte silinir
   - Request'teki `*Path` alanı yanıttaki tam URL'yi de kabul eder: `Common/StoredPathJson.cs` (JSON TypeInfo modifier) `Dtos` namespace'indeki string `*Path` setter'larını `StorageOptions.ToStoredPath` ile göreli yola çevirir. Böylece panel GET'te aldığı `*Url` değerini PUT'ta aynen geri gönderebilir; başka alan adındaki URL doğrulamada reddedilir
@@ -116,7 +116,7 @@ GET|PUT /api/v1/admin/site-settings
 GET    /api/v1/admin/page-contents            // GET|PUT /page-contents/{pageKey}
 GET|PUT /api/v1/admin/diet-program
 GET    /api/v1/admin/legal-documents/{type}   // + GET {type}/revisions
-POST   /api/v1/admin/legal-documents/{type}/versions   // multipart: file (PDF) + note
+POST   /api/v1/admin/legal-documents/{type}/versions   // { contentHtml, note } → yeni sürüm (panelde CKEditor)
 GET    /api/v1/admin/contact-messages?status=&page=&size=        // + PATCH {id}/status, DELETE {id} (kalıcı)
 GET    /api/v1/admin/diet-form-submissions?status=&page=&size=   // + PATCH {id}/status, PATCH {id}/client-form, DELETE {id} (kalıcı)
 GET    /api/v1/admin/newsletter-subscribers?page=&size=          // + DELETE {id} (kalıcı)

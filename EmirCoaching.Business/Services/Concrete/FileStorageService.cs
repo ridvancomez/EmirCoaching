@@ -9,7 +9,6 @@ public partial class FileStorageService(IWebHostEnvironment environment) : IFile
 {
     private const string UploadsFolder = "uploads";
     private const long MaxImageBytes = 5 * 1024 * 1024;
-    private const long MaxPdfBytes = 10 * 1024 * 1024;
 
     // Uzantı → dosya imzası (magic bytes); uzantı tek başına güvenilmez
     private static readonly Dictionary<string, byte[]> ImageSignatures = new()
@@ -20,7 +19,6 @@ public partial class FileStorageService(IWebHostEnvironment environment) : IFile
         [".webp"] = "RIFF"u8.ToArray() // + 8. bayttan itibaren "WEBP", aşağıda kontrol edilir
     };
 
-    private static readonly byte[] PdfSignature = "%PDF-"u8.ToArray();
 
     [GeneratedRegex("^[a-z0-9]+(?:-[a-z0-9]+)*$")]
     private static partial Regex FolderPattern();
@@ -30,10 +28,6 @@ public partial class FileStorageService(IWebHostEnvironment environment) : IFile
     public Task<string> SaveImageAsync(IFormFile file, string? folder) =>
         SaveAsync(file, folder ?? "images", MaxImageBytes, extension =>
             ImageSignatures.TryGetValue(extension, out var signature) ? signature : null);
-
-    public Task<string> SavePdfAsync(IFormFile file, string? folder) =>
-        SaveAsync(file, folder ?? "documents", MaxPdfBytes, extension =>
-            extension == ".pdf" ? PdfSignature : null);
 
     public Task DeleteAsync(string filePath)
     {

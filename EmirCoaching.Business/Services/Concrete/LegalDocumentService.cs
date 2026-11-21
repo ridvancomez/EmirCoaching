@@ -5,7 +5,7 @@ using EmirCoaching.Business.Services.Abstract;
 using EmirCoaching.DataAccess.Repositories.UnitOfWork;
 using EmirCoaching.Entities.Common;
 using EmirCoaching.Entities.Entities;
-using Microsoft.AspNetCore.Http;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace EmirCoaching.Business.Services.Concrete;
@@ -13,12 +13,9 @@ namespace EmirCoaching.Business.Services.Concrete;
 public class LegalDocumentService(
     IUnitOfWork unitOfWork,
     IMapper mapper,
-    IFileStorageService fileStorage,
+    IValidator<PublishLegalDocumentRequest> validator,
     ILogger<LegalDocumentService> logger) : ILegalDocumentService
 {
-    private const string UploadFolder = "yasal-metinler";
-    private const int NoteMaxLength = 300;
-
     private static readonly Dictionary<LegalDocumentType, string> DefaultTitles = new()
     {
         [LegalDocumentType.Kvkk] = "KVKK Aydınlatma Metni",
@@ -26,7 +23,8 @@ public class LegalDocumentService(
         [LegalDocumentType.Cerez] = "Çerez Politikası",
         [LegalDocumentType.IptalIade] = "İptal ve İade Koşulları",
         [LegalDocumentType.TicariIleti] = "Ticari Elektronik İleti Onay Metni",
-        [LegalDocumentType.Gizlilik] = "Gizlilik Politikası"
+        [LegalDocumentType.Gizlilik] = "Gizlilik Politikası",
+        [LegalDocumentType.MesafeliSatis] = "Mesafeli Satış Sözleşmesi"
     };
 
     public async Task<Result<LegalDocumentResponse>> GetCurrentAsync(LegalDocumentType type)
@@ -41,48 +39,39 @@ public class LegalDocumentService(
         Result<IReadOnlyList<LegalDocumentRevisionResponse>>.Success(
             mapper.Map<List<LegalDocumentRevisionResponse>>(await unitOfWork.LegalDocuments.GetRevisionsAsync(type)));
 
-    public async Task<Result<LegalDocumentResponse>> UploadNewVersionAsync(LegalDocumentType type, IFormFile file, string note)
+    public async Task<Result<LegalDocumentResponse>> PublishNewVersionAsync(LegalDocumentType type, PublishLegalDocumentRequest request)
     {
         if (!Enum.IsDefined(type))
             return Result<LegalDocumentResponse>.Invalid("Geçersiz belge türü.");
 
-        note = note.Trim();
-        if (note.Length is 0 or > NoteMaxLength)
-            return Result<LegalDocumentResponse>.Invalid($"Değişiklik notu zorunludur (en fazla {NoteMaxLength} karakter).");
+        var errors = await validator.GetErrorsAsync(request);
+        if (errors.Count > 0)
+            return Result<LegalDocumentResponse>.Invalid(errors);
 
-        string filePath;
+        var note = request.Note.Trim();
+        var current = await unitOfWork.LegalDocuments.GetCurrentAsync(type);
+        var now = DateTime.UtcNow;
+        var document = new LegalDocument
+        {
+            Type = type,
+            Title = current?.Title ?? DefaultTitles[type],
+            Version = await unitOfWork.LegalDocuments.GetLatestVersionAsync(type) + 1,
+            Note = note,
+            ContentHtml = request.ContentHtml,
+            PublishedAt = now,
+            IsCurrent = true
+        };
+
+        // Revizyon geçmişi elle girilmez; her yeni sürümle birlikte otomatik yazılır
+        document.Revisions.Add(new LegalDocumentRevision
+        {
+            Type = type, Version = document.Version, Note = note, RevisedAt = now
+        });
+
+        await unitOfWork.BeginTransactionAsync();
         try
         {
-            filePath = await fileStorage.SavePdfAsync(file, UploadFolder);
-        }
-        catch (ArgumentException ex)
-        {
-            return Result<LegalDocumentResponse>.Invalid(ex.Message);
-        }
-
-        try
-        {
-            var current = await unitOfWork.LegalDocuments.GetCurrentAsync(type);
-            var now = DateTime.UtcNow;
-            var document = new LegalDocument
-            {
-                Type = type,
-                Title = current?.Title ?? DefaultTitles[type],
-                Version = await unitOfWork.LegalDocuments.GetLatestVersionAsync(type) + 1,
-                Note = note,
-                FilePath = filePath,
-                PublishedAt = now,
-                IsCurrent = true
-            };
-
-            // Revizyon geçmişi elle girilmez; her yeni sürümle birlikte otomatik yazılır
-            document.Revisions.Add(new LegalDocumentRevision
-            {
-                Type = type, Version = document.Version, Note = note, RevisedAt = now
-            });
-
             // "Türe göre tek güncel sürüm" index'i nedeniyle önce eskisi kapatılır, sonra yenisi eklenir.
-            await unitOfWork.BeginTransactionAsync();
             if (current is not null)
             {
                 current.IsCurrent = false;
@@ -92,16 +81,14 @@ public class LegalDocumentService(
             await unitOfWork.LegalDocuments.AddAsync(document);
             await unitOfWork.SaveChangesAsync();
             await unitOfWork.CommitAsync();
-
-            logger.LogInformation("{Type} belgesinin {Version}. sürümü yayınlandı", type, document.Version);
-
-            return Result<LegalDocumentResponse>.Success(mapper.Map<LegalDocumentResponse>(document));
         }
         catch
         {
             await unitOfWork.RollbackAsync();
-            await fileStorage.DeleteAsync(filePath);
             throw;
         }
+
+        logger.LogInformation("{Type} belgesinin {Version}. sürümü yayınlandı", type, document.Version);
+        return Result<LegalDocumentResponse>.Success(mapper.Map<LegalDocumentResponse>(document));
     }
 }
