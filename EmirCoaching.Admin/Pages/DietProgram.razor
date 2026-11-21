@@ -1,0 +1,52 @@
+@page "/diet-program"
+@inject IAdminDietProgramClient Client
+@inject ApiCaller Api
+
+<PageTitle>Diyet programı | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Diyet programı" Description="Diyet planı detay sayfasındaki program başlığı ve diyetisyen kartı. Adımlar “Nasıl çalışır?” bölümünde." />
+
+@if (_form is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudPaper Outlined="true" Class="pa-6" Style="max-width: 900px">
+        <div class="form-grid">
+            <MudTextField @bind-Value="_form.Title" Label="Program başlığı" Class="form-grid__full" />
+            <MudTextField @bind-Value="_form.DietitianFullName" Label="Diyetisyenin adı" />
+            <MudTextField @bind-Value="_form.DietitianTitle" Label="Diyetisyenin unvanı" HelperText="Ör. Uzman Diyetisyen" />
+            <div class="form-grid__full">
+                <ImageUpload @bind-Value="_form.DietitianPhotoPath" Label="Diyetisyen fotoğrafı" Folder="diet-program" />
+            </div>
+            <MudSwitch @bind-Value="_form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+        </div>
+        <div class="d-flex justify-end mt-6">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveAsync" Disabled="_saving">
+                @(_saving ? "Kaydediliyor…" : "Kaydet")
+            </MudButton>
+        </div>
+    </MudPaper>
+}
+
+@code {
+    private UpdateDietProgramRequest? _form;
+    private bool _saving;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var program = await Api.GetAsync(Client.GetAsync);
+        if (program is null)
+            return;
+        _form = ObjectCopy.To<UpdateDietProgramRequest>(program);
+        _form.DietitianPhotoPath = program.DietitianPhotoUrl;
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        await Api.RunAsync(() => Client.UpdateAsync(_form!), "Kaydedildi.");
+        _saving = false;
+    }
+}

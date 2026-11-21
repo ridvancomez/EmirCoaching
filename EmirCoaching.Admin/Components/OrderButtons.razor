@@ -1,0 +1,23 @@
+@typeparam TItem
+
+@* Alt listedeki satırın yukarı / aşağı / sil düğmeleri *@
+<div class="d-flex">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowUpward" Size="Size.Small" Disabled="List.IndexOf(Item) == 0"
+                   OnClick="() => Change(() => ListOrder.MoveUp(List, Item))" aria-label="Yukarı taşı" />
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowDownward" Size="Size.Small" Disabled="List.IndexOf(Item) == List.Count - 1"
+                   OnClick="() => Change(() => ListOrder.MoveDown(List, Item))" aria-label="Aşağı taşı" />
+    <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" Color="Color.Error"
+                   OnClick="() => Change(() => List.Remove(Item))" aria-label="Kaldır" />
+</div>
+
+@code {
+    [Parameter, EditorRequired] public List<TItem> List { get; set; } = [];
+    [Parameter, EditorRequired] public TItem Item { get; set; } = default!;
+    [Parameter] public EventCallback Changed { get; set; }
+
+    private Task Change(Action action)
+    {
+        action();
+        return Changed.InvokeAsync();
+    }
+}

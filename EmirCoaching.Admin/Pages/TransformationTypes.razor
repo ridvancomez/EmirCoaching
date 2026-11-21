@@ -1,0 +1,52 @@
+@page "/transformation-types"
+@inherits CrudPage<TransformationTypeResponse, CreateTransformationTypeRequest>
+@inject IAdminTransformationTypesClient Client
+
+<PageTitle>Değişim tipleri | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Değişim tipleri" Description="Değişimler sayfasındaki filtreler (ör. Kilo verme, Kas kazanımı). Kullanılan tip silinemez.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="TransformationTypeResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Ad</MudTh>
+        <MudTh>Adres (slug)</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Ad">@context.Name</MudTd>
+        <MudTd DataLabel="Adres"><code>@context.Slug</code></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync" MaxWidth="MaxWidth.Small">
+    <MudTextField Value="Form.Name" ValueChanged="(string v) => OnNameChanged(v)" Label="Ad" Class="form-grid__full" Immediate="true" />
+    <MudTextField @bind-Value="Form.Slug" Label="Adres (slug)" HelperText="Addan otomatik üretilir" />
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni değişim tipi";
+    protected override string EditTitle => "Değişim tipini düzenle";
+
+    protected override Task<List<TransformationTypeResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(TransformationTypeResponse item) => item.Id;
+    protected override string LabelOf(TransformationTypeResponse item) => item.Name;
+    protected override CreateTransformationTypeRequest NewForm() => new() { SortOrder = NextSortOrder(t => t.SortOrder) };
+
+    private void OnNameChanged(string name)
+    {
+        Form.Slug = SlugField.Follow(Form.Name, Form.Slug, name);
+        Form.Name = name;
+    }
+
+    protected override Task CreateAsync(CreateTransformationTypeRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateTransformationTypeRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateTransformationTypeRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

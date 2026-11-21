@@ -1,0 +1,74 @@
+@page "/social-posts"
+@inherits CrudPage<SocialPostResponse, CreateSocialPostRequest>
+@inject IAdminSocialPostsClient Client
+
+<PageTitle>Sosyal gönderiler | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Sosyal gönderiler" Description="Ana sayfadaki sosyal medya bölümünde görünen gönderiler (Instagram entegrasyonu gelene kadar elle).">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="SocialPostResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh Style="width: 72px">Görsel</MudTh>
+        <MudTh>Başlık</MudTh>
+        <MudTh>Platform</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Görsel"><img src="@SiteLinks.Image(context.ImageUrl)" alt="" class="table-thumb" /></MudTd>
+        <MudTd DataLabel="Başlık"><div class="cell-ellipsis">@(context.Title ?? context.Caption ?? "—")</div></MudTd>
+        <MudTd DataLabel="Platform">@Labels.Of(context.Platform)</MudTd>
+        <MudTd DataLabel="Durum"><ActiveChip Active="context.IsActive" /></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudSelect @bind-Value="Form.Platform" Label="Platform">
+        @foreach (var platform in Enum.GetValues<SocialPlatform>())
+        {
+            <MudSelectItem Value="platform">@Labels.Of(platform)</MudSelectItem>
+        }
+    </MudSelect>
+    <MudDatePicker @bind-Date="Form.PostedAt" Label="Paylaşım tarihi" DateFormat="dd.MM.yyyy" Editable="true" />
+    <MudTextField @bind-Value="Form.Url" Label="Gönderi adresi" HelperText="https:// ile" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Title" Label="Başlık" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Caption" Label="Açıklama" Lines="3" Sizing="InputSizing.Auto" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Hashtag" Label="Etiket" HelperText="Ör. #dönüşüm" />
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+    <div class="form-grid__full">
+        <ImageUpload @bind-Value="Form.ImagePath" Label="Görsel" Folder="social" Required="true" />
+    </div>
+    <MudSwitch @bind-Value="Form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni gönderi";
+    protected override string EditTitle => "Gönderiyi düzenle";
+
+    protected override Task<List<SocialPostResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(SocialPostResponse item) => item.Id;
+    protected override string LabelOf(SocialPostResponse item) => item.Title ?? item.Url;
+    protected override CreateSocialPostRequest NewForm() => new()
+    {
+        Platform = SocialPlatform.Instagram, IsActive = true, PostedAt = DateTime.Today, SortOrder = NextSortOrder(s => s.SortOrder)
+    };
+
+    // Yanıtta ImageUrl, istekte ImagePath: tam URL de kabul edilir
+    protected override Task<CreateSocialPostRequest?> ToFormAsync(SocialPostResponse item)
+    {
+        var form = ObjectCopy.To<CreateSocialPostRequest>(item);
+        form.ImagePath = item.ImageUrl;
+        return Task.FromResult<CreateSocialPostRequest?>(form);
+    }
+
+    protected override Task CreateAsync(CreateSocialPostRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateSocialPostRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateSocialPostRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

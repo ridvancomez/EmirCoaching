@@ -1,0 +1,50 @@
+@page "/site-settings"
+@inject IAdminSiteSettingsClient Client
+@inject ApiCaller Api
+
+<PageTitle>Site ayarları | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Site ayarları" Description="İletişim bilgileri ve çalışma saatleri (footer, iletişim sayfası, yasal metinler)." />
+
+@if (_form is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudPaper Outlined="true" Class="pa-6" Style="max-width: 900px">
+        <div class="form-grid">
+            <MudTextField @bind-Value="_form.Phone" Label="Telefon" HelperText="Ör. +90 545 371 25 15" />
+            <MudTextField @bind-Value="_form.Email" Label="E-posta" InputType="InputType.Email" />
+            <MudTextField @bind-Value="_form.LegalEmail" Label="Hukuk e-postası" HelperText="KVKK başvuruları için, yasal metinlerde görünür" />
+            <MudTextField @bind-Value="_form.Address" Label="Adres" />
+            <MudTextField @bind-Value="_form.WorkingDays1" Label="Çalışma günleri (1)" HelperText="Ör. Pazartesi – Cuma" />
+            <MudTextField @bind-Value="_form.WorkingHours1" Label="Saatler (1)" HelperText="Ör. 09:00 – 19:00" />
+            <MudTextField @bind-Value="_form.WorkingDays2" Label="Çalışma günleri (2)" HelperText="Ör. Cumartesi" />
+            <MudTextField @bind-Value="_form.WorkingHours2" Label="Saatler (2)" HelperText="Ör. 10:00 – 16:00" />
+        </div>
+        <div class="d-flex justify-end mt-6">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveAsync" Disabled="_saving">
+                @(_saving ? "Kaydediliyor…" : "Kaydet")
+            </MudButton>
+        </div>
+    </MudPaper>
+}
+
+@code {
+    private UpdateSiteSettingRequest? _form;
+    private bool _saving;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var settings = await Api.GetAsync(Client.GetAsync);
+        _form = settings is null ? null : ObjectCopy.To<UpdateSiteSettingRequest>(settings);
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        await Api.RunAsync(() => Client.UpdateAsync(_form!), "Kaydedildi.");
+        _saving = false;
+    }
+}

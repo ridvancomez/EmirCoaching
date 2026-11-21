@@ -1,0 +1,99 @@
+@page "/testimonials"
+@inherits CrudPage<TestimonialResponse, CreateTestimonialRequest>
+@inject IAdminTestimonialsClient Client
+@inject IAdminPackagesClient PackagesClient
+
+<PageTitle>Yorumlar | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Danışan yorumları" Description="Her yorum bir pakete bağlıdır ve o paketin detayında görünür. “Ana sayfada” işaretliler ana sayfada da çıkar.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="TestimonialResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <ToolBarContent>
+        @* Pakete göre süzme: API ?packageId= ile *@
+        <MudSelect T="int?" Value="_packageFilter" ValueChanged="FilterAsync" Label="Paket" Dense="true" Clearable="true"
+                   Style="min-width: 260px" Variant="Variant.Outlined" Margin="Margin.Dense">
+            @foreach (var package in _packages)
+            {
+                <MudSelectItem T="int?" Value="package.Id">@PackageName(package)</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Ad</MudTh>
+        <MudTh>Yorum</MudTh>
+        <MudTh>Puan</MudTh>
+        <MudTh>Paket</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Ad">@context.Name</MudTd>
+        <MudTd DataLabel="Yorum"><div class="cell-ellipsis" style="max-width: 320px">@context.Text</div></MudTd>
+        <MudTd DataLabel="Puan"><MudRating ReadOnly="true" SelectedValue="(int)Math.Round(context.Rating)" Size="Size.Small" /></MudTd>
+        <MudTd DataLabel="Paket">@context.PackageName</MudTd>
+        <MudTd DataLabel="Durum">
+            <ActiveChip Active="context.IsActive" />
+            @if (context.ShowOnHome)
+            {
+                <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Text">Ana sayfada</MudChip>
+            }
+        </MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="Form.Name" Label="Danışan adı" HelperText="Ör. Ahmet Y." />
+    <MudSelect @bind-Value="Form.PackageId" Label="Paket">
+        @foreach (var package in _packages)
+        {
+            <MudSelectItem Value="package.Id">@PackageName(package)</MudSelectItem>
+        }
+    </MudSelect>
+    <MudTextField @bind-Value="Form.Text" Label="Yorum" Lines="4" Sizing="InputSizing.Auto" Class="form-grid__full" />
+    <MudNumericField @bind-Value="Form.Rating" Label="Puan" Min="0" Max="5" Step="0.5" HelperText="0–5, yarım puan olabilir" />
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+    <MudSwitch @bind-Value="Form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+    <MudSwitch @bind-Value="Form.ShowOnHome" Label="Ana sayfada göster" Color="Color.Primary" />
+</FormDialog>
+
+@code {
+    private List<PackageResponse> _packages = [];
+    private int? _packageFilter;
+
+    protected override string NewTitle => "Yeni yorum";
+    protected override string EditTitle => "Yorumu düzenle";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _packages = await Api.GetAsync(PackagesClient.GetAllAsync) ?? [];
+        await base.OnInitializedAsync();
+    }
+
+    private static string PackageName(PackageResponse package) => $"{package.Name} ({Labels.Of(package.Location)})";
+
+    private async Task FilterAsync(int? packageId)
+    {
+        _packageFilter = packageId;
+        await ReloadAsync();
+    }
+
+    protected override Task<List<TestimonialResponse>> FetchAsync() => Client.GetAllAsync(_packageFilter);
+    protected override int IdOf(TestimonialResponse item) => item.Id;
+    protected override string LabelOf(TestimonialResponse item) => item.Name;
+    protected override CreateTestimonialRequest NewForm() => new()
+    {
+        Rating = 5, IsActive = true, PackageId = _packageFilter ?? _packages.FirstOrDefault()?.Id ?? 0,
+        SortOrder = NextSortOrder(t => t.SortOrder)
+    };
+
+    protected override Task CreateAsync(CreateTestimonialRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateTestimonialRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateTestimonialRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

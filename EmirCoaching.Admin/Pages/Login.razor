@@ -1,0 +1,83 @@
+@page "/login"
+@layout LoginLayout
+@inject AuthService Auth
+@inject NavigationManager Navigation
+
+<PageTitle>Giriş | Emir Coaching Panel</PageTitle>
+
+<MudPaper Class="login-card pa-8" Elevation="6">
+    <div class="login-card__brand">
+        <img src="images/logo.png" alt="Emir Coaching" width="194" height="29" class="login-card__logo" />
+    </div>
+    <MudText Typo="Typo.h5" Class="mt-6">Panele giriş</MudText>
+
+    @if (Expired && _error is null)
+    {
+        <MudAlert Severity="Severity.Info" Dense="true" Class="mt-4">Oturumunuzun süresi doldu, tekrar giriş yapın.</MudAlert>
+    }
+    @if (_error is not null)
+    {
+        <MudAlert Severity="Severity.Error" Dense="true" Class="mt-4" Style="white-space: pre-line">@_error</MudAlert>
+    }
+
+    @* EditForm: Enter tuşu formu gönderir *@
+    <EditForm Model="_model" OnSubmit="SubmitAsync">
+        <MudTextField @bind-Value="_model.Email" Label="E-posta" InputType="InputType.Email" Variant="Variant.Outlined"
+                      Class="mt-4" autocomplete="username" Immediate="true" />
+        <MudTextField @bind-Value="_model.Password" Label="Şifre" InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                      Variant="Variant.Outlined" Class="mt-4" autocomplete="current-password" Immediate="true"
+                      Adornment="Adornment.End" AdornmentIcon="@(_showPassword ? Icons.Material.Outlined.VisibilityOff : Icons.Material.Outlined.Visibility)"
+                      OnAdornmentClick="() => _showPassword = !_showPassword" AdornmentAriaLabel="Şifreyi göster/gizle" />
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
+                   Size="Size.Large" Class="mt-6" Disabled="_busy">
+            @(_busy ? "Giriş yapılıyor…" : "Giriş yap")
+        </MudButton>
+    </EditForm>
+</MudPaper>
+
+@code {
+    [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
+    [SupplyParameterFromQuery] public bool Expired { get; set; }
+
+    private readonly LoginModel _model = new();
+    private string? _error;
+    private bool _busy;
+    private bool _showPassword;
+
+    // Cookie hâlâ geçerliyse (ör. sayfa yenilendi) giriş ekranı atlanır
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Expired && await Auth.TryRestoreAsync())
+            GoBack();
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_model.Email) || string.IsNullOrWhiteSpace(_model.Password))
+        {
+            _error = "E-posta ve şifre girin.";
+            return;
+        }
+
+        _busy = true;
+        _error = await Auth.LoginAsync(_model.Email.Trim(), _model.Password);
+        _busy = false;
+        if (_error is null)
+            GoBack();
+    }
+
+    // Yalnızca panel içi göreli adrese dönülür (başka siteye yönlendirme açığı olmasın)
+    private void GoBack()
+    {
+        var target = ReturnUrl is { Length: > 0 } url && !url.Contains(':') && !url.StartsWith('/') && !url.StartsWith("login")
+            ? "/" + url
+            : "/";
+        Navigation.NavigateTo(target);
+    }
+
+    private sealed class LoginModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

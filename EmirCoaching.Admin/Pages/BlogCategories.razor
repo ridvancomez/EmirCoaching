@@ -1,0 +1,49 @@
+@page "/blog-categories"
+@inherits CrudPage<BlogCategoryResponse, CreateBlogCategoryRequest>
+@inject IAdminBlogCategoriesClient Client
+
+<PageTitle>Blog kategorileri | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Blog kategorileri" Description="Blog sayfasındaki filtreler. İçinde yazı olan kategori silinemez.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="BlogCategoryResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh>Ad</MudTh>
+        <MudTh>Adres (slug)</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Ad">@context.Name</MudTd>
+        <MudTd DataLabel="Adres"><code>@context.Slug</code></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync" MaxWidth="MaxWidth.Small">
+    <MudTextField Value="Form.Name" ValueChanged="(string v) => OnNameChanged(v)"
+                  Label="Ad" Class="form-grid__full" Immediate="true" />
+    <MudTextField @bind-Value="Form.Slug" Label="Adres (slug)" HelperText="Küçük harf ve tire; addan otomatik üretilir" Class="form-grid__full" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni kategori";
+    protected override string EditTitle => "Kategoriyi düzenle";
+
+    protected override Task<List<BlogCategoryResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(BlogCategoryResponse item) => item.Id;
+    protected override string LabelOf(BlogCategoryResponse item) => item.Name;
+
+    private void OnNameChanged(string name)
+    {
+        Form.Slug = SlugField.Follow(Form.Name, Form.Slug, name);
+        Form.Name = name;
+    }
+
+    protected override Task CreateAsync(CreateBlogCategoryRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateBlogCategoryRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateBlogCategoryRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

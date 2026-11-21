@@ -1,0 +1,195 @@
+@page "/packages/new"
+@page "/packages/{Id:int}"
+@inject IAdminPackagesClient Client
+@inject ApiCaller Api
+@inject NavigationManager Navigation
+
+<PageTitle>@(IsNew ? "Yeni paket" : _form.Name) | Emir Coaching Panel</PageTitle>
+
+<MudBreadcrumbs Items="_breadcrumbs" Class="px-0 pt-0" />
+<PageHeader Title="@(IsNew ? "Yeni paket" : "Paketi düzenle")"
+            Description="Kart maddeleri ve modüller paketle birlikte tek seferde kaydedilir. Sıra listedeki sıradır.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveAsync" Disabled="_saving">@(_saving ? "Kaydediliyor…" : "Kaydet")</MudButton>
+    </Actions>
+</PageHeader>
+
+@if (!_loaded)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12" lg="7">
+            <MudPaper Outlined="true" Class="pa-6">
+                <MudText Typo="Typo.h6" Class="mb-2">Paket bilgileri</MudText>
+                <div class="form-grid">
+                    <MudTextField Value="_form.Name" ValueChanged="(string v) => OnNameChanged(v)" Label="Paket adı" Immediate="true" HelperText="Ör. Dönüşüm Protokolü" />
+                    <MudTextField @bind-Value="_form.Slug" Label="Adres (slug)" HelperText="Salonda ve evde paketlerin slug'ı farklı olmalı" />
+                    <MudTextField @bind-Value="_form.Subtitle" Label="Alt başlık" HelperText="Ör. Dönüşüm Programı" />
+                    <MudSelect @bind-Value="_form.Location" Label="Yer">
+                        @foreach (var location in Enum.GetValues<PackageLocation>())
+                        {
+                            <MudSelectItem Value="location">@Labels.Of(location)</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudNumericField @bind-Value="_form.DurationMonths" Label="Süre (ay)" Min="1" />
+                    <MudNumericField @bind-Value="_form.Price" Label="Fiyat (₺)" Min="0" Format="N0" Culture="_tr"
+                                     HelperText="@($"Aylık: {Labels.Price(_form.DurationMonths > 0 ? Math.Round(_form.Price / _form.DurationMonths, MidpointRounding.AwayFromZero) : 0)}")" />
+                    <MudTextField @bind-Value="_form.ShortDescription" Label="Kısa açıklama" Lines="2" Sizing="InputSizing.Auto" Class="form-grid__full"
+                                  HelperText="Paket detay sayfasının üstündeki metin" />
+                    <MudTextField @bind-Value="_form.PurchaseUrl" Label="Satın alma adresi" Class="form-grid__full" HelperText="Ödeme sayfası, https:// ile" />
+                    <MudNumericField @bind-Value="_form.SortOrder" Label="Sıra" Min="0" />
+                    <div></div>
+                    <MudSwitch @bind-Value="_form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+                    <MudSwitch @bind-Value="_form.IsFeatured" Label="En çok tercih edilen" Color="Color.Primary"
+                               title="Her yerde (salonda/evde) tek paket işaretlenebilir; yenisi seçilince eskisi kalkar" />
+                </div>
+            </MudPaper>
+
+            <MudPaper Outlined="true" Class="pa-6 mt-4">
+                <div class="d-flex align-center justify-space-between mb-2">
+                    <MudText Typo="Typo.h6">Modüller</MudText>
+                    <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddModule">Modül ekle</MudButton>
+                </div>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">Paket detayındaki “Program içeriği” kartları. Kilitli kalem sitede kilit ikonuyla görünür.</MudText>
+                <div class="sub-list">
+                    @foreach (var module in _form.Modules)
+                    {
+                        <MudPaper Outlined="true" Class="pa-4">
+                            <div class="sub-list__item">
+                                <div class="sub-list__fields form-grid">
+                                    <MudTextField @bind-Value="module.Title" Label="Modül başlığı" />
+                                    <MudSelect @bind-Value="module.IconKey" Label="İkon">
+                                        @foreach (var (key, label) in IconKeys.PackageModule)
+                                        {
+                                            <MudSelectItem Value="key">@label</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </div>
+                                <OrderButtons List="_form.Modules" Item="module" Changed="StateHasChanged" />
+                            </div>
+                            <div class="sub-list mt-2 ml-4">
+                                @foreach (var item in module.Items)
+                                {
+                                    <div class="sub-list__item">
+                                        <div class="sub-list__fields d-flex align-center gap-4">
+                                            <MudTextField @bind-Value="item.Text" Label="Kalem" Margin="Margin.Dense" />
+                                            <MudCheckBox @bind-Value="item.IsLocked" Label="Kilitli" Color="Color.Primary" />
+                                        </div>
+                                        <OrderButtons List="module.Items" Item="item" Changed="StateHasChanged" />
+                                    </div>
+                                }
+                                <div>
+                                    <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                                               OnClick="() => module.Items.Add(new PackageModuleItemRequest())">Kalem ekle</MudButton>
+                                </div>
+                            </div>
+                        </MudPaper>
+                    }
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" lg="5">
+            <MudPaper Outlined="true" Class="pa-6">
+                <div class="d-flex align-center justify-space-between mb-2">
+                    <MudText Typo="Typo.h6">Kart maddeleri</MudText>
+                    <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddHighlight">Madde ekle</MudButton>
+                </div>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">Paketler sayfasındaki kartta görünen öne çıkan maddeler.</MudText>
+                <div class="sub-list">
+                    @foreach (var highlight in _form.Highlights)
+                    {
+                        <MudPaper Outlined="true" Class="pa-4">
+                            <div class="sub-list__item">
+                                <div class="sub-list__fields">
+                                    <MudTextField @bind-Value="highlight.Text" Label="Madde" Margin="Margin.Dense" />
+                                    <MudTextField @bind-Value="highlight.SubText" Label="Alt metin" Margin="Margin.Dense" HelperText="İsteğe bağlı, ör. Her Cumartesi · 20 dk birebir" />
+                                    <div class="d-flex align-center gap-4">
+                                        <MudSelect @bind-Value="highlight.IconKey" Label="İkon" Margin="Margin.Dense">
+                                            @foreach (var (key, label) in IconKeys.PackageHighlight)
+                                            {
+                                                <MudSelectItem Value="key">@label</MudSelectItem>
+                                            }
+                                        </MudSelect>
+                                        <MudCheckBox @bind-Value="highlight.IsLocked" Label="Kilitli" Color="Color.Primary" />
+                                    </div>
+                                </div>
+                                <OrderButtons List="_form.Highlights" Item="highlight" Changed="StateHasChanged" />
+                            </div>
+                        </MudPaper>
+                    }
+                </div>
+            </MudPaper>
+
+            <MudPaper Outlined="true" Class="pa-6 mt-4">
+                <MudText Typo="Typo.subtitle2">Arama motoru (SEO)</MudText>
+                <MudTextField @bind-Value="_form.MetaTitle" Label="Sayfa başlığı" Counter="70" />
+                <MudTextField @bind-Value="_form.MetaDescription" Label="Açıklama" Lines="3" Sizing="InputSizing.Auto" Counter="160" />
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private bool IsNew => Id is null;
+    private static readonly System.Globalization.CultureInfo _tr = new("tr-TR");
+
+    private CreatePackageRequest _form = new() { DurationMonths = 3, IsActive = true, Highlights = [], Modules = [] };
+    private bool _loaded;
+    private bool _saving;
+    private List<BreadcrumbItem> _breadcrumbs = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Modül/kalem/madde id'leri formda saklanır ve PUT'ta geri gider: API id'si olanı günceller, olmayanı ekler
+        if (Id is { } id)
+        {
+            var package = await Api.GetAsync(() => Client.GetByIdAsync(id));
+            if (package is null)
+                return;
+            _form = ObjectCopy.To<CreatePackageRequest>(package);
+        }
+
+        _breadcrumbs = [new("Paketler", "/packages"), new(IsNew ? "Yeni paket" : $"{_form.Name} ({Labels.Of(_form.Location)})", null, disabled: true)];
+        _loaded = true;
+    }
+
+    private void OnNameChanged(string name)
+    {
+        _form.Slug = SlugField.Follow(_form.Name, _form.Slug, name);
+        _form.Name = name;
+    }
+
+    private void AddModule() =>
+        _form.Modules.Add(new PackageModuleRequest { IconKey = IconKeys.PackageModule.Keys.First(), Items = [new PackageModuleItemRequest()] });
+
+    private void AddHighlight() =>
+        _form.Highlights.Add(new PackageHighlightRequest { IconKey = IconKeys.PackageHighlight.Keys.First() });
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        if (Id is { } id)
+        {
+            if (await Api.RunAsync(() => Client.UpdateAsync(id, ObjectCopy.To<UpdatePackageRequest>(_form)), "Kaydedildi."))
+            {
+                // Yeni eklenen alt kayıtlar id aldı: sonraki kayıtta tekrar eklenmesinler diye form yeniden okunur
+                var package = await Api.GetAsync(() => Client.GetByIdAsync(id));
+                if (package is not null)
+                    _form = ObjectCopy.To<CreatePackageRequest>(package);
+            }
+        }
+        else
+        {
+            CreatedResponse? created = null;
+            if (await Api.RunAsync(async () => created = await Client.CreateAsync(_form), "Paket oluşturuldu."))
+                Navigation.NavigateTo($"/packages/{created!.Id}");
+        }
+        _saving = false;
+    }
+}

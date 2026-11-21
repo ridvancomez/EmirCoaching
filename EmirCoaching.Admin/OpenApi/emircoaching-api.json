@@ -6993,10 +6993,6 @@
           "isCoach": {
             "type": "boolean"
           },
-          "coachTitle": {
-            "type": "string",
-            "nullable": true
-          },
           "coachExperience": {
             "type": "string",
             "nullable": true
@@ -8575,10 +8571,6 @@
             "nullable": true
           },
           "avatarPath": {
-            "type": "string",
-            "nullable": true
-          },
-          "coachTitle": {
             "type": "string",
             "nullable": true
           },

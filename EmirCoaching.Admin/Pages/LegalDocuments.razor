@@ -1,0 +1,60 @@
+@page "/legal-documents"
+@inject IAdminLegalDocumentsClient Client
+@inject ApiCaller Api
+
+<PageTitle>Yasal metinler | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Yasal metinler" Description="Sitedeki tüm yasal metinler Gizlilik Politikası sayfasının tasarımıyla açılır. Düzenlemek istediğin belgeyi seç." />
+
+@if (_loading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudGrid>
+        @foreach (var type in Enum.GetValues<LegalDocumentType>())
+        {
+            var doc = _current.GetValueOrDefault(type);
+            <MudItem xs="12" sm="6" lg="4">
+                <MudCard Outlined="true" Style="height: 100%">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">@Labels.Of(type)</MudText>
+                        @if (doc is null)
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Warning" Variant="Variant.Text" Class="ml-0">Henüz yayınlanmadı</MudChip>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                                v@(doc.Version) · @Labels.Date(doc.PublishedAt) · @(doc.ContentHtml is null ? "PDF (ilk sürüm)" : "Panelden girildi")
+                            </MudText>
+                            <MudText Typo="Typo.body2" Class="mt-1">“@doc.Note”</MudText>
+                        }
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Href="@($"/legal-documents/{type}")" Variant="Variant.Text" Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Outlined.Edit">@(doc is null ? "Metni yaz" : "Yeni sürüm yayınla")</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@code {
+    private readonly Dictionary<LegalDocumentType, LegalDocumentResponse> _current = [];
+    private bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var types = Enum.GetValues<LegalDocumentType>();
+        var docs = await Task.WhenAll(types.Select(t => Api.GetOptionalAsync(() => Client.GetCurrentAsync(t))));
+        for (var i = 0; i < types.Length; i++)
+        {
+            if (docs[i] is { } doc)
+                _current[types[i]] = doc;
+        }
+        _loading = false;
+    }
+}

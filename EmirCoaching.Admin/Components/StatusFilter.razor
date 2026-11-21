@@ -1,0 +1,17 @@
+@typeparam T where T : struct, Enum
+
+@* Gelen kutusu listelerinde durum süzgeci: Tümü / Yeni / Okundu / ... *@
+<MudChipSet T="T?" SelectedValue="Value" SelectedValueChanged="ValueChanged" SelectionMode="SelectionMode.SingleSelection"
+            CheckMark="false" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">
+    <MudChip T="T?" Value="null" Default="Value is null">Tümü</MudChip>
+    @foreach (var status in Enum.GetValues<T>())
+    {
+        <MudChip T="T?" Value="status">@LabelOf(status)</MudChip>
+    }
+</MudChipSet>
+
+@code {
+    [Parameter] public T? Value { get; set; }
+    [Parameter] public EventCallback<T?> ValueChanged { get; set; }
+    [Parameter, EditorRequired] public Func<T, string> LabelOf { get; set; } = default!;
+}

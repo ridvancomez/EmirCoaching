@@ -1,0 +1,47 @@
+@page "/site-stats"
+@inherits CrudPage<SiteStatResponse, CreateSiteStatRequest>
+@inject IAdminSiteStatsClient Client
+
+<PageTitle>Sayaçlar | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Sayaçlar" Description="Hakkımda sayfasının üstündeki rakamlar (ör. 500 + Mutlu danışan).">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="SiteStatResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Değer</MudTh>
+        <MudTh>Etiket</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Değer"><strong>@context.Value@context.Suffix</strong></MudTd>
+        <MudTd DataLabel="Etiket">@context.Label</MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="Form.Value" Label="Değer" HelperText="Ör. 500" />
+    <MudTextField @bind-Value="Form.Suffix" Label="Ek" HelperText="Değerin yanındaki işaret, ör. + veya %" />
+    <MudTextField @bind-Value="Form.Label" Label="Etiket" HelperText="Ör. Mutlu danışan" Class="form-grid__full" />
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni sayaç";
+    protected override string EditTitle => "Sayacı düzenle";
+
+    protected override Task<List<SiteStatResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(SiteStatResponse item) => item.Id;
+    protected override string LabelOf(SiteStatResponse item) => item.Label;
+    protected override CreateSiteStatRequest NewForm() => new() { SortOrder = NextSortOrder(s => s.SortOrder) };
+
+    protected override Task CreateAsync(CreateSiteStatRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateSiteStatRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateSiteStatRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

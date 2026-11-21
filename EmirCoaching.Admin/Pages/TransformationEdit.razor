@@ -1,0 +1,155 @@
+@page "/transformations/new"
+@page "/transformations/{Id:int}"
+@inject IAdminTransformationsClient Client
+@inject IAdminTransformationTypesClient TypesClient
+@inject ApiCaller Api
+@inject NavigationManager Navigation
+
+<PageTitle>@(IsNew ? "Yeni değişim" : _form.ClientName) | Emir Coaching Panel</PageTitle>
+
+<MudBreadcrumbs Items="_breadcrumbs" Class="px-0 pt-0" />
+<PageHeader Title="@(IsNew ? "Yeni değişim" : "Değişimi düzenle")" Description="Ölçümler değişimle birlikte tek seferde kaydedilir.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveAsync" Disabled="_saving">@(_saving ? "Kaydediliyor…" : "Kaydet")</MudButton>
+    </Actions>
+</PageHeader>
+
+@if (!_loaded)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12" lg="7">
+            <MudPaper Outlined="true" Class="pa-6">
+                <div class="form-grid">
+                    <MudTextField @bind-Value="_form.ClientName" Label="Danışan adı" HelperText="Ör. Mehmet K." />
+                    <MudSelect @bind-Value="_form.TransformationTypeId" Label="Değişim tipi">
+                        @foreach (var type in _types)
+                        {
+                            <MudSelectItem Value="type.Id">@type.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudNumericField @bind-Value="_form.Age" Label="Yaş" Min="10" Max="100" />
+                    <MudNumericField @bind-Value="_form.DurationWeeks" Label="Süre (hafta)" Min="1" />
+                    <MudNumericField @bind-Value="_form.Year" Label="Yıl" Min="2000" Max="DateTime.Today.Year" />
+                    <MudSelect @bind-Value="_form.Section" Label="Değişimler sayfasında bölüm">
+                        @foreach (var section in Enum.GetValues<TransformationSection>())
+                        {
+                            <MudSelectItem Value="section">@Labels.Of(section)</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudTextField @bind-Value="_form.Quote" Label="Alıntı" Lines="2" Sizing="InputSizing.Auto" Class="form-grid__full"
+                                  HelperText="Kartta tırnak içinde görünen kısa söz" />
+                    <MudTextField @bind-Value="_form.Story" Label="Hikâye" Lines="6" Sizing="InputSizing.Auto" Class="form-grid__full"
+                                  HelperText="Detay penceresindeki metin" />
+                    <MudNumericField @bind-Value="_form.SortOrder" Label="Sıra" Min="0" />
+                    <MudSwitch @bind-Value="_form.AlignBottom" Label="Görseli alttan hizala" Color="Color.Primary"
+                               title="Kırpmada ayakların görünmesi gerekiyorsa" />
+                    <MudSwitch @bind-Value="_form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+                    <MudSwitch @bind-Value="_form.ShowOnHome" Label="Ana sayfada göster" Color="Color.Primary" />
+                </div>
+            </MudPaper>
+
+            <MudPaper Outlined="true" Class="pa-6 mt-4">
+                <div class="d-flex align-center justify-space-between mb-2">
+                    <MudText Typo="Typo.h6">Ölçümler</MudText>
+                    <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                               OnClick="() => _form.Metrics.Add(new TransformationMetricRequest())">Ölçüm ekle</MudButton>
+                </div>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">Kartın altındaki rakamlar, ör. Kilo: −12 kg.</MudText>
+                <div class="sub-list">
+                    @foreach (var metric in _form.Metrics)
+                    {
+                        <div class="sub-list__item">
+                            <div class="sub-list__fields form-grid">
+                                <MudTextField @bind-Value="metric.Label" Label="Etiket" Margin="Margin.Dense" HelperText="Ör. Kilo" />
+                                <MudTextField @bind-Value="metric.Value" Label="Değer" Margin="Margin.Dense" HelperText="Ör. −12 kg" />
+                            </div>
+                            <OrderButtons List="_form.Metrics" Item="metric" Changed="StateHasChanged" />
+                        </div>
+                    }
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" lg="5">
+            <MudPaper Outlined="true" Class="pa-6">
+                <MudText Typo="Typo.h6" Class="mb-2">Görseller</MudText>
+                <ImageUpload @bind-Value="_form.BeforeImagePath" Label="Önce" Folder="transformations" Required="true" HelperText="Dikey (portre) fotoğraf" />
+                <div class="mt-4">
+                    <ImageUpload @bind-Value="_form.AfterImagePath" Label="Sonra" Folder="transformations" Required="true" HelperText="Dikey (portre) fotoğraf" />
+                </div>
+                <MudDivider Class="my-4" />
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">Kare görseller isteğe bağlı: ana sayfadaki kaydırmalı bölümde kullanılır, yoksa dikey görsel kırpılır.</MudText>
+                <div class="mt-4">
+                    <ImageUpload @bind-Value="_form.BeforeSquarePath" Label="Önce (kare)" Folder="transformations" />
+                </div>
+                <div class="mt-4">
+                    <ImageUpload @bind-Value="_form.AfterSquarePath" Label="Sonra (kare)" Folder="transformations" />
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private bool IsNew => Id is null;
+
+    private CreateTransformationRequest _form = new() { IsActive = true, Year = DateTime.Today.Year, DurationWeeks = 12, Metrics = [] };
+    private List<TransformationTypeResponse> _types = [];
+    private bool _loaded;
+    private bool _saving;
+    private List<BreadcrumbItem> _breadcrumbs = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _types = await Api.GetAsync(TypesClient.GetAllAsync) ?? [];
+        if (Id is { } id)
+        {
+            if (!await LoadAsync(id))
+                return;
+        }
+        else
+        {
+            _form.TransformationTypeId = _types.FirstOrDefault()?.Id ?? 0;
+        }
+
+        _breadcrumbs = [new("Değişimler", "/transformations"), new(IsNew ? "Yeni değişim" : _form.ClientName, null, disabled: true)];
+        _loaded = true;
+    }
+
+    // Ölçüm id'leri formda kalır ve PUT'ta geri gider (id'siz olan yeni sayılır)
+    private async Task<bool> LoadAsync(int id)
+    {
+        var item = await Api.GetAsync(() => Client.GetByIdAsync(id));
+        if (item is null)
+            return false;
+        _form = ObjectCopy.To<CreateTransformationRequest>(item);
+        _form.BeforeImagePath = item.BeforeImageUrl;
+        _form.AfterImagePath = item.AfterImageUrl;
+        _form.BeforeSquarePath = item.BeforeSquareUrl;
+        _form.AfterSquarePath = item.AfterSquareUrl;
+        return true;
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        if (Id is { } id)
+        {
+            if (await Api.RunAsync(() => Client.UpdateAsync(id, ObjectCopy.To<UpdateTransformationRequest>(_form)), "Kaydedildi."))
+                await LoadAsync(id);
+        }
+        else
+        {
+            CreatedResponse? created = null;
+            if (await Api.RunAsync(async () => created = await Client.CreateAsync(_form), "Değişim oluşturuldu."))
+                Navigation.NavigateTo($"/transformations/{created!.Id}");
+        }
+        _saving = false;
+    }
+}

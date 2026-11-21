@@ -1,0 +1,52 @@
+@page "/faqs"
+@inherits CrudPage<FaqResponse, CreateFaqRequest>
+@inject IAdminFaqsClient Client
+
+<PageTitle>SSS | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Sıkça sorulan sorular" Description="Ana sayfadaki SSS bölümü (Genel grubu). Sıra numarası küçük olan önce görünür.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="FaqResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Soru</MudTh>
+        <MudTh>Grup</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Soru"><div class="cell-ellipsis">@context.Question</div></MudTd>
+        <MudTd DataLabel="Grup">@Labels.Of(context.Group)</MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="Form.Question" Label="Soru" Class="form-grid__full" Counter="300" MaxLength="300" />
+    <MudTextField @bind-Value="Form.Answer" Label="Cevap" Lines="5" Sizing="InputSizing.Auto" Class="form-grid__full" Counter="2000" MaxLength="2000" />
+    <MudSelect @bind-Value="Form.Group" Label="Grup">
+        @foreach (var group in Enum.GetValues<FaqGroup>())
+        {
+            <MudSelectItem Value="group">@Labels.Of(group)</MudSelectItem>
+        }
+    </MudSelect>
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni soru";
+    protected override string EditTitle => "Soruyu düzenle";
+
+    protected override Task<List<FaqResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(FaqResponse item) => item.Id;
+    protected override string LabelOf(FaqResponse item) => item.Question;
+    protected override CreateFaqRequest NewForm() => new() { Group = FaqGroup.Genel, SortOrder = NextSortOrder(f => f.SortOrder) };
+
+    protected override Task CreateAsync(CreateFaqRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateFaqRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateFaqRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

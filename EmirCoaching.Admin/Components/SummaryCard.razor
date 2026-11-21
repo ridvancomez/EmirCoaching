@@ -1,0 +1,27 @@
+@* Başlangıç sayfasındaki sayı kartı; tıklayınca ilgili listeye gider *@
+<MudCard Outlined="true" Style="height: 100%">
+    <MudCardContent>
+        <div class="d-flex align-center gap-4">
+            <MudAvatar Color="Color.Primary" Variant="Variant.Outlined"><MudIcon Icon="@Icon" /></MudAvatar>
+            <div>
+                <MudText Typo="Typo.h4">@(Count?.ToString() ?? "–")</MudText>
+                <MudText Typo="Typo.body2">@Title</MudText>
+            </div>
+        </div>
+        @if (Hint is not null)
+        {
+            <MudText Typo="Typo.caption" Class="mud-text-secondary d-block mt-3">@Hint</MudText>
+        }
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Href="@Href" Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowForward">Listeye git</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+    [Parameter] public int? Count { get; set; }
+    [Parameter, EditorRequired] public string Href { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string Icon { get; set; } = string.Empty;
+    [Parameter] public string? Hint { get; set; }
+}

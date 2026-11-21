@@ -1,0 +1,144 @@
+@page "/contact-messages"
+@inject IAdminContactMessagesClient Client
+@inject ApiCaller Api
+@inject IDialogService Dialogs
+
+<PageTitle>İletişim mesajları | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="İletişim mesajları" Description="İletişim sayfasındaki formdan gelenler. Silme kalıcıdır (KVKK)." />
+
+<CrudTable TItem="ContactMessageResponse" Items="_items" Loading="_loading" @bind-SelectedItems="_selected"
+           OnEdit="OpenDetail" EditText="Ayrıntı" EditIcon="@Icons.Material.Outlined.Visibility"
+           OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <ToolBarContent>
+        <StatusFilter T="ContactMessageStatus" Value="_status" ValueChanged="FilterAsync" LabelOf="Labels.Of" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Tarih</MudTh>
+        <MudTh>Ad</MudTh>
+        <MudTh>İletişim</MudTh>
+        <MudTh>İlgilendiği paket</MudTh>
+        <MudTh>Mesaj</MudTh>
+        <MudTh Style="width: 150px">Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Tarih">@Labels.Date(context.CreatedAt)</MudTd>
+        <MudTd DataLabel="Ad">@context.Name</MudTd>
+        <MudTd DataLabel="İletişim">
+            <div>@context.Phone</div>
+            <MudText Typo="Typo.caption" Class="mud-text-secondary">@context.Email</MudText>
+        </MudTd>
+        <MudTd DataLabel="Paket">
+            @(context.PackageName ?? "—")@(context.Location is { } location ? $" ({Labels.Of(location)})" : "")
+        </MudTd>
+        <MudTd DataLabel="Mesaj"><div class="cell-ellipsis" style="max-width: 280px">@(context.Message ?? "—")</div></MudTd>
+        <MudTd DataLabel="Durum">
+            <MudSelect T="ContactMessageStatus" Value="context.Status" ValueChanged="s => ChangeStatusAsync(context, s)" Dense="true" Margin="Margin.Dense">
+                @foreach (var status in Enum.GetValues<ContactMessageStatus>())
+                {
+                    <MudSelectItem Value="status">@Labels.Of(status)</MudSelectItem>
+                }
+            </MudSelect>
+        </MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<Pager Page="_page" PageChanged="ChangePageAsync" TotalPages="_totalPages" TotalCount="_totalCount" />
+
+<MudDialog @bind-Visible="_detailOpen" Options="_detailOptions">
+    <TitleContent><MudText Typo="Typo.h6">@_detail?.Name</MudText></TitleContent>
+    <DialogContent>
+        @if (_detail is { } d)
+        {
+            <MudSimpleTable Dense="true" Elevation="0">
+                <tbody>
+                    <tr><th>Tarih</th><td>@Labels.Date(d.CreatedAt)</td></tr>
+                    <tr><th>Telefon</th><td><MudLink Href="@($"tel:{d.Phone}")">@d.Phone</MudLink></td></tr>
+                    <tr><th>E-posta</th><td><MudLink Href="@($"mailto:{d.Email}")">@d.Email</MudLink></td></tr>
+                    <tr><th>Paket</th><td>@(d.PackageName ?? "—")</td></tr>
+                </tbody>
+            </MudSimpleTable>
+            <MudText Typo="Typo.subtitle2" Class="mt-4">Mesaj</MudText>
+            <MudText Style="white-space: pre-line">@(d.Message ?? "—")</MudText>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="() => _detailOpen = false">Kapat</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private const int PageSize = 20;
+
+    private List<ContactMessageResponse> _items = [];
+    private HashSet<ContactMessageResponse> _selected = [];
+    private bool _loading = true;
+    private ContactMessageStatus? _status;
+    private int _page = 1;
+    private int _totalPages;
+    private int _totalCount;
+
+    private ContactMessageResponse? _detail;
+    private bool _detailOpen;
+    private readonly DialogOptions _detailOptions = new() { MaxWidth = MaxWidth.Small, FullWidth = true, CloseOnEscapeKey = true };
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        var result = await Api.GetAsync(() => Client.GetAllAsync(_status, _page, PageSize));
+        _items = result?.Items ?? [];
+        _totalPages = result?.TotalPages ?? 0;
+        _totalCount = result?.TotalCount ?? 0;
+        _selected = [];
+        _loading = false;
+    }
+
+    private async Task FilterAsync(ContactMessageStatus? status)
+    {
+        _status = status;
+        _page = 1;
+        await LoadAsync();
+    }
+
+    private async Task ChangePageAsync(int page)
+    {
+        _page = page;
+        await LoadAsync();
+    }
+
+    // Mesaj açılınca "Yeni" ise "Okundu"ya geçer
+    private async Task OpenDetail(ContactMessageResponse item)
+    {
+        _detail = item;
+        _detailOpen = true;
+        if (item.Status == ContactMessageStatus.Yeni)
+            await ChangeStatusAsync(item, ContactMessageStatus.Okundu);
+    }
+
+    private async Task ChangeStatusAsync(ContactMessageResponse item, ContactMessageStatus status)
+    {
+        if (await Api.RunAsync(() => Client.UpdateStatusAsync(item.Id, new UpdateContactMessageStatusRequest { Status = status })))
+            item.Status = status;
+    }
+
+    private async Task ConfirmDeleteAsync(ContactMessageResponse item)
+    {
+        if (await Dialogs.ShowMessageBoxAsync("Kalıcı silme", $"{item.Name} mesajı kalıcı olarak silinsin mi?",
+                yesText: "Kalıcı sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteAsync(item.Id), "Silindi."))
+            await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteSelectedAsync()
+    {
+        var ids = _selected.Select(s => s.Id).ToList();
+        if (await Dialogs.ShowMessageBoxAsync("Kalıcı silme", $"Seçilen {ids.Count} mesaj kalıcı olarak silinsin mi?",
+                yesText: "Kalıcı sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteManyAsync(ids), $"{ids.Count} mesaj silindi."))
+            await LoadAsync();
+    }
+}

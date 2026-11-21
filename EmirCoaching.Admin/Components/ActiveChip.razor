@@ -1,0 +1,10 @@
+@* Listelerde Aktif / Pasif etiketi *@
+<MudChip T="string" Size="Size.Small" Color="@(Active ? Color.Success : Color.Default)" Variant="Variant.Text">
+    @(Active ? ActiveText : InactiveText)
+</MudChip>
+
+@code {
+    [Parameter] public bool Active { get; set; }
+    [Parameter] public string ActiveText { get; set; } = "Aktif";
+    [Parameter] public string InactiveText { get; set; } = "Pasif";
+}

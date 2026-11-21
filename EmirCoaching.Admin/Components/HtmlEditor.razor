@@ -1,0 +1,70 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+@* Zengin metin editörü (CKEditor 5). Blazor bu alanın içini çizmez; editörü JS yönetir (wwwroot/js/html-editor.js). *@
+<div class="html-editor">
+    @if (Label is not null)
+    {
+        <MudText Typo="Typo.subtitle2" Class="mb-1">@Label</MudText>
+    }
+    <div @ref="_host"></div>
+</div>
+
+@code {
+    [Parameter] public string? Value { get; set; }
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+    [Parameter] public string? Label { get; set; }
+
+    private ElementReference _host;
+    private DotNetObjectReference<HtmlEditor>? _self;
+    private string? _lastFromEditor;
+    private bool _created;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+        _self = DotNetObjectReference.Create(this);
+        _lastFromEditor = Value;
+        await JS.InvokeVoidAsync("adminHtmlEditor.create", _host, Value ?? "", _self);
+        _created = true;
+    }
+
+    // Değer dışarıdan değişirse (ör. kayıt yeniden yüklendi) editöre yazılır; editörden geleni geri yazmaz
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_created && Value != _lastFromEditor)
+        {
+            _lastFromEditor = Value;
+            await JS.InvokeVoidAsync("adminHtmlEditor.setData", _host, Value ?? "");
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnEditorChanged(string html)
+    {
+        _lastFromEditor = html;
+        Value = html;
+        await ValueChanged.InvokeAsync(html);
+    }
+
+    // Kaydetmeden hemen önce: son 300 ms'lik yazım da alınsın
+    public async Task<string> GetDataAsync()
+    {
+        var html = await JS.InvokeAsync<string>("adminHtmlEditor.getData", _host);
+        await OnEditorChanged(html);
+        return html;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("adminHtmlEditor.destroy", _host);
+        }
+        catch (JSDisconnectedException)
+        {
+        }
+        _self?.Dispose();
+    }
+}

@@ -1,0 +1,55 @@
+@page "/social-links"
+@inherits CrudPage<SocialLinkResponse, CreateSocialLinkRequest>
+@inject IAdminSocialLinksClient Client
+
+<PageTitle>Sosyal linkler | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Sosyal linkler" Description="Footer ve iletişim sayfasındaki hesaplar. WhatsApp linki sitedeki tüm WhatsApp düğmelerinde kullanılır.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="SocialLinkResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Platform</MudTh>
+        <MudTh>Adres</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Platform">@Labels.Of(context.Platform)</MudTd>
+        <MudTd DataLabel="Adres"><div class="cell-ellipsis"><MudLink Href="@context.Url" Target="_blank">@context.Url</MudLink></div></MudTd>
+        <MudTd DataLabel="Durum"><ActiveChip Active="context.IsActive" /></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudSelect @bind-Value="Form.Platform" Label="Platform">
+        @foreach (var platform in Enum.GetValues<SocialPlatform>())
+        {
+            <MudSelectItem Value="platform">@Labels.Of(platform)</MudSelectItem>
+        }
+    </MudSelect>
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+    <MudTextField @bind-Value="Form.Url" Label="Adres" HelperText="https:// ile; WhatsApp için https://wa.me/90..." Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Description" Label="Açıklama" HelperText="Bağlantının title metni, ör. Instagram hesabımız" Class="form-grid__full" />
+    <MudSwitch @bind-Value="Form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni sosyal link";
+    protected override string EditTitle => "Sosyal linki düzenle";
+
+    protected override Task<List<SocialLinkResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(SocialLinkResponse item) => item.Id;
+    protected override string LabelOf(SocialLinkResponse item) => Labels.Of(item.Platform);
+    protected override CreateSocialLinkRequest NewForm() => new() { IsActive = true, SortOrder = NextSortOrder(s => s.SortOrder) };
+
+    protected override Task CreateAsync(CreateSocialLinkRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateSocialLinkRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateSocialLinkRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

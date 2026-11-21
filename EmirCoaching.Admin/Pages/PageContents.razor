@@ -1,0 +1,72 @@
+@page "/page-contents"
+@inject IAdminPageContentsClient Client
+@inject ApiCaller Api
+
+<PageTitle>Sayfa içerikleri | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Sayfa içerikleri" Description="Her sayfanın üst bölümü (başlık, vurgulu kelime, açıklama, arka plan görseli). Sayfalar sabittir; yalnızca içerik düzenlenir." />
+
+<CrudTable TItem="PageContentResponse" Items="_items" Loading="_loading" CanDelete="false" OnEdit="OpenEdit">
+    <HeaderContent>
+        <MudTh Style="width: 72px">Görsel</MudTh>
+        <MudTh>Sayfa</MudTh>
+        <MudTh>Başlık</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Görsel">
+            @if (context.BackgroundImageUrl is { } bg)
+            {
+                <img src="@SiteLinks.Image(bg)" alt="" class="table-thumb" />
+            }
+        </MudTd>
+        <MudTd DataLabel="Sayfa"><code>@context.PageKey</code></MudTd>
+        <MudTd DataLabel="Başlık">@context.Title <MudText Inline="true" Color="Color.Primary">@context.HighlightText</MudText></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="_dialogOpen" Title="@($"İçerik: {_pageKey}")" Saving="_saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="_form.Title" Label="Başlık" />
+    <MudTextField @bind-Value="_form.HighlightText" Label="Vurgulu kelime" HelperText="Başlıkta mavi görünen kısım" />
+    <MudTextField @bind-Value="_form.Description" Label="Açıklama" Lines="3" Sizing="InputSizing.Auto" Class="form-grid__full" />
+    <MudTextField @bind-Value="_form.ButtonUrl" Label="Düğme adresi" HelperText="İsteğe bağlı; site içi (/paketler.html) veya https://" Class="form-grid__full" />
+    <div class="form-grid__full">
+        <ImageUpload @bind-Value="_form.BackgroundImagePath" Label="Arka plan görseli" Folder="pages" />
+    </div>
+</FormDialog>
+
+@code {
+    private List<PageContentResponse> _items = [];
+    private bool _loading = true;
+    private bool _dialogOpen;
+    private bool _saving;
+    private string _pageKey = string.Empty;
+    private UpdatePageContentRequest _form = new();
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        _items = await Api.GetAsync(Client.GetAllAsync) ?? [];
+        _loading = false;
+    }
+
+    private void OpenEdit(PageContentResponse item)
+    {
+        _pageKey = item.PageKey;
+        _form = ObjectCopy.To<UpdatePageContentRequest>(item);
+        _form.BackgroundImagePath = item.BackgroundImageUrl;
+        _dialogOpen = true;
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        var ok = await Api.RunAsync(() => Client.UpdateAsync(_pageKey, _form), "Kaydedildi.");
+        _saving = false;
+        if (!ok)
+            return;
+        _dialogOpen = false;
+        await LoadAsync();
+    }
+}

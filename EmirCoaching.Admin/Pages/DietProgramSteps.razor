@@ -1,0 +1,57 @@
+@page "/diet-program-steps"
+@inherits CrudPage<DietProgramStepResponse, CreateDietProgramStepRequest>
+@inject IAdminDietProgramStepsClient Client
+
+<PageTitle>Nasıl çalışır? | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="“Nasıl çalışır?” adımları" Description="Diyet planı detay sayfasındaki adımlar.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="DietProgramStepResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Başlık</MudTh>
+        <MudTh>Açıklama</MudTh>
+        <MudTh>İkon</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Başlık">@context.Title</MudTd>
+        <MudTd DataLabel="Açıklama"><div class="cell-ellipsis">@context.Description</div></MudTd>
+        <MudTd DataLabel="İkon">@Labels.Of(context.Icon)</MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="Form.Title" Label="Başlık" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Description" Label="Açıklama" Lines="4" Sizing="InputSizing.Auto" Class="form-grid__full" />
+    <MudSelect @bind-Value="Form.Icon" Label="İkon">
+        @foreach (var icon in Enum.GetValues<DietProgramStepIcon>())
+        {
+            <MudSelectItem Value="icon">@Labels.Of(icon)</MudSelectItem>
+        }
+    </MudSelect>
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni adım";
+    protected override string EditTitle => "Adımı düzenle";
+
+    protected override Task<List<DietProgramStepResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(DietProgramStepResponse item) => item.Id;
+    protected override string LabelOf(DietProgramStepResponse item) => item.Title;
+    protected override CreateDietProgramStepRequest NewForm() => new()
+    {
+        Icon = DietProgramStepIcon.FormuDoldur, SortOrder = NextSortOrder(s => s.SortOrder)
+    };
+
+    protected override Task CreateAsync(CreateDietProgramStepRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateDietProgramStepRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateDietProgramStepRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

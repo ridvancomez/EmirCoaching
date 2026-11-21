@@ -1,0 +1,147 @@
+@page "/blog-posts"
+@inject IAdminBlogPostsClient Client
+@inject IAdminBlogCategoriesClient CategoriesClient
+@inject ApiCaller Api
+@inject IDialogService Dialogs
+@inject NavigationManager Navigation
+
+<PageTitle>Blog yazıları | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Blog yazıları" Description="Yeni yazı taslak olarak kaydedilir; “Yayınla” deyince sitede görünür.">
+    <Actions>
+        <MudButton Href="/blog-posts/new" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">Yeni yazı</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="BlogPostResponse" Items="_items" Loading="_loading" @bind-SelectedItems="_selected"
+           OnEdit="@(p => Navigation.NavigateTo($"/blog-posts/{p.Id}"))" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <ToolBarContent>
+        <div class="d-flex flex-wrap gap-2">
+            <MudSelect T="int?" Value="_categoryId" ValueChanged="FilterCategoryAsync" Label="Kategori" Clearable="true" Dense="true"
+                       Variant="Variant.Outlined" Margin="Margin.Dense" Style="min-width: 200px">
+                @foreach (var category in _categories)
+                {
+                    <MudSelectItem T="int?" Value="category.Id">@category.Name</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect T="bool?" Value="_isPublished" ValueChanged="FilterPublishedAsync" Label="Durum" Clearable="true" Dense="true"
+                       Variant="Variant.Outlined" Margin="Margin.Dense" Style="min-width: 160px">
+                <MudSelectItem T="bool?" Value="true">Yayında</MudSelectItem>
+                <MudSelectItem T="bool?" Value="false">Taslak</MudSelectItem>
+            </MudSelect>
+        </div>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh Style="width: 72px">Kapak</MudTh>
+        <MudTh>Başlık</MudTh>
+        <MudTh>Kategori</MudTh>
+        <MudTh>Yayın tarihi</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Kapak">
+            @if (context.CoverImageUrl is { } cover)
+            {
+                <img src="@SiteLinks.Image(cover)" alt="" class="table-thumb" />
+            }
+        </MudTd>
+        <MudTd DataLabel="Başlık">
+            <MudLink Href="@($"/blog-posts/{context.Id}")">@context.Title</MudLink>
+            @if (context.IsFeatured)
+            {
+                <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Text">Öne çıkan</MudChip>
+            }
+        </MudTd>
+        <MudTd DataLabel="Kategori">@context.CategoryName</MudTd>
+        <MudTd DataLabel="Yayın tarihi">@(context.PublishedAt is { } date ? Labels.Date(date) : "—")</MudTd>
+        <MudTd DataLabel="Durum"><ActiveChip Active="context.IsPublished" ActiveText="Yayında" InactiveText="Taslak" /></MudTd>
+    </RowTemplate>
+    <ExtraActions>
+        @if (context.IsPublished)
+        {
+            <MudMenuItem Icon="@Icons.Material.Outlined.Unpublished" OnClick="() => SetPublishedAsync(context, false)">Taslağa al</MudMenuItem>
+        }
+        else
+        {
+            <MudMenuItem Icon="@Icons.Material.Outlined.Publish" OnClick="() => SetPublishedAsync(context, true)">Yayınla</MudMenuItem>
+        }
+    </ExtraActions>
+</CrudTable>
+
+<Pager Page="_page" PageChanged="ChangePageAsync" TotalPages="_totalPages" TotalCount="_totalCount" />
+
+@code {
+    private const int PageSize = 20;
+
+    private List<BlogPostResponse> _items = [];
+    private HashSet<BlogPostResponse> _selected = [];
+    private List<BlogCategoryResponse> _categories = [];
+    private bool _loading = true;
+    private int? _categoryId;
+    private bool? _isPublished;
+    private int _page = 1;
+    private int _totalPages;
+    private int _totalCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await Api.GetAsync(CategoriesClient.GetAllAsync) ?? [];
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        var result = await Api.GetAsync(() => Client.GetAllAsync(_categoryId, _isPublished, _page, PageSize));
+        _items = result?.Items ?? [];
+        _totalPages = result?.TotalPages ?? 0;
+        _totalCount = result?.TotalCount ?? 0;
+        _selected = [];
+        _loading = false;
+    }
+
+    private async Task FilterCategoryAsync(int? categoryId)
+    {
+        _categoryId = categoryId;
+        _page = 1;
+        await LoadAsync();
+    }
+
+    private async Task FilterPublishedAsync(bool? isPublished)
+    {
+        _isPublished = isPublished;
+        _page = 1;
+        await LoadAsync();
+    }
+
+    private async Task ChangePageAsync(int page)
+    {
+        _page = page;
+        await LoadAsync();
+    }
+
+    private async Task SetPublishedAsync(BlogPostResponse post, bool publish)
+    {
+        var ok = await Api.RunAsync(() => publish ? Client.PublishAsync(post.Id) : Client.UnpublishAsync(post.Id),
+            publish ? "Yazı yayınlandı." : "Yazı taslağa alındı.");
+        if (ok)
+            await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteAsync(BlogPostResponse post)
+    {
+        if (await Dialogs.ShowMessageBoxAsync("Onay", $"\"{post.Title}\" silinsin mi?", yesText: "Sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteAsync(post.Id), "Silindi."))
+            await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteSelectedAsync()
+    {
+        var ids = _selected.Select(p => p.Id).ToList();
+        if (await Dialogs.ShowMessageBoxAsync("Onay", $"Seçilen {ids.Count} yazı silinsin mi?", yesText: "Sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteManyAsync(ids), $"{ids.Count} yazı silindi."))
+            await LoadAsync();
+    }
+}

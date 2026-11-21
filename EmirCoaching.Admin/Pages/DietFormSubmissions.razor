@@ -1,0 +1,196 @@
+@page "/diet-form-submissions"
+@inject IAdminDietFormSubmissionsClient Client
+@inject ApiCaller Api
+@inject IDialogService Dialogs
+
+<PageTitle>Diyet başvuruları | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Diyet başvuruları" Description="Paket satın alırken doldurulan bilgi formu. Sağlık verisi içerir: silme kalıcıdır (KVKK)." />
+
+<CrudTable TItem="DietFormSubmissionResponse" Items="_items" Loading="_loading" @bind-SelectedItems="_selected"
+           OnEdit="OpenDetail" EditText="Ayrıntı" EditIcon="@Icons.Material.Outlined.Visibility" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <ToolBarContent>
+        <StatusFilter T="DietFormStatus" Value="_status" ValueChanged="FilterAsync" LabelOf="Labels.Of" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Tarih</MudTh>
+        <MudTh>Ad soyad</MudTh>
+        <MudTh>Paket</MudTh>
+        <MudTh>İletişim</MudTh>
+        <MudTh>Danışan formu</MudTh>
+        <MudTh Style="width: 150px">Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Tarih">@Labels.Date(context.CreatedAt)</MudTd>
+        <MudTd DataLabel="Ad soyad">@context.FullName</MudTd>
+        <MudTd DataLabel="Paket">
+            @* Silinmiş paket: soluk, tıklanamaz (kayıt yine de görünür ve silinebilir) *@
+            @if (context.PackageIsDeleted)
+            {
+                <span class="package--deleted" title="Bu paket silinmiş">@context.PackageName (@Labels.Of(context.PackageLocation))</span>
+            }
+            else
+            {
+                <MudLink Href="@($"/packages/{context.PackageId}")">@context.PackageName (@Labels.Of(context.PackageLocation))</MudLink>
+            }
+        </MudTd>
+        <MudTd DataLabel="İletişim">
+            <div>@context.PhoneNumber</div>
+            <MudText Typo="Typo.caption" Class="mud-text-secondary">@context.Email</MudText>
+        </MudTd>
+        <MudTd DataLabel="Danışan formu">
+            @if (context.ClientFormUrl is { } url)
+            {
+                <MudLink Href="@url" Target="_blank">Formu aç</MudLink>
+            }
+            else
+            {
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">Henüz yok</MudText>
+            }
+        </MudTd>
+        <MudTd DataLabel="Durum">
+            <MudSelect T="DietFormStatus" Value="context.Status" ValueChanged="s => ChangeStatusAsync(context, s)" Dense="true" Margin="Margin.Dense">
+                @foreach (var status in Enum.GetValues<DietFormStatus>())
+                {
+                    <MudSelectItem Value="status">@Labels.Of(status)</MudSelectItem>
+                }
+            </MudSelect>
+        </MudTd>
+    </RowTemplate>
+    <ExtraActions>
+        <MudMenuItem Icon="@Icons.Material.Outlined.Link" OnClick="() => OpenClientForm(context)">Danışan formu linki</MudMenuItem>
+    </ExtraActions>
+</CrudTable>
+
+<Pager Page="_page" PageChanged="ChangePageAsync" TotalPages="_totalPages" TotalCount="_totalCount" />
+
+@* Başvuru ayrıntısı (Düzenle yerine: başvuru içeriği değiştirilmez) *@
+<MudDialog @bind-Visible="_detailOpen" Options="_detailOptions">
+    <TitleContent><MudText Typo="Typo.h6">@_detail?.FullName</MudText></TitleContent>
+    <DialogContent>
+        @if (_detail is { } d)
+        {
+            <MudSimpleTable Dense="true" Elevation="0">
+                <tbody>
+                    <tr><th>Başvuru tarihi</th><td>@Labels.Date(d.CreatedAt)</td></tr>
+                    <tr><th>Paket</th><td>@d.PackageName (@Labels.Of(d.PackageLocation))@(d.PackageIsDeleted ? " — silinmiş" : "")</td></tr>
+                    <tr><th>Cinsiyet</th><td>@Labels.Of(d.Gender)</td></tr>
+                    <tr><th>Yaş</th><td>@d.Age</td></tr>
+                    <tr><th>Boy</th><td>@d.HeightCm cm</td></tr>
+                    <tr><th>Mevcut kilo</th><td>@d.CurrentWeight kg</td></tr>
+                    <tr><th>Hedef kilo</th><td>@d.TargetWeight kg</td></tr>
+                    <tr><th>Telefon</th><td><MudLink Href="@($"tel:{d.PhoneNumber}")">@d.PhoneNumber</MudLink></td></tr>
+                    <tr><th>E-posta</th><td><MudLink Href="@($"mailto:{d.Email}")">@d.Email</MudLink></td></tr>
+                    <tr><th>Danışan formu</th><td>@(d.ClientFormUrl ?? "—")</td></tr>
+                </tbody>
+            </MudSimpleTable>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="() => _detailOpen = false">Kapat</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@* Google Form linki: koç danışana WhatsApp'tan gönderdiği formu buraya kaydeder; boş bırakılırsa link kaldırılır *@
+<FormDialog @bind-Visible="_formOpen" Title="Danışan formu linki" Saving="_saving" OnSave="SaveClientFormAsync" MaxWidth="MaxWidth.Small">
+    <MudTextField @bind-Value="_clientFormUrl" Label="Google Form adresi" Class="form-grid__full"
+                  HelperText="https://docs.google.com/forms/... veya https://forms.gle/... — boş bırakırsan link kaldırılır" />
+</FormDialog>
+
+@code {
+    private const int PageSize = 20;
+
+    private List<DietFormSubmissionResponse> _items = [];
+    private HashSet<DietFormSubmissionResponse> _selected = [];
+    private bool _loading = true;
+    private DietFormStatus? _status;
+    private int _page = 1;
+    private int _totalPages;
+    private int _totalCount;
+
+    private DietFormSubmissionResponse? _detail;
+    private bool _detailOpen;
+    private readonly DialogOptions _detailOptions = new() { MaxWidth = MaxWidth.Small, FullWidth = true, CloseOnEscapeKey = true };
+
+    private DietFormSubmissionResponse? _formTarget;
+    private string? _clientFormUrl;
+    private bool _formOpen;
+    private bool _saving;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        var result = await Api.GetAsync(() => Client.GetAllAsync(_status, _page, PageSize));
+        _items = result?.Items ?? [];
+        _totalPages = result?.TotalPages ?? 0;
+        _totalCount = result?.TotalCount ?? 0;
+        _selected = [];
+        _loading = false;
+    }
+
+    private async Task FilterAsync(DietFormStatus? status)
+    {
+        _status = status;
+        _page = 1;
+        await LoadAsync();
+    }
+
+    private async Task ChangePageAsync(int page)
+    {
+        _page = page;
+        await LoadAsync();
+    }
+
+    private void OpenDetail(DietFormSubmissionResponse item)
+    {
+        _detail = item;
+        _detailOpen = true;
+    }
+
+    private async Task ChangeStatusAsync(DietFormSubmissionResponse item, DietFormStatus status)
+    {
+        if (await Api.RunAsync(() => Client.UpdateStatusAsync(item.Id, new UpdateDietFormSubmissionStatusRequest { Status = status })))
+            item.Status = status;
+    }
+
+    private void OpenClientForm(DietFormSubmissionResponse item)
+    {
+        _formTarget = item;
+        _clientFormUrl = item.ClientFormUrl;
+        _formOpen = true;
+    }
+
+    private async Task SaveClientFormAsync()
+    {
+        var url = string.IsNullOrWhiteSpace(_clientFormUrl) ? null : _clientFormUrl.Trim();
+        _saving = true;
+        var ok = await Api.RunAsync(() => Client.UpdateClientFormAsync(_formTarget!.Id,
+            new UpdateDietFormSubmissionClientFormRequest { ClientFormUrl = url }), "Kaydedildi.");
+        _saving = false;
+        if (!ok)
+            return;
+        _formTarget!.ClientFormUrl = url;
+        _formOpen = false;
+    }
+
+    private async Task ConfirmDeleteAsync(DietFormSubmissionResponse item)
+    {
+        if (await Dialogs.ShowMessageBoxAsync("Kalıcı silme", $"{item.FullName} başvurusu ve onay kayıtları kalıcı olarak silinsin mi? Bu işlem geri alınamaz.",
+                yesText: "Kalıcı sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteAsync(item.Id), "Silindi."))
+            await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteSelectedAsync()
+    {
+        var ids = _selected.Select(s => s.Id).ToList();
+        if (await Dialogs.ShowMessageBoxAsync("Kalıcı silme", $"Seçilen {ids.Count} başvuru kalıcı olarak silinsin mi? Bu işlem geri alınamaz.",
+                yesText: "Kalıcı sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteManyAsync(ids), $"{ids.Count} başvuru silindi."))
+            await LoadAsync();
+    }
+}

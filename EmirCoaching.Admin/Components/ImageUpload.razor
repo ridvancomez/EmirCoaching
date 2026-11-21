@@ -1,0 +1,102 @@
+@inject HttpClient Http
+@inject ApiCaller Api
+
+@* Görsel alanı: dosya seçilince hemen POST /admin/uploads/images ile yüklenir, dönen URL alana yazılır.
+   İstekteki *Path alanı tam URL'yi de kabul eder (API göreli yola çevirir), bu yüzden tek değer yeterli. *@
+<div class="image-upload">
+    <MudText Typo="Typo.subtitle2">@Label@(Required ? " *" : "")</MudText>
+    @if (HelperText is not null)
+    {
+        <MudText Typo="Typo.caption" Class="mud-text-secondary">@HelperText</MudText>
+    }
+    <div class="image-upload__row">
+        @if (!string.IsNullOrEmpty(Value))
+        {
+            <a href="@SiteLinks.Image(Value)" target="_blank" rel="noopener" title="Görseli yeni sekmede aç">
+                <img src="@SiteLinks.Image(Value)" alt="" class="image-upload__preview" />
+            </a>
+        }
+        else
+        {
+            <div class="image-upload__empty"><MudIcon Icon="@Icons.Material.Outlined.Image" /></div>
+        }
+        <div class="image-upload__buttons">
+            @* v9: düğme dosya seçiciyi context.OpenFilePickerAsync() ile açar *@
+            <MudFileUpload T="IBrowserFile" Accept=".jpg,.jpeg,.png,.webp" FilesChanged="UploadAsync" Disabled="_uploading">
+                <CustomContent>
+                    <MudButton Variant="Variant.Outlined" Size="Size.Small" StartIcon="@Icons.Material.Outlined.Upload" Disabled="_uploading"
+                               OnClick="@context.OpenFilePickerAsync">
+                        @(_uploading ? "Yükleniyor…" : string.IsNullOrEmpty(Value) ? "Görsel seç" : "Değiştir")
+                    </MudButton>
+                </CustomContent>
+            </MudFileUpload>
+            @if (!Required && !string.IsNullOrEmpty(Value))
+            {
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error" OnClick="ClearAsync">Kaldır</MudButton>
+            }
+            <MudText Typo="Typo.caption" Class="mud-text-secondary">JPG, PNG veya WEBP, en fazla 5 MB</MudText>
+        </div>
+    </div>
+</div>
+
+@code {
+    private const long MaxBytes = 5 * 1024 * 1024; // API ile aynı sınır
+
+    [Parameter] public string? Value { get; set; }
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+    [Parameter, EditorRequired] public string Label { get; set; } = string.Empty;
+    [Parameter] public string? HelperText { get; set; }
+    [Parameter] public bool Required { get; set; }
+
+    // uploads/{Folder}/ altına kaydedilir (ör. "blog", "certificates")
+    [Parameter, EditorRequired] public string Folder { get; set; } = string.Empty;
+
+    private bool _uploading;
+
+    private async Task UploadAsync(IBrowserFile? file)
+    {
+        if (file is null)
+            return;
+        if (file.Size > MaxBytes)
+        {
+            Api.ShowError("Görsel en fazla 5 MB olabilir.");
+            return;
+        }
+
+        _uploading = true;
+        try
+        {
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.OpenReadStream(MaxBytes));
+            fileContent.Headers.ContentType = new(string.IsNullOrEmpty(file.ContentType) ? "application/octet-stream" : file.ContentType);
+            content.Add(fileContent, "file", file.Name);
+            content.Add(new StringContent(Folder), "folder");
+
+            using var response = await Http.PostAsync("api/v1/admin/uploads/images", content);
+            if (!response.IsSuccessStatusCode)
+            {
+                if ((int)response.StatusCode != 401)
+                    Api.ShowError(ApiErrors.Describe((int)response.StatusCode, await response.Content.ReadAsStringAsync()));
+                return;
+            }
+
+            var uploaded = await response.Content.ReadFromJsonAsync<UploadedFileResponse>();
+            Value = uploaded!.Url;
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (HttpRequestException)
+        {
+            Api.ShowError("Görsel yüklenemedi: API'ye ulaşılamadı.");
+        }
+        finally
+        {
+            _uploading = false;
+        }
+    }
+
+    private async Task ClearAsync()
+    {
+        Value = null;
+        await ValueChanged.InvokeAsync(null);
+    }
+}

@@ -1,0 +1,79 @@
+@typeparam TItem where TItem : class
+
+@* Panelin ortak listesi: çoklu seçim + toplu silme, satır sonunda "⋯" menüsü (Düzenle / Sil + sayfaya özel işlemler) *@
+<MudTable T="TItem" Items="Items" Loading="Loading" Hover="true" Elevation="0" Outlined="true"
+          MultiSelection="CanDelete" SelectedItems="SelectedItems" SelectedItemsChanged="SelectedItemsChanged"
+          SelectOnRowClick="false" RowClassFunc="RowClass" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Primary">
+    <ToolBarContent>
+        @if (SelectedItems.Count > 0)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" StartIcon="@Icons.Material.Outlined.Delete"
+                       OnClick="OnDeleteSelected">Seçilenleri sil (@SelectedItems.Count)</MudButton>
+        }
+        else
+        {
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">@(Loading ? "" : $"{Items.Count()} kayıt")</MudText>
+        }
+        <MudSpacer />
+        @ToolBarContent
+    </ToolBarContent>
+    <HeaderContent>
+        @HeaderContent
+        <MudTh Style="width: 56px"><span class="visually-hidden">İşlemler</span></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        @RowTemplate(context)
+        <MudTd Style="text-align: right">
+            @if (IsRowDisabled?.Invoke(context) != true)
+            {
+                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" AnchorOrigin="Origin.BottomRight"
+                         TransformOrigin="Origin.TopRight" aria-label="İşlemler">
+                    @if (OnEdit.HasDelegate)
+                    {
+                        <MudMenuItem Icon="@EditIcon" OnClick="() => OnEdit.InvokeAsync(context)">@EditText</MudMenuItem>
+                    }
+                    @ExtraActions?.Invoke(context)
+                    @if (CanDelete)
+                    {
+                        <MudMenuItem Icon="@Icons.Material.Outlined.Delete" IconColor="Color.Error"
+                                     OnClick="() => OnDelete.InvokeAsync(context)">Sil</MudMenuItem>
+                    }
+                </MudMenu>
+            }
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText Class="mud-text-secondary py-4">Henüz kayıt yok.</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText Class="mud-text-secondary py-4">Yükleniyor…</MudText>
+    </LoadingContent>
+    <PagerContent>@PagerContent</PagerContent>
+</MudTable>
+
+@code {
+    [Parameter, EditorRequired] public IEnumerable<TItem> Items { get; set; } = [];
+    [Parameter] public bool Loading { get; set; }
+    [Parameter] public RenderFragment? ToolBarContent { get; set; }
+    [Parameter, EditorRequired] public RenderFragment HeaderContent { get; set; } = default!;
+    [Parameter, EditorRequired] public RenderFragment<TItem> RowTemplate { get; set; } = default!;
+    [Parameter] public RenderFragment<TItem>? ExtraActions { get; set; }
+    [Parameter] public RenderFragment? PagerContent { get; set; }
+
+    [Parameter] public HashSet<TItem> SelectedItems { get; set; } = [];
+    [Parameter] public EventCallback<HashSet<TItem>> SelectedItemsChanged { get; set; }
+
+    [Parameter] public EventCallback<TItem> OnEdit { get; set; }
+    [Parameter] public EventCallback<TItem> OnDelete { get; set; }
+    [Parameter] public EventCallback OnDeleteSelected { get; set; }
+    [Parameter] public bool CanDelete { get; set; } = true;
+
+    // Salt okunur kayıtlarda (başvuru, mesaj) "Ayrıntı"
+    [Parameter] public string EditText { get; set; } = "Düzenle";
+    [Parameter] public string EditIcon { get; set; } = Icons.Material.Outlined.Edit;
+
+    // Soluk gösterilen, tıklanamayan satır (ör. silinmiş pakete ait kayıt)
+    [Parameter] public Func<TItem, bool>? IsRowDisabled { get; set; }
+
+    private string RowClass(TItem item, int _) => IsRowDisabled?.Invoke(item) == true ? "row--disabled" : "";
+}

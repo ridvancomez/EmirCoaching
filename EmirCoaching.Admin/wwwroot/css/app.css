@@ -89,3 +89,167 @@ h1:focus {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+/* ==================== Giriş ekranı ==================== */
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 16px;
+    background: #000636;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Logo koyu mavi: beyaz kartın üstünde */
+.login-card__brand {
+    display: flex;
+    justify-content: center;
+}
+
+.login-card__logo {
+    display: block;
+    height: auto;
+}
+
+/* ==================== Sayfa başlığı ==================== */
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.page-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Silinmiş pakete ait kayıt gibi pasif satırlar: soluk, tıklanamaz */
+.row--disabled {
+    opacity: 0.45;
+}
+
+.row--disabled td {
+    pointer-events: none;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+.cell-ellipsis {
+    max-width: 420px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-thumb {
+    width: 56px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #e9ecf3;
+}
+
+/* Form pencerelerinde alanlar iki sütun (mobilde tek) */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 16px;
+}
+
+.form-grid__full {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ==================== Görsel yükleme ==================== */
+.image-upload__row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.image-upload__preview,
+.image-upload__empty {
+    display: block;
+    width: 120px;
+    height: 80px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: #e9ecf3;
+}
+
+.image-upload__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9aa3b8;
+}
+
+.image-upload__buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+/* ==================== Zengin metin editörü ==================== */
+.html-editor .ck-editor__editable {
+    min-height: 320px;
+}
+
+.html-editor .ck-content h2 {
+    font-size: 1.5rem;
+}
+
+.html-editor .ck-content h3 {
+    font-size: 1.2rem;
+}
+
+/* Liste içindeki alt kayıtlar (paket modülleri, ölçümler) */
+.sub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sub-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.sub-list__item>.sub-list__fields {
+    flex: 1;
+}
+
+.mud-snackbar .mud-snackbar-content-message {
+    white-space: pre-line;
+}
+
+/* Silinmiş pakete ait başvuru: paket adı soluk ve tıklanamaz */
+.package--deleted {
+    opacity: 0.45;
+    text-decoration: line-through;
+    cursor: default;
+}

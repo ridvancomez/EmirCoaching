@@ -1,0 +1,69 @@
+@page "/certificates"
+@inherits CrudPage<CertificateResponse, CreateCertificateRequest>
+@inject IAdminCertificatesClient Client
+
+<PageTitle>Sertifikalar | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Sertifikalar" Description="Ana sayfa koç bölümü ve Hakkımda'daki sertifika kartları.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="CertificateResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh Style="width: 72px">Logo</MudTh>
+        <MudTh>Sertifika</MudTh>
+        <MudTh>Kurum</MudTh>
+        <MudTh>Yıl</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Logo"><img src="@SiteLinks.Image(context.LogoUrl)" alt="" class="table-thumb" style="object-fit: contain" /></MudTd>
+        <MudTd DataLabel="Sertifika">@context.Title</MudTd>
+        <MudTd DataLabel="Kurum">@context.Issuer</MudTd>
+        <MudTd DataLabel="Yıl">@context.Year</MudTd>
+        <MudTd DataLabel="Durum"><ActiveChip Active="context.IsActive" /></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="Form.Title" Label="Sertifika adı" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Issuer" Label="Kurum (kısa)" HelperText="Kartta görünen kısaltma, ör. TVGFBF" />
+    <MudTextField @bind-Value="Form.IssuerFullName" Label="Kurumun tam adı" />
+    <MudTextField @bind-Value="Form.Detail" Label="Detay" HelperText="İsteğe bağlı, ör. 2. Kademe" />
+    <MudNumericField @bind-Value="Form.Year" Label="Yıl" Min="1950" Max="DateTime.Today.Year" />
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+    <MudSwitch @bind-Value="Form.IsActive" Label="Sitede göster" Color="Color.Primary" />
+    <div class="form-grid__full">
+        <ImageUpload @bind-Value="Form.LogoPath" Label="Logo" Folder="certificates" Required="true" />
+    </div>
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni sertifika";
+    protected override string EditTitle => "Sertifikayı düzenle";
+
+    protected override Task<List<CertificateResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(CertificateResponse item) => item.Id;
+    protected override string LabelOf(CertificateResponse item) => item.Title;
+    protected override CreateCertificateRequest NewForm() => new()
+    {
+        Year = DateTime.Today.Year, IsActive = true, SortOrder = NextSortOrder(c => c.SortOrder)
+    };
+
+    protected override Task<CreateCertificateRequest?> ToFormAsync(CertificateResponse item)
+    {
+        var form = ObjectCopy.To<CreateCertificateRequest>(item);
+        form.LogoPath = item.LogoUrl;
+        return Task.FromResult<CreateCertificateRequest?>(form);
+    }
+
+    protected override Task CreateAsync(CreateCertificateRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreateCertificateRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdateCertificateRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

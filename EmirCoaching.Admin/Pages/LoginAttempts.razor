@@ -1,0 +1,69 @@
+@page "/login-attempts"
+@inject IAdminLoginAttemptsClient Client
+@inject ApiCaller Api
+
+<PageTitle>Giriş geçmişi | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Giriş geçmişi" Description="Panele yapılan giriş denemeleri (son 90 gün). Tanımadığın bir IP'den başarılı giriş varsa şifreni değiştir." />
+
+<MudTable T="LoginAttemptResponse" Items="_items" Loading="_loading" Hover="true" Elevation="0" Outlined="true" Breakpoint="Breakpoint.Sm">
+    <ToolBarContent>
+        <StatusFilter T="LoginAttemptResult" Value="_result" ValueChanged="FilterAsync" LabelOf="Labels.Of" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Tarih</MudTh>
+        <MudTh>Sonuç</MudTh>
+        <MudTh>Kullanıcı</MudTh>
+        <MudTh>IP</MudTh>
+        <MudTh>Tarayıcı</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Tarih">@Labels.Date(context.CreatedAt)</MudTd>
+        <MudTd DataLabel="Sonuç">
+            <MudChip T="string" Size="Size.Small" Variant="Variant.Text"
+                     Color="@(context.Result == LoginAttemptResult.Basarili ? Color.Success : Color.Error)">@Labels.Of(context.Result)</MudChip>
+        </MudTd>
+        <MudTd DataLabel="Kullanıcı">@(context.UserFullName ?? context.UserEmail ?? "—")</MudTd>
+        <MudTd DataLabel="IP"><code>@context.IpAddress</code></MudTd>
+        <MudTd DataLabel="Tarayıcı"><div class="cell-ellipsis" style="max-width: 320px" title="@context.UserAgent">@context.UserAgent</div></MudTd>
+    </RowTemplate>
+    <NoRecordsContent><MudText Class="mud-text-secondary py-4">Kayıt yok.</MudText></NoRecordsContent>
+</MudTable>
+
+<Pager Page="_page" PageChanged="ChangePageAsync" TotalPages="_totalPages" TotalCount="_totalCount" />
+
+@code {
+    private const int PageSize = 30;
+
+    private List<LoginAttemptResponse> _items = [];
+    private bool _loading = true;
+    private LoginAttemptResult? _result;
+    private int _page = 1;
+    private int _totalPages;
+    private int _totalCount;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        var result = await Api.GetAsync(() => Client.GetAllAsync(_result, _page, PageSize));
+        _items = result?.Items ?? [];
+        _totalPages = result?.TotalPages ?? 0;
+        _totalCount = result?.TotalCount ?? 0;
+        _loading = false;
+    }
+
+    private async Task FilterAsync(LoginAttemptResult? result)
+    {
+        _result = result;
+        _page = 1;
+        await LoadAsync();
+    }
+
+    private async Task ChangePageAsync(int page)
+    {
+        _page = page;
+        await LoadAsync();
+    }
+}

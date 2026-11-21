@@ -1,0 +1,147 @@
+@page "/legal-documents/{Type}"
+@inject IAdminLegalDocumentsClient Client
+@inject ApiCaller Api
+@inject IDialogService Dialogs
+@inject NavigationManager Navigation
+
+<PageTitle>@Labels.Of(_type) | Emir Coaching Panel</PageTitle>
+
+<MudBreadcrumbs Items="_breadcrumbs" Class="px-0 pt-0" />
+<PageHeader Title="@Labels.Of(_type)" Description="@(_current is null ? "Bu metin henüz yayınlanmadı." : $"Yayındaki sürüm: v{_current.Version}, {Labels.Date(_current.PublishedAt)}")" />
+
+<MudGrid>
+    <MudItem xs="12" lg="8">
+        <MudPaper Outlined="true" Class="pa-6">
+            @if (_loaded)
+            {
+                <HtmlEditor @ref="_editor" @bind-Value="_contentHtml" Label="Metin" />
+            }
+            <MudTextField @bind-Value="_note" Label="Değişiklik notu" Class="mt-4" Counter="300" MaxLength="300"
+                          HelperText="Sitede “Revizyon Geçmişi”nde görünür, ör. Çerez süreleri güncellendi." />
+            <div class="d-flex justify-end mt-6 gap-2">
+                <MudButton Href="@SitePreviewUrl" Target="_blank" Variant="Variant.Text" StartIcon="@Icons.Material.Outlined.OpenInNew">Sitede gör</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="PublishAsync" Disabled="_saving"
+                           StartIcon="@Icons.Material.Outlined.Publish">
+                    @(_saving ? "Yayınlanıyor…" : "Yeni sürüm olarak yayınla")
+                </MudButton>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" lg="4">
+        @* Kullanım rehberi: metin sitede gizlilik-politikasi.html?tur=... sayfasında bu kurallarla görünür *@
+        <MudPaper Outlined="true" Class="pa-6">
+            <MudText Typo="Typo.h6" Class="mb-2">Sitede nasıl görünür?</MudText>
+            <MudList T="string" Dense="true" ReadOnly="true">
+                <MudListItem Icon="@Icons.Material.Outlined.Title">
+                    Bölüm başlıklarını araç çubuğundan <strong>“Başlık”</strong> seçerek yaz. Sağdaki “İçindekiler” bu başlıklardan
+                    otomatik oluşur, numarası (01, 02…) da kendiliğinden verilir.
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Outlined.FormatListNumbered">
+                    Başlığın başına “1.” yazarsan sitede başlıkta görünür, içindekilerde tekrar edilmez.
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Outlined.FormatListBulleted">
+                    Madde işaretli listeler mavi noktayla, kalın yazılar açık renkle görünür. Renk ve yazı tipi sitenin tasarımından gelir.
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Outlined.History">
+                    Her yayın yeni bir sürüm olur (v1, v2…). Eski sürümler silinmez; notları sitedeki “Revizyon Geçmişi”nde listelenir.
+                    Sürüm ve tarih sayfanın üstünde görünür.
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Outlined.Save">
+                    Taslak yok: “Yayınla” dediğin an sitede görünür. Uzun metni başka bir yerde hazırlayıp yapıştırabilirsin.
+                </MudListItem>
+            </MudList>
+        </MudPaper>
+
+        <MudPaper Outlined="true" Class="pa-6 mt-4">
+            <MudText Typo="Typo.h6" Class="mb-2">Revizyon geçmişi</MudText>
+            @if (_revisions.Count == 0)
+            {
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">Henüz sürüm yok.</MudText>
+            }
+            else
+            {
+                <MudTimeline TimelinePosition="TimelinePosition.Start" Class="pt-0">
+                    @foreach (var revision in _revisions)
+                    {
+                        <MudTimelineItem Size="Size.Small" Color="Color.Primary">
+                            <MudText Typo="Typo.subtitle2">v@(revision.Version) · @Labels.Date(revision.RevisedAt)</MudText>
+                            <MudText Typo="Typo.body2">@revision.Note</MudText>
+                        </MudTimelineItem>
+                    }
+                </MudTimeline>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter] public string Type { get; set; } = string.Empty;
+
+    private LegalDocumentType _type;
+    private LegalDocumentResponse? _current;
+    private List<LegalDocumentRevisionResponse> _revisions = [];
+    private HtmlEditor? _editor;
+    private string? _contentHtml;
+    private string? _note;
+    private bool _loaded;
+    private bool _saving;
+    private List<BreadcrumbItem> _breadcrumbs = [];
+
+    // Sitedeki ?tur= değerleri (EmirCoaching.Web/wwwroot/js/yasal-metin.js)
+    private static readonly Dictionary<LegalDocumentType, string> SiteKeys = new()
+    {
+        [LegalDocumentType.Gizlilik] = "gizlilik",
+        [LegalDocumentType.Kvkk] = "kvkk",
+        [LegalDocumentType.AcikRiza] = "acik-riza",
+        [LegalDocumentType.Cerez] = "cerez",
+        [LegalDocumentType.IptalIade] = "iptal-iade",
+        [LegalDocumentType.TicariIleti] = "ticari-ileti",
+        [LegalDocumentType.MesafeliSatis] = "mesafeli-satis"
+    };
+
+    private string SitePreviewUrl => $"{SiteLinks.SiteBaseUrl}gizlilik-politikasi.html?tur={SiteKeys[_type]}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Enum.TryParse(Type, out _type))
+        {
+            Navigation.NavigateTo("/legal-documents");
+            return;
+        }
+
+        _breadcrumbs = [new("Yasal metinler", "/legal-documents"), new(Labels.Of(_type), null, disabled: true)];
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _current = await Api.GetOptionalAsync(() => Client.GetCurrentAsync(_type));
+        _revisions = await Api.GetAsync(() => Client.GetRevisionsAsync(_type)) ?? [];
+        // İlk sürüm PDF'se editör boş başlar; metin müşteriden gelince buraya yapıştırılır
+        _contentHtml = _current?.ContentHtml ?? "";
+        _loaded = true;
+    }
+
+    private async Task PublishAsync()
+    {
+        var html = _editor is null ? _contentHtml : await _editor.GetDataAsync();
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            Api.ShowError("Metin boş olamaz.");
+            return;
+        }
+        if (await Dialogs.ShowMessageBoxAsync("Yayınla", $"{Labels.Of(_type)} yeni sürüm olarak sitede yayınlansın mı?",
+                yesText: "Yayınla", cancelText: "Vazgeç") != true)
+            return;
+
+        _saving = true;
+        var ok = await Api.RunAsync(() => Client.PublishNewVersionAsync(_type,
+            new PublishLegalDocumentRequest { ContentHtml = html, Note = _note?.Trim() ?? "" }), "Yeni sürüm yayınlandı.");
+        _saving = false;
+        if (!ok)
+            return;
+        _note = null;
+        await LoadAsync();
+    }
+}

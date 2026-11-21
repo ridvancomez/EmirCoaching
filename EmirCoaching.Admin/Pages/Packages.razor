@@ -1,0 +1,76 @@
+@page "/packages"
+@inject IAdminPackagesClient Client
+@inject ApiCaller Api
+@inject IDialogService Dialogs
+@inject NavigationManager Navigation
+
+<PageTitle>Paketler | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Paketler" Description="Salonda ve evde paketleri. Pasif paketler sitede görünmez ama eski başvurular onlara bağlı kalır.">
+    <Actions>
+        <MudButton Href="/packages/new" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">Yeni paket</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="PackageResponse" Items="_items" Loading="_loading" @bind-SelectedItems="_selected"
+           OnEdit="@(p => Navigation.NavigateTo($"/packages/{p.Id}"))" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Paket</MudTh>
+        <MudTh>Yer</MudTh>
+        <MudTh>Süre</MudTh>
+        <MudTh>Fiyat</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Paket">
+            <MudLink Href="@($"/packages/{context.Id}")">@context.Name</MudLink>
+            @if (context.IsFeatured)
+            {
+                <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Text">En çok tercih edilen</MudChip>
+            }
+        </MudTd>
+        <MudTd DataLabel="Yer">@Labels.Of(context.Location)</MudTd>
+        <MudTd DataLabel="Süre">@context.DurationMonths ay</MudTd>
+        <MudTd DataLabel="Fiyat">
+            <div>@Labels.Price(context.Price)</div>
+            <MudText Typo="Typo.caption" Class="mud-text-secondary">aylık @Labels.Price(context.MonthlyPrice)</MudText>
+        </MudTd>
+        <MudTd DataLabel="Durum"><ActiveChip Active="context.IsActive" /></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+@code {
+    private List<PackageResponse> _items = [];
+    private HashSet<PackageResponse> _selected = [];
+    private bool _loading = true;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        _items = await Api.GetAsync(Client.GetAllAsync) ?? [];
+        _selected = [];
+        _loading = false;
+    }
+
+    private async Task ConfirmDeleteAsync(PackageResponse package)
+    {
+        if (await Dialogs.ShowMessageBoxAsync("Onay", $"\"{package.Name} ({Labels.Of(package.Location)})\" silinsin mi? Bu pakete bağlı başvurular silinmez, panelde soluk görünür.",
+                yesText: "Sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteAsync(package.Id), "Silindi."))
+            await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteSelectedAsync()
+    {
+        var ids = _selected.Select(p => p.Id).ToList();
+        if (await Dialogs.ShowMessageBoxAsync("Onay", $"Seçilen {ids.Count} paket silinsin mi?", yesText: "Sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteManyAsync(ids), $"{ids.Count} paket silindi."))
+            await LoadAsync();
+    }
+}

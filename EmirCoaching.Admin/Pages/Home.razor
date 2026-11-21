@@ -1,6 +1,40 @@
 @page "/"
+@inject AuthSession Session
+@inject IAdminDietFormSubmissionsClient DietForms
+@inject IAdminContactMessagesClient ContactMessages
+@inject IAdminNewsletterSubscribersClient Subscribers
+@inject ApiCaller Api
 
 <PageTitle>Başlangıç | Emir Coaching Panel</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">Hoş geldin</MudText>
-<MudText>Soldaki menüden düzenlemek istediğin bölümü seç.</MudText>
+<PageHeader Title="@($"Hoş geldin, {Session.User?.FullName}")" Description="Bekleyen işler aşağıda; düzenlemek istediğin bölümü soldaki menüden seç." />
+
+<MudGrid>
+    <MudItem xs="12" sm="6" lg="4">
+        <SummaryCard Title="Yeni diyet başvurusu" Count="_newDietForms" Href="/diet-form-submissions"
+                     Icon="@Icons.Material.Outlined.Assignment" Hint="Danışana Google Form linkini göndermeyi unutma" />
+    </MudItem>
+    <MudItem xs="12" sm="6" lg="4">
+        <SummaryCard Title="Yeni iletişim mesajı" Count="_newMessages" Href="/contact-messages" Icon="@Icons.Material.Outlined.Mail" />
+    </MudItem>
+    <MudItem xs="12" sm="6" lg="4">
+        <SummaryCard Title="Bülten abonesi" Count="_subscribers" Href="/newsletter-subscribers" Icon="@Icons.Material.Outlined.MarkEmailRead" />
+    </MudItem>
+</MudGrid>
+
+@code {
+    private int? _newDietForms;
+    private int? _newMessages;
+    private int? _subscribers;
+
+    // Sayılar sayfalı listelerin toplamından (size=1: yalnızca TotalCount için)
+    protected override async Task OnInitializedAsync()
+    {
+        var dietForms = Api.GetAsync(() => DietForms.GetAllAsync(DietFormStatus.Yeni, 1, 1));
+        var messages = Api.GetAsync(() => ContactMessages.GetAllAsync(ContactMessageStatus.Yeni, 1, 1));
+        var subscribers = Api.GetAsync(() => Subscribers.GetAllAsync(1, 1));
+        _newDietForms = (await dietForms)?.TotalCount;
+        _newMessages = (await messages)?.TotalCount;
+        _subscribers = (await subscribers)?.TotalCount;
+    }
+}

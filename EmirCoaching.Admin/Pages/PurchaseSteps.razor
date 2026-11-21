@@ -1,0 +1,55 @@
+@page "/purchase-steps"
+@inherits CrudPage<PurchaseStepResponse, CreatePurchaseStepRequest>
+@inject IAdminPurchaseStepsClient Client
+
+<PageTitle>Satın alma adımları | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Satın alma adımları" Description="Ana sayfadaki “Satın aldıktan sonra ne oluyor?” bölümü.">
+    <Actions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCreate">Yeni ekle</MudButton>
+    </Actions>
+</PageHeader>
+
+<CrudTable TItem="PurchaseStepResponse" Items="Items" Loading="Loading" @bind-SelectedItems="Selected"
+           OnEdit="OpenEditAsync" OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh Style="width: 64px">Sıra</MudTh>
+        <MudTh>Başlık</MudTh>
+        <MudTh>Süre etiketi</MudTh>
+        <MudTh>İkon</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sıra">@context.SortOrder</MudTd>
+        <MudTd DataLabel="Başlık">@context.Title</MudTd>
+        <MudTd DataLabel="Süre">@context.TimeLabel</MudTd>
+        <MudTd DataLabel="İkon">@(IconKeys.PurchaseStep.GetValueOrDefault(context.IconKey, context.IconKey))</MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<FormDialog @bind-Visible="DialogOpen" Title="@DialogTitle" Saving="Saving" OnSave="SaveAsync">
+    <MudTextField @bind-Value="Form.Title" Label="Başlık" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.Description" Label="Açıklama" Lines="3" Sizing="InputSizing.Auto" Class="form-grid__full" />
+    <MudTextField @bind-Value="Form.TimeLabel" Label="Süre etiketi" HelperText="Ör. İlk 24 saat" />
+    <MudSelect @bind-Value="Form.IconKey" Label="İkon">
+        @foreach (var (key, label) in IconKeys.PurchaseStep)
+        {
+            <MudSelectItem Value="key">@label</MudSelectItem>
+        }
+    </MudSelect>
+    <MudNumericField @bind-Value="Form.SortOrder" Label="Sıra" Min="0" />
+</FormDialog>
+
+@code {
+    protected override string NewTitle => "Yeni adım";
+    protected override string EditTitle => "Adımı düzenle";
+
+    protected override Task<List<PurchaseStepResponse>> FetchAsync() => Client.GetAllAsync();
+    protected override int IdOf(PurchaseStepResponse item) => item.Id;
+    protected override string LabelOf(PurchaseStepResponse item) => item.Title;
+    protected override CreatePurchaseStepRequest NewForm() => new() { IconKey = "form", SortOrder = NextSortOrder(s => s.SortOrder) };
+
+    protected override Task CreateAsync(CreatePurchaseStepRequest form) => Client.CreateAsync(form);
+    protected override Task UpdateAsync(int id, CreatePurchaseStepRequest form) => Client.UpdateAsync(id, ObjectCopy.To<UpdatePurchaseStepRequest>(form));
+    protected override Task DeleteAsync(int id) => Client.DeleteAsync(id);
+    protected override Task DeleteManyAsync(List<int> ids) => Client.DeleteManyAsync(ids);
+}

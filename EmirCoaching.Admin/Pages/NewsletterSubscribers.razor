@@ -1,0 +1,73 @@
+@page "/newsletter-subscribers"
+@inject IAdminNewsletterSubscribersClient Client
+@inject ApiCaller Api
+@inject IDialogService Dialogs
+
+<PageTitle>Bülten aboneleri | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Bülten aboneleri" Description="Footer'daki bülten formundan abone olanlar. Abonelikten çıkanlar pasif görünür. Silme kalıcıdır (KVKK)." />
+
+<CrudTable TItem="NewsletterSubscriberResponse" Items="_items" Loading="_loading" @bind-SelectedItems="_selected"
+           OnDelete="ConfirmDeleteAsync" OnDeleteSelected="ConfirmDeleteSelectedAsync">
+    <HeaderContent>
+        <MudTh>E-posta</MudTh>
+        <MudTh>Abone olma tarihi</MudTh>
+        <MudTh>Durum</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="E-posta">@context.Email</MudTd>
+        <MudTd DataLabel="Tarih">@Labels.Date(context.CreatedAt)</MudTd>
+        <MudTd DataLabel="Durum"><ActiveChip Active="context.IsActive" ActiveText="Abone" InactiveText="Çıktı" /></MudTd>
+    </RowTemplate>
+</CrudTable>
+
+<Pager Page="_page" PageChanged="ChangePageAsync" TotalPages="_totalPages" TotalCount="_totalCount" />
+
+@code {
+    private const int PageSize = 20;
+
+    private List<NewsletterSubscriberResponse> _items = [];
+    private HashSet<NewsletterSubscriberResponse> _selected = [];
+    private bool _loading = true;
+    private int _page = 1;
+    private int _totalPages;
+    private int _totalCount;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        var result = await Api.GetAsync(() => Client.GetAllAsync(_page, PageSize));
+        _items = result?.Items ?? [];
+        _totalPages = result?.TotalPages ?? 0;
+        _totalCount = result?.TotalCount ?? 0;
+        _selected = [];
+        _loading = false;
+    }
+
+    private async Task ChangePageAsync(int page)
+    {
+        _page = page;
+        await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteAsync(NewsletterSubscriberResponse item)
+    {
+        if (await Dialogs.ShowMessageBoxAsync("Kalıcı silme", $"{item.Email} aboneliği ve onay kayıtları kalıcı olarak silinsin mi?",
+                yesText: "Kalıcı sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteAsync(item.Id), "Silindi."))
+            await LoadAsync();
+    }
+
+    private async Task ConfirmDeleteSelectedAsync()
+    {
+        var ids = _selected.Select(s => s.Id).ToList();
+        if (await Dialogs.ShowMessageBoxAsync("Kalıcı silme", $"Seçilen {ids.Count} abone kalıcı olarak silinsin mi?",
+                yesText: "Kalıcı sil", cancelText: "Vazgeç") != true)
+            return;
+        if (await Api.RunAsync(() => Client.DeleteManyAsync(ids), $"{ids.Count} abone silindi."))
+            await LoadAsync();
+    }
+}

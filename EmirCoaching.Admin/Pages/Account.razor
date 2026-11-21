@@ -1,0 +1,120 @@
+@page "/account"
+@inject IAuthClient Client
+@inject AuthService Auth
+@inject AuthSession Session
+@inject ApiCaller Api
+
+<PageTitle>Kullanıcı ayarları | Emir Coaching Panel</PageTitle>
+
+<PageHeader Title="Kullanıcı ayarları" Description="@($"Giriş: {Session.User?.Email}")" />
+
+<MudGrid>
+    <MudItem xs="12" lg="7">
+        <MudPaper Outlined="true" Class="pa-6">
+            <MudText Typo="Typo.h6">Profil</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">
+                Ad, unvan ve fotoğraf yazdığın blog yazılarının yazar kartında görünür.
+                @if (Session.User?.IsCoach == true)
+                {
+                    <text> Koç olduğun için unvanın blogda ve koç bölümünde de çıkar.</text>
+                }
+                else
+                {
+                    <text> Unvan yalnızca koçun yazılarında gösterilir.</text>
+                }
+            </MudText>
+            <div class="form-grid">
+                <MudTextField @bind-Value="_profile.FullName" Label="Ad soyad" />
+                <MudTextField @bind-Value="_profile.Title" Label="Unvan" HelperText="Ör. Baş Antrenör" />
+                <MudTextField @bind-Value="_profile.Bio" Label="Kısa biyografi" Lines="3" Sizing="InputSizing.Auto" Class="form-grid__full"
+                              HelperText="Blog yazısının altındaki yazar kartında" />
+                <div class="form-grid__full">
+                    <ImageUpload @bind-Value="_profile.AvatarPath" Label="Profil fotoğrafı" Folder="avatars" />
+                </div>
+            </div>
+
+            @* Koç bölümü: ana sayfa ve Hakkımda'daki "Koçunuzla tanışın" alanı *@
+            @if (Session.User?.IsCoach == true)
+            {
+                <MudDivider Class="my-6" />
+                <MudText Typo="Typo.h6">Koç bölümü</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">Ana sayfa ve Hakkımda sayfasındaki koç tanıtımı. Ad, unvan ve fotoğraf yukarıdan gelir.</MudText>
+                <div class="form-grid">
+                    <MudTextField @bind-Value="_profile.CoachExperience" Label="Deneyim" HelperText="Ör. 8+ yıl" />
+                    <MudTextField @bind-Value="_profile.CoachVideoUrl" Label="Tanıtım videosu" HelperText="YouTube adresi" />
+                    <MudTextField @bind-Value="_profile.CoachStory" Label="Hikâye" Lines="8" Sizing="InputSizing.Auto" Class="form-grid__full"
+                                  HelperText="Paragrafları boş bir satırla ayır; sitede ayrı paragraf olarak görünür" />
+                    <div class="form-grid__full">
+                        <ImageUpload @bind-Value="_profile.CoachVideoCoverPath" Label="Video kapak görseli" Folder="coach" />
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-end mt-6">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveProfileAsync" Disabled="_savingProfile">
+                    @(_savingProfile ? "Kaydediliyor…" : "Profili kaydet")
+                </MudButton>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" lg="5">
+        <MudPaper Outlined="true" Class="pa-6">
+            <MudText Typo="Typo.h6">Şifre değiştir</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">Şifre değişince diğer cihazlardaki oturumlar kapanır; bu oturum açık kalır.</MudText>
+            <MudTextField @bind-Value="_password.CurrentPassword" Label="Mevcut şifre" InputType="InputType.Password" autocomplete="current-password" />
+            <MudTextField @bind-Value="_password.NewPassword" Label="Yeni şifre" InputType="InputType.Password" autocomplete="new-password" Class="mt-2" />
+            <MudTextField @bind-Value="_passwordRepeat" Label="Yeni şifre (tekrar)" InputType="InputType.Password" autocomplete="new-password" Class="mt-2" />
+            <div class="d-flex justify-end mt-6">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ChangePasswordAsync" Disabled="_savingPassword">
+                    @(_savingPassword ? "Değiştiriliyor…" : "Şifreyi değiştir")
+                </MudButton>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private UpdateProfileRequest _profile = new();
+    private ChangePasswordRequest _password = new();
+    private string _passwordRepeat = string.Empty;
+    private bool _savingProfile;
+    private bool _savingPassword;
+
+    protected override void OnInitialized()
+    {
+        // Oturum açılırken /auth/me zaten okundu; yanıttaki *Url alanları istekte *Path olarak gider
+        if (Session.User is not { } user)
+            return;
+        _profile = ObjectCopy.To<UpdateProfileRequest>(user);
+        _profile.AvatarPath = user.AvatarUrl;
+        _profile.CoachVideoCoverPath = user.CoachVideoCoverUrl;
+    }
+
+    private async Task SaveProfileAsync()
+    {
+        _savingProfile = true;
+        if (await Api.RunAsync(() => Client.UpdateProfileAsync(_profile), "Profil kaydedildi."))
+            await Api.RunAsync(Auth.LoadUserAsync); // üst menüdeki ad ve fotoğraf yenilensin
+        _savingProfile = false;
+    }
+
+    private async Task ChangePasswordAsync()
+    {
+        if (_password.NewPassword != _passwordRepeat)
+        {
+            Api.ShowError("Yeni şifreler aynı değil.");
+            return;
+        }
+
+        _savingPassword = true;
+        AuthResponse? tokens = null;
+        if (await Api.RunAsync(async () => tokens = await Client.ChangePasswordAsync(_password), "Şifre değiştirildi."))
+        {
+            Auth.SetTokens(tokens!);
+            _password = new();
+            _passwordRepeat = string.Empty;
+        }
+        _savingPassword = false;
+    }
+}

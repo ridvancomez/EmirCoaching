@@ -1,13 +1,32 @@
-@* Sağ üstteki kullanıcı menüsü; ad ve çıkış, giriş akışı eklenince API'ye bağlanacak *@
+@implements IDisposable
+@inject AuthSession Session
+@inject AuthService Auth
+
+@* Sağ üstteki kullanıcı menüsü: giriş yapanın adı, ayarlar ve çıkış *@
 <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
     <ActivatorContent>
-        <MudButton Variant="Variant.Text" Color="Color.Inherit"
-                   StartIcon="@Icons.Material.Outlined.AccountCircle" EndIcon="@Icons.Material.Filled.ArrowDropDown">
-            Admin
+        <MudButton Variant="Variant.Text" Color="Color.Inherit" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+            @if (Session.User?.AvatarUrl is { } avatar)
+            {
+                <MudAvatar Size="Size.Small" Class="mr-2"><MudImage Src="@SiteLinks.Image(avatar)" Alt="" /></MudAvatar>
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Outlined.AccountCircle" Class="mr-2" />
+            }
+            @(Session.User?.FullName ?? "Admin")
         </MudButton>
     </ActivatorContent>
     <ChildContent>
         <MudMenuItem Href="/account" Icon="@Icons.Material.Outlined.ManageAccounts">Kullanıcı ayarları</MudMenuItem>
-        <MudMenuItem Icon="@Icons.Material.Outlined.Logout">Çıkış yap</MudMenuItem>
+        <MudMenuItem OnClick="Auth.LogoutAsync" Icon="@Icons.Material.Outlined.Logout">Çıkış yap</MudMenuItem>
     </ChildContent>
 </MudMenu>
+
+@code {
+    protected override void OnInitialized() => Session.Changed += Refresh;
+
+    private void Refresh() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Session.Changed -= Refresh;
+}
