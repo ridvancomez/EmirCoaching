@@ -16298,3 +16298,54 @@ iconify-icon[icon="bi:award-fill"] {
     animation: none;
   }
 }
+/* ==================== Yasal metin: panelde editörle girilen içerik (js/yasal-metin.js) ==================== */
+/* CKEditor düz h2/h3/p/ul/ol/a üretir; seed Gizlilik metni kendi gizlilik-bolum sınıflarını taşır */
+.yasal-icerik>*+* {
+  margin-top: 20px;
+}
+
+.yasal-icerik h2,
+.yasal-icerik h3 {
+  margin: clamp(40px, 2.163vw + 17.846px, 49px) 0 0;
+  scroll-margin-top: calc(var(--navbar-top) + var(--navbar-height) + 24px);
+  font-family: var(--font-geologica);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #dee2f6;
+}
+
+.yasal-icerik>h2:first-child,
+.yasal-icerik>h3:first-child {
+  margin-top: 0;
+}
+
+.yasal-icerik h2 {
+  font-size: clamp(26px, 1.923vw + 12.308px, 40px);
+}
+
+.yasal-icerik h3 {
+  font-size: clamp(20px, 0.962vw + 12px, 26px);
+}
+
+.yasal-icerik ul,
+.yasal-icerik ol {
+  padding-left: 1.4em;
+}
+
+.yasal-icerik li+li {
+  margin-top: 10px;
+}
+
+.yasal-icerik li::marker {
+  color: #1b6dff;
+}
+
+.yasal-icerik a {
+  color: #4d8dff;
+  text-decoration: underline;
+}
+
+.yasal-icerik strong {
+  color: #dee2f6;
+}

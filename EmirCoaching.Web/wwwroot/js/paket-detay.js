@@ -39,7 +39,12 @@
   var heroImg = document.querySelector(".paketler-hero__bg");
   if (heroImg) heroImg.setAttribute("title", "Emir Coaching " + p.ad);
   var crumb = document.querySelector(".paketler-hero__breadcrumb-link[aria-current]");
-  if (crumb) crumb.setAttribute("href", "paket-detay.html?paket=" + kod + "&yer=" + yer);
+  if (crumb) {
+    // Breadcrumb'da "Paket Detay" yerine seçilen paketin adı
+    crumb.setAttribute("href", "paket-detay.html?paket=" + kod + "&yer=" + yer);
+    crumb.setAttribute("title", adYer);
+    crumb.textContent = adYer;
+  }
 
   // Fiyat kartı
   setText(".fiyat-karti__title", p.ad);

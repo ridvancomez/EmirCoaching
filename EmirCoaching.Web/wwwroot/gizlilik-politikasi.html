@@ -127,14 +127,14 @@
             <a href="index.html" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
           </li>
           <li class="paketler-hero__breadcrumb-item">
-            <a href="gizlilik-politikasi.html" class="paketler-hero__breadcrumb-link" title="Gizlilik Politikası" aria-current="page">Gizlilik Politikası</a>
+            <a href="gizlilik-politikasi.html" class="paketler-hero__breadcrumb-link" title="Gizlilik Politikası" aria-current="page" data-legal-title>Gizlilik Politikası</a>
           </li>
         </ul>
       </nav>
 
       <div class="container gizlilik-hero__inner">
-        <h1 id="gizlilik-title" class="gizlilik-hero__title">Gizlilik Politikası</h1>
-        <p class="gizlilik-hero__lead">
+        <h1 id="gizlilik-title" class="gizlilik-hero__title" data-legal-title>Gizlilik Politikası</h1>
+        <p class="gizlilik-hero__lead" data-legal-lead>
           Bu politika, EMIRCOACHING platformunu kullanan bireylerin kişisel verilerinin toplanması, işlenmesi,
           saklanması ve korunmasına ilişkin temel ilkeleri ve yasal yükümlülükleri düzenler.
         </p>
@@ -143,18 +143,18 @@
           <dl class="gizlilik-meta">
             <div class="gizlilik-meta__item">
               <dt class="gizlilik-meta__label">Versiyon</dt>
-              <dd class="gizlilik-meta__value">v2.4.0</dd>
+              <dd class="gizlilik-meta__value" data-legal-version>v2.4.0</dd>
             </div>
             <div class="gizlilik-meta__item">
               <dt class="gizlilik-meta__label">Yürürlük Tarihi</dt>
-              <dd class="gizlilik-meta__value"><time datetime="2024-01-01">01 Ocak 2024</time></dd>
+              <dd class="gizlilik-meta__value" data-legal-effective><time datetime="2024-01-01">01 Ocak 2024</time></dd>
             </div>
             <div class="gizlilik-meta__item">
               <dt class="gizlilik-meta__label">Son Güncelleme</dt>
-              <dd class="gizlilik-meta__value"><time datetime="2024-10-15">15 Ekim 2024</time></dd>
+              <dd class="gizlilik-meta__value" data-legal-updated><time datetime="2024-10-15">15 Ekim 2024</time></dd>
             </div>
           </dl>
-          <a href="images/gizlilik-politikasi.pdf" class="gizlilik-hero__download" download
+          <a href="images/gizlilik-politikasi.pdf" class="gizlilik-hero__download" data-legal-download download
             title="Gizlilik Politikasını PDF olarak indir">
             <iconify-icon icon="mdi:tray-arrow-down" mode="svg" noobserver class="gizlilik-hero__download-icon" aria-hidden="true"></iconify-icon>
             PDF Olarak İndir
@@ -165,7 +165,9 @@
 
     <!-- ==================== Gövde: politika metni + sticky sidebar ==================== -->
     <div class="gizlilik-body container">
-      <article class="gizlilik-body__content" aria-labelledby="gizlilik-title">
+      <!-- Metin panelde (Yasal Metinler) editörle girilir; js/yasal-metin.js API'den yükler (?tur=kvkk vb.).
+           Aşağıdaki statik metin yalnızca API'ye ulaşılamazsa görünür. -->
+      <article class="gizlilik-body__content" aria-labelledby="gizlilik-title" data-legal-content>
         <section class="gizlilik-bolum" aria-labelledby="genel-bilgilendirme">
           <h2 id="genel-bilgilendirme" class="gizlilik-bolum__title">
             <span class="gizlilik-bolum__no">1.</span> Genel Bilgilendirme
@@ -324,40 +326,47 @@
 
         <section class="gizlilik-belgeler" aria-labelledby="ilgili-belgeler">
           <h2 id="ilgili-belgeler" class="gizlilik-belgeler__title">İlgili Belgeler</h2>
-          <!-- Yasal metinler yasal-metinler/ klasöründeki PDF'lerdir; panelden yüklenecekse yalnızca href değişir -->
+          <!-- Her belge aynı sayfada açılır; içerik panelden girilir (js/yasal-metin.js) -->
           <ul class="gizlilik-belgeler__list">
             <li>
-              <a href="yasal-metinler/kvkk-aydinlatma-metni.pdf" class="gizlilik-belgeler__link" title="KVKK Aydınlatma Metni (PDF, yeni sekmede açılır)" target="_blank" rel="noopener">
+              <a href="gizlilik-politikasi.html?tur=kvkk" class="gizlilik-belgeler__link" title="KVKK Aydınlatma Metni">
                 <iconify-icon icon="mdi:file-document-outline" mode="svg" noobserver class="gizlilik-belgeler__icon" aria-hidden="true"></iconify-icon>
                 <span class="gizlilik-belgeler__text">KVKK Aydınlatma Metni</span>
                 <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="gizlilik-belgeler__arrow" aria-hidden="true"></iconify-icon>
               </a>
             </li>
             <li>
-              <a href="yasal-metinler/acik-riza-metni.pdf" class="gizlilik-belgeler__link" title="Açık Rıza Metni (PDF, yeni sekmede açılır)" target="_blank" rel="noopener">
+              <a href="gizlilik-politikasi.html?tur=acik-riza" class="gizlilik-belgeler__link" title="Açık Rıza Metni">
                 <iconify-icon icon="mdi:shield-check-outline" mode="svg" noobserver class="gizlilik-belgeler__icon" aria-hidden="true"></iconify-icon>
                 <span class="gizlilik-belgeler__text">Açık Rıza Metni</span>
                 <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="gizlilik-belgeler__arrow" aria-hidden="true"></iconify-icon>
               </a>
             </li>
             <li>
-              <a href="yasal-metinler/iptal-ve-iade-kosullari.pdf" class="gizlilik-belgeler__link" title="İptal ve İade Koşulları (PDF, yeni sekmede açılır)" target="_blank" rel="noopener">
+              <a href="gizlilik-politikasi.html?tur=iptal-iade" class="gizlilik-belgeler__link" title="İptal ve İade Koşulları">
                 <iconify-icon icon="mdi:cash-refund" mode="svg" noobserver class="gizlilik-belgeler__icon" aria-hidden="true"></iconify-icon>
                 <span class="gizlilik-belgeler__text">İptal ve İade Koşulları</span>
                 <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="gizlilik-belgeler__arrow" aria-hidden="true"></iconify-icon>
               </a>
             </li>
             <li>
-              <a href="yasal-metinler/ticari-elektronik-ileti-onay-metni.pdf" class="gizlilik-belgeler__link" title="Ticari Elektronik İleti Onayı (PDF, yeni sekmede açılır)" target="_blank" rel="noopener">
+              <a href="gizlilik-politikasi.html?tur=ticari-ileti" class="gizlilik-belgeler__link" title="Ticari Elektronik İleti Onayı">
                 <iconify-icon icon="mdi:email-check-outline" mode="svg" noobserver class="gizlilik-belgeler__icon" aria-hidden="true"></iconify-icon>
                 <span class="gizlilik-belgeler__text">Ticari Elektronik İleti Onayı</span>
                 <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="gizlilik-belgeler__arrow" aria-hidden="true"></iconify-icon>
               </a>
             </li>
             <li>
-              <a href="yasal-metinler/cerez-politikasi.pdf" class="gizlilik-belgeler__link" title="Çerez Politikası (PDF, yeni sekmede açılır)" target="_blank" rel="noopener">
+              <a href="gizlilik-politikasi.html?tur=cerez" class="gizlilik-belgeler__link" title="Çerez Politikası">
                 <iconify-icon icon="mdi:cookie-outline" mode="svg" noobserver class="gizlilik-belgeler__icon" aria-hidden="true"></iconify-icon>
                 <span class="gizlilik-belgeler__text">Çerez Politikası</span>
+                <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="gizlilik-belgeler__arrow" aria-hidden="true"></iconify-icon>
+              </a>
+            </li>
+            <li>
+              <a href="gizlilik-politikasi.html?tur=mesafeli-satis" class="gizlilik-belgeler__link" title="Mesafeli Satış Sözleşmesi">
+                <iconify-icon icon="mdi:file-sign" mode="svg" noobserver class="gizlilik-belgeler__icon" aria-hidden="true"></iconify-icon>
+                <span class="gizlilik-belgeler__text">Mesafeli Satış Sözleşmesi</span>
                 <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver class="gizlilik-belgeler__arrow" aria-hidden="true"></iconify-icon>
               </a>
             </li>
@@ -444,7 +453,7 @@
             <div class="footer__checkbox-group">
               <input type="checkbox" id="footer-privacy" name="privacy" class="footer__checkbox" required>
               <label for="footer-privacy" class="footer__checkbox-label">
-                <a href="gizlilik-politikasi.html" class="footer__privacy-link" title="Gizlilik Politikasını görüntüle" target="_blank" rel="noopener">Gizlilik Politikasını</a> ve <a href="yasal-metinler/ticari-elektronik-ileti-onay-metni.pdf" class="footer__privacy-link" title="Ticari Elektronik İleti Onay Metnini görüntüle" target="_blank" rel="noopener">Ticari İleti Onayını</a> kabul ediyorum
+                <a href="gizlilik-politikasi.html" class="footer__privacy-link" title="Gizlilik Politikasını görüntüle" target="_blank" rel="noopener">Gizlilik Politikasını</a> ve <a href="gizlilik-politikasi.html?tur=ticari-ileti" class="footer__privacy-link" title="Ticari Elektronik İleti Onay Metnini görüntüle" target="_blank" rel="noopener">Ticari İleti Onayını</a> kabul ediyorum
               </label>
             </div>
           </form>
@@ -543,6 +552,8 @@
 
   <script src="js/main.js"></script>
   <script src="js/blog-detay.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/yasal-metin.js"></script>
 </body>
 
 </html>
