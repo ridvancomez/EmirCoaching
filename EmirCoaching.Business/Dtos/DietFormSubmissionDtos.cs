@@ -4,6 +4,7 @@ namespace EmirCoaching.Business.Dtos;
 
 public record CreateDietFormSubmissionRequest
 {
+    public int PackageId { get; init; } // aktif bir paket olmalı
     public string FullName { get; init; } = string.Empty;
     public Gender Gender { get; init; }
     public int Age { get; init; }
@@ -12,22 +13,19 @@ public record CreateDietFormSubmissionRequest
     public decimal HeightCm { get; init; }
     public decimal CurrentWeight { get; init; }
     public decimal TargetWeight { get; init; }
-    public int MealsPerDay { get; init; }
-    public string? Allergies { get; init; }
-    public string? AvoidedFoods { get; init; }
-    public string? Supplements { get; init; }
-    public int? SleepHours { get; init; }
-    public ActivityLevel ActivityLevel { get; init; }
-    public decimal? WaterLiters { get; init; }
     public bool PrivacyAccepted { get; init; }
 
-    // Sağlık verileri için açık rıza (müşteri onayı bekleniyor; işaretlenirse kaydedilir)
+    // Sağlık verileri için açık rıza (işaretlenirse kaydedilir)
     public bool HealthDataConsent { get; init; }
 }
 
 public record DietFormSubmissionResponse
 {
     public int Id { get; init; }
+    public int PackageId { get; init; }
+    public string PackageName { get; init; } = string.Empty;
+    public PackageLocation PackageLocation { get; init; }
+    public bool PackageIsDeleted { get; init; } // panelde soluk ve tıklanamaz gösterilir
     public string FullName { get; init; } = string.Empty;
     public Gender Gender { get; init; }
     public int Age { get; init; }
@@ -36,13 +34,7 @@ public record DietFormSubmissionResponse
     public decimal HeightCm { get; init; }
     public decimal CurrentWeight { get; init; }
     public decimal TargetWeight { get; init; }
-    public int MealsPerDay { get; init; }
-    public string? Allergies { get; init; }
-    public string? AvoidedFoods { get; init; }
-    public string? Supplements { get; init; }
-    public int? SleepHours { get; init; }
-    public ActivityLevel ActivityLevel { get; init; }
-    public decimal? WaterLiters { get; init; }
+    public string? ClientFormUrl { get; init; } // boşsa danışan Google Form'u henüz doldurmadı
     public DietFormStatus Status { get; init; }
     public DateTime CreatedAt { get; init; }
 }
@@ -51,4 +43,10 @@ public record DietFormSubmissionResponse
 public record UpdateDietFormSubmissionStatusRequest
 {
     public DietFormStatus Status { get; init; }
+}
+
+// Admin: danışanın Google Form yanıt linki; boş gönderilirse link silinir
+public record UpdateDietFormSubmissionClientFormRequest
+{
+    public string? ClientFormUrl { get; init; }
 }

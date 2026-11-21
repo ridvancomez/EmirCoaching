@@ -34,10 +34,14 @@ public static class SeedData
     ];
 
     // Front-end paketler.html kart listesi (.paketler-card__features); Zoom satırı 3 aylıkta kilitli
-    private static readonly string[] Highlights =
+    private static readonly (string Text, string IconKey, string? SubText)[] Highlights =
     [
-        "Kişiye özel antrenman planlaması", "Kalorisi hesaplanmış beslenme planı", "Kan tahlili analizi & revize",
-        "Haftalık durum değerlendirmesi", "Birebir WhatsApp iletişimi", ZoomItemText
+        ("Kişiye Özel Antrenman", "antrenman", null),
+        ("Kalori & Beslenme Planı", "beslenme", null),
+        ("Kan Tahlili Analizi & Revize", "tahlil", null),
+        ("Haftalık Form Kontrolleri", "takvim", null),
+        ("WhatsApp Birebir İletişim", "whatsapp", null),
+        (ZoomItemText, "zoom", "Her Cumartesi · 20 dk birebir")
     ];
 
     public static void Seed(ModelBuilder builder)
@@ -57,11 +61,11 @@ public static class SeedData
     {
         var basePackages = new[]
         {
-            new { Name = "Başlangıç & Deneme", Slug = "baslangic-deneme", Months = 3, Price = 3450m,
+            new { Name = "Başlangıç & Deneme", Slug = "baslangic-deneme", Months = 3, SalondaPrice = 8999m, EvdePrice = 5999m,
                   Subtitle = "3 Aylık Başlangıç Programı" },
-            new { Name = "Dönüşüm Protokolü", Slug = "donusum-protokolu", Months = 6, Price = 8250m,
+            new { Name = "Dönüşüm Protokolü", Slug = "donusum-protokolu", Months = 6, SalondaPrice = 15999m, EvdePrice = 10999m,
                   Subtitle = "6 Aylık Dönüşüm Programı" },
-            new { Name = "VIP Yaşam Tarzı", Slug = "vip-yasam-tarzi", Months = 12, Price = 14900m,
+            new { Name = "VIP Yaşam Tarzı", Slug = "vip-yasam-tarzi", Months = 12, SalondaPrice = 27999m, EvdePrice = 18999m,
                   Subtitle = "12 Aylık Yaşam Tarzı Programı" }
         };
 
@@ -86,7 +90,7 @@ public static class SeedData
                     Slug = isEvde ? $"{p.Slug}-evde" : p.Slug,
                     Subtitle = p.Subtitle,
                     DurationMonths = p.Months,
-                    Price = p.Price,
+                    Price = isEvde ? p.EvdePrice : p.SalondaPrice,
                     Location = location,
                     PurchaseUrl = ShopierPlaceholder,
                     IsFeatured = p.Months == 6, // "En Çok Tercih Edilen": her kategoride Dönüşüm Protokolü
@@ -131,12 +135,15 @@ public static class SeedData
 
                 for (var h = 0; h < Highlights.Length; h++)
                 {
+                    var highlight = Highlights[h];
                     highlights.Add(new PackageHighlight
                     {
                         Id = ++highlightId,
                         PackageId = packageId,
-                        Text = Highlights[h],
-                        IsLocked = IsZoomLocked(Highlights[h], p.Months),
+                        Text = highlight.Text,
+                        SubText = highlight.SubText,
+                        IconKey = highlight.IconKey,
+                        IsLocked = IsZoomLocked(highlight.Text, p.Months),
                         SortOrder = h + 1,
                         CreatedAt = SeedDate
                     });

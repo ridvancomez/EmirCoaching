@@ -16,6 +16,7 @@ public class DietFormSubmissionService(
     IMapper mapper,
     IConsentRecordService consentRecordService,
     IValidator<CreateDietFormSubmissionRequest> validator,
+    IValidator<UpdateDietFormSubmissionClientFormRequest> clientFormValidator,
     ILogger<DietFormSubmissionService> logger) : IDietFormSubmissionService
 {
     public async Task<Result> SubmitAsync(CreateDietFormSubmissionRequest request, RequestInfo requestInfo)
@@ -23,6 +24,14 @@ public class DietFormSubmissionService(
         var errors = await validator.GetErrorsAsync(request);
         if (errors.Count > 0)
             return Result.Invalid(errors);
+
+        // Satıştan kaldırılmış (pasif) paket seçilemez
+        var package = await unitOfWork.Packages.GetByIdAsync(request.PackageId);
+        if (package is not { IsActive: true })
+        {
+            logger.LogWarning("Diyet formu reddedildi: paket {PackageId} bulunamadı", request.PackageId);
+            return Result.Invalid("Seçilen paket bulunamadı.");
+        }
 
         var submission = mapper.Map<DietFormSubmission>(request);
         submission.Email = request.Email.Trim().ToLowerInvariant();
@@ -92,6 +101,23 @@ public class DietFormSubmissionService(
         await unitOfWork.SaveChangesAsync();
 
         logger.LogInformation("Diyet formu {Id} durumu {Status} oldu", id, newStatus);
+        return Result.Success();
+    }
+
+    public async Task<Result> UpdateClientFormAsync(int id, UpdateDietFormSubmissionClientFormRequest request)
+    {
+        var errors = await clientFormValidator.GetErrorsAsync(request);
+        if (errors.Count > 0)
+            return Result.Invalid(errors);
+
+        var submission = await unitOfWork.DietFormSubmissions.GetByIdAsync(id);
+        if (submission is null)
+            return Result.NotFound("Başvuru bulunamadı.");
+
+        submission.ClientFormUrl = string.IsNullOrWhiteSpace(request.ClientFormUrl) ? null : request.ClientFormUrl.Trim();
+        await unitOfWork.SaveChangesAsync();
+
+        logger.LogInformation("Diyet formu {Id} Google Form linki {Action}", id, submission.ClientFormUrl is null ? "silindi" : "kaydedildi");
         return Result.Success();
     }
 

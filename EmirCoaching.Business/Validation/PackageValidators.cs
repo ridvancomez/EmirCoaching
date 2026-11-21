@@ -17,7 +17,12 @@ public class CreatePackageRequestValidator : AbstractValidator<CreatePackageRequ
         RuleFor(x => x.PurchaseUrl).NotEmpty().HttpsUrl();
         RuleFor(x => x.MetaTitle).MaximumLength(70);
         RuleFor(x => x.MetaDescription).MaximumLength(170);
-        RuleForEach(x => x.Highlights).ChildRules(h => h.RuleFor(i => i.Text).NotEmpty().MaximumLength(200));
+        RuleForEach(x => x.Highlights).ChildRules(h =>
+        {
+            h.RuleFor(i => i.Text).NotEmpty().MaximumLength(200);
+            h.RuleFor(i => i.SubText).MaximumLength(200);
+            h.RuleFor(i => i.IconKey).NotEmpty().MaximumLength(50);
+        });
         RuleForEach(x => x.Modules).SetValidator(new PackageModuleRequestValidator());
     }
 }

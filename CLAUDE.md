@@ -117,7 +117,7 @@ GET|PUT /api/v1/admin/diet-program
 GET    /api/v1/admin/legal-documents/{type}   // + GET {type}/revisions
 POST   /api/v1/admin/legal-documents/{type}/versions   // multipart: file (PDF) + note
 GET    /api/v1/admin/contact-messages?status=&page=&size=        // + PATCH {id}/status, DELETE {id} (kalıcı)
-GET    /api/v1/admin/diet-form-submissions?status=&page=&size=   // + PATCH {id}/status, DELETE {id} (kalıcı)
+GET    /api/v1/admin/diet-form-submissions?status=&page=&size=   // + PATCH {id}/status, PATCH {id}/client-form, DELETE {id} (kalıcı)
 GET    /api/v1/admin/newsletter-subscribers?page=&size=          // + DELETE {id} (kalıcı)
 GET    /api/v1/admin/login-attempts?result=&page=&size=          // giriş geçmişi
 POST   /api/v1/admin/uploads/images           // multipart: file + folder → { path, url }

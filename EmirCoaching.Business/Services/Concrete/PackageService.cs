@@ -225,6 +225,8 @@ public class PackageService(
         ChildListSync.Sync(package.Highlights, request.Highlights, h => h.Id, unitOfWork.PackageHighlights.Remove, (highlight, input, order) =>
         {
             highlight.Text = input.Text;
+            highlight.SubText = string.IsNullOrWhiteSpace(input.SubText) ? null : input.SubText;
+            highlight.IconKey = input.IconKey;
             highlight.IsLocked = input.IsLocked;
             highlight.SortOrder = order;
         });

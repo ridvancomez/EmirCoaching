@@ -10,6 +10,8 @@ namespace EmirCoaching.Entities.Entities;
 public class PackageHighlight : BaseEntity, ISortable
 {
     public string Text { get; set; } = string.Empty;
+    public string? SubText { get; set; } // alt satır, ör. "Her Cumartesi · 20 dk birebir"
+    public string IconKey { get; set; } = string.Empty; // front-end ikon eşlemesi: antrenman, beslenme, tahlil, takvim, whatsapp, zoom
     public bool IsLocked { get; set; } // paketler-card__feature--kilitli
     public int SortOrder { get; set; }
 

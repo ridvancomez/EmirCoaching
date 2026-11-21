@@ -17,7 +17,8 @@ public class MappingProfile : Profile
         CreateMap<PackageHighlight, PackageHighlightResponse>();
         CreateMap<PackageModuleItem, PackageModuleItemResponse>();
         CreateMap<PackageModule, PackageModuleResponse>();
-        CreateMap<Package, PackageResponse>();
+        CreateMap<Package, PackageResponse>()
+            .ForMember(d => d.MonthlyPrice, o => o.MapFrom(s => MonthlyPriceOf(s)));
         CreateMap<Package, PackageDetailResponse>()
             .ForMember(d => d.TotalItemCount, o => o.MapFrom(s => s.Modules.Sum(m => m.Items.Count(i => !i.IsLocked))));
         MapRequests<CreatePackageRequest, UpdatePackageRequest, Package>()
@@ -115,7 +116,7 @@ public class MappingProfile : Profile
         CreateMap<ContactMessage, ContactMessageResponse>();
 
         CreateMap<CreateDietFormSubmissionRequest, DietFormSubmission>();
-        CreateMap<DietFormSubmission, DietFormSubmissionResponse>();
+        CreateMap<DietFormSubmission, DietFormSubmissionResponse>(); // PackageName/Location/IsDeleted → Package.*
 
         CreateMap<NewsletterSubscriber, NewsletterSubscriberResponse>();
 
@@ -133,6 +134,10 @@ public class MappingProfile : Profile
             .ForMember(d => d.Id, o => o.Ignore())
             .Include<TUpdateRequest, TEntity>();
     }
+
+    // Kartta "ayda ≈ ₺2.667": tam sayıya yuvarlanır, .5 yukarı (15999 / 6 = 2666,5 → 2667)
+    private static decimal MonthlyPriceOf(Package package) =>
+        package.DurationMonths > 0 ? Math.Round(package.Price / package.DurationMonths, MidpointRounding.AwayFromZero) : package.Price;
 
     // Front-end "evde" / "salonda" değerleri (validator geçersiz değeri önceden reddeder)
     private static PackageLocation? ParseLocation(string? value) => value switch

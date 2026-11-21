@@ -26,6 +26,14 @@ public static class ValidationRules
                 && (uri.Host.EndsWith("youtube.com", StringComparison.OrdinalIgnoreCase) || uri.Host.Equals("youtu.be", StringComparison.OrdinalIgnoreCase)))
             .WithMessage("Geçerli bir YouTube adresi girin.");
 
+    // Google Form linki: docs.google.com/forms/... (yanıt linki dahil) veya forms.gle kısa linki
+    public static IRuleBuilderOptions<T, string> GoogleFormUrl<T>(this IRuleBuilder<T, string> rule) =>
+        rule.MaximumLength(500)
+            .Must(url => Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps
+                && ((uri.Host.Equals("docs.google.com", StringComparison.OrdinalIgnoreCase) && uri.AbsolutePath.StartsWith("/forms/"))
+                    || uri.Host.Equals("forms.gle", StringComparison.OrdinalIgnoreCase)))
+            .WithMessage("Geçerli bir Google Form linki girin.");
+
     // 0–5 arası, 0.5'lik adımlarla (veritabanındaki CK_Testimonials_Rating ile aynı)
     public static IRuleBuilderOptions<T, decimal> Rating<T>(this IRuleBuilder<T, decimal> rule) =>
         rule.InclusiveBetween(0, 5).Must(r => r * 2 == decimal.Truncate(r * 2))

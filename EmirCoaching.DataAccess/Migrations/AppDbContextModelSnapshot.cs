@@ -389,17 +389,10 @@ namespace EmirCoaching.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ActivityLevel")
-                        .HasColumnType("int");
-
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("Allergies")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("AvoidedFoods")
+                    b.Property<string>("ClientFormUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -433,7 +426,7 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MealsPerDay")
+                    b.Property<int>("PackageId")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -441,15 +434,8 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("SleepHours")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("Supplements")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<decimal>("TargetWeight")
                         .HasPrecision(5, 1)
@@ -458,13 +444,11 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("WaterLiters")
-                        .HasPrecision(4, 1)
-                        .HasColumnType("decimal(4,1)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email");
+
+                    b.HasIndex("PackageId");
 
                     b.HasIndex("PhoneNumber");
 
@@ -1055,7 +1039,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             MetaDescription = "Emir Coaching Başlangıç & Deneme: 3 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Başlangıç & Deneme Paket Detayı | Emir Coaching",
                             Name = "Başlangıç & Deneme",
-                            Price = 3450m,
+                            Price = 8999m,
                             PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "3 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "baslangic-deneme",
@@ -1074,7 +1058,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             MetaDescription = "Emir Coaching Dönüşüm Protokolü: 6 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Dönüşüm Protokolü Paket Detayı | Emir Coaching",
                             Name = "Dönüşüm Protokolü",
-                            Price = 8250m,
+                            Price = 15999m,
                             PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "6 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "donusum-protokolu",
@@ -1093,7 +1077,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             MetaDescription = "Emir Coaching VIP Yaşam Tarzı: 12 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "VIP Yaşam Tarzı Paket Detayı | Emir Coaching",
                             Name = "VIP Yaşam Tarzı",
-                            Price = 14900m,
+                            Price = 27999m,
                             PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "12 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "vip-yasam-tarzi",
@@ -1112,7 +1096,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             MetaDescription = "Emir Coaching Başlangıç & Deneme (Evde): evde antrenmanla 3 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Başlangıç & Deneme (Evde) Paket Detayı | Emir Coaching",
                             Name = "Başlangıç & Deneme",
-                            Price = 3450m,
+                            Price = 5999m,
                             PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "Evde antrenmanla 3 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "baslangic-deneme-evde",
@@ -1131,7 +1115,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             MetaDescription = "Emir Coaching Dönüşüm Protokolü (Evde): evde antrenmanla 6 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "Dönüşüm Protokolü (Evde) Paket Detayı | Emir Coaching",
                             Name = "Dönüşüm Protokolü",
-                            Price = 8250m,
+                            Price = 10999m,
                             PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "Evde antrenmanla 6 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "donusum-protokolu-evde",
@@ -1150,7 +1134,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             MetaDescription = "Emir Coaching VIP Yaşam Tarzı (Evde): evde antrenmanla 12 aylık program. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik.",
                             MetaTitle = "VIP Yaşam Tarzı (Evde) Paket Detayı | Emir Coaching",
                             Name = "VIP Yaşam Tarzı",
-                            Price = 14900m,
+                            Price = 18999m,
                             PurchaseUrl = "https://www.shopier.com/",
                             ShortDescription = "Evde antrenmanla 12 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
                             Slug = "vip-yasam-tarzi-evde",
@@ -1173,6 +1157,11 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("IconKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1184,6 +1173,10 @@ namespace EmirCoaching.DataAccess.Migrations
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
+
+                    b.Property<string>("SubText")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -1204,360 +1197,402 @@ namespace EmirCoaching.DataAccess.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "antrenman",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 1,
                             SortOrder = 1,
-                            Text = "Kişiye özel antrenman planlaması"
+                            Text = "Kişiye Özel Antrenman"
                         },
                         new
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "beslenme",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 1,
                             SortOrder = 2,
-                            Text = "Kalorisi hesaplanmış beslenme planı"
+                            Text = "Kalori & Beslenme Planı"
                         },
                         new
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "tahlil",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 1,
                             SortOrder = 3,
-                            Text = "Kan tahlili analizi & revize"
+                            Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "takvim",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 1,
                             SortOrder = 4,
-                            Text = "Haftalık durum değerlendirmesi"
+                            Text = "Haftalık Form Kontrolleri"
                         },
                         new
                         {
                             Id = 5,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "whatsapp",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 1,
                             SortOrder = 5,
-                            Text = "Birebir WhatsApp iletişimi"
+                            Text = "WhatsApp Birebir İletişim"
                         },
                         new
                         {
                             Id = 6,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "zoom",
                             IsDeleted = false,
                             IsLocked = true,
                             PackageId = 1,
                             SortOrder = 6,
+                            SubText = "Her Cumartesi · 20 dk birebir",
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 7,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "antrenman",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 2,
                             SortOrder = 1,
-                            Text = "Kişiye özel antrenman planlaması"
+                            Text = "Kişiye Özel Antrenman"
                         },
                         new
                         {
                             Id = 8,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "beslenme",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 2,
                             SortOrder = 2,
-                            Text = "Kalorisi hesaplanmış beslenme planı"
+                            Text = "Kalori & Beslenme Planı"
                         },
                         new
                         {
                             Id = 9,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "tahlil",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 2,
                             SortOrder = 3,
-                            Text = "Kan tahlili analizi & revize"
+                            Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
                         {
                             Id = 10,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "takvim",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 2,
                             SortOrder = 4,
-                            Text = "Haftalık durum değerlendirmesi"
+                            Text = "Haftalık Form Kontrolleri"
                         },
                         new
                         {
                             Id = 11,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "whatsapp",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 2,
                             SortOrder = 5,
-                            Text = "Birebir WhatsApp iletişimi"
+                            Text = "WhatsApp Birebir İletişim"
                         },
                         new
                         {
                             Id = 12,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "zoom",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 2,
                             SortOrder = 6,
+                            SubText = "Her Cumartesi · 20 dk birebir",
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 13,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "antrenman",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 3,
                             SortOrder = 1,
-                            Text = "Kişiye özel antrenman planlaması"
+                            Text = "Kişiye Özel Antrenman"
                         },
                         new
                         {
                             Id = 14,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "beslenme",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 3,
                             SortOrder = 2,
-                            Text = "Kalorisi hesaplanmış beslenme planı"
+                            Text = "Kalori & Beslenme Planı"
                         },
                         new
                         {
                             Id = 15,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "tahlil",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 3,
                             SortOrder = 3,
-                            Text = "Kan tahlili analizi & revize"
+                            Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
                         {
                             Id = 16,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "takvim",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 3,
                             SortOrder = 4,
-                            Text = "Haftalık durum değerlendirmesi"
+                            Text = "Haftalık Form Kontrolleri"
                         },
                         new
                         {
                             Id = 17,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "whatsapp",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 3,
                             SortOrder = 5,
-                            Text = "Birebir WhatsApp iletişimi"
+                            Text = "WhatsApp Birebir İletişim"
                         },
                         new
                         {
                             Id = 18,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "zoom",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 3,
                             SortOrder = 6,
+                            SubText = "Her Cumartesi · 20 dk birebir",
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 19,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "antrenman",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 4,
                             SortOrder = 1,
-                            Text = "Kişiye özel antrenman planlaması"
+                            Text = "Kişiye Özel Antrenman"
                         },
                         new
                         {
                             Id = 20,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "beslenme",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 4,
                             SortOrder = 2,
-                            Text = "Kalorisi hesaplanmış beslenme planı"
+                            Text = "Kalori & Beslenme Planı"
                         },
                         new
                         {
                             Id = 21,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "tahlil",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 4,
                             SortOrder = 3,
-                            Text = "Kan tahlili analizi & revize"
+                            Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
                         {
                             Id = 22,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "takvim",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 4,
                             SortOrder = 4,
-                            Text = "Haftalık durum değerlendirmesi"
+                            Text = "Haftalık Form Kontrolleri"
                         },
                         new
                         {
                             Id = 23,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "whatsapp",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 4,
                             SortOrder = 5,
-                            Text = "Birebir WhatsApp iletişimi"
+                            Text = "WhatsApp Birebir İletişim"
                         },
                         new
                         {
                             Id = 24,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "zoom",
                             IsDeleted = false,
                             IsLocked = true,
                             PackageId = 4,
                             SortOrder = 6,
+                            SubText = "Her Cumartesi · 20 dk birebir",
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 25,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "antrenman",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 5,
                             SortOrder = 1,
-                            Text = "Kişiye özel antrenman planlaması"
+                            Text = "Kişiye Özel Antrenman"
                         },
                         new
                         {
                             Id = 26,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "beslenme",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 5,
                             SortOrder = 2,
-                            Text = "Kalorisi hesaplanmış beslenme planı"
+                            Text = "Kalori & Beslenme Planı"
                         },
                         new
                         {
                             Id = 27,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "tahlil",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 5,
                             SortOrder = 3,
-                            Text = "Kan tahlili analizi & revize"
+                            Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
                         {
                             Id = 28,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "takvim",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 5,
                             SortOrder = 4,
-                            Text = "Haftalık durum değerlendirmesi"
+                            Text = "Haftalık Form Kontrolleri"
                         },
                         new
                         {
                             Id = 29,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "whatsapp",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 5,
                             SortOrder = 5,
-                            Text = "Birebir WhatsApp iletişimi"
+                            Text = "WhatsApp Birebir İletişim"
                         },
                         new
                         {
                             Id = 30,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "zoom",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 5,
                             SortOrder = 6,
+                            SubText = "Her Cumartesi · 20 dk birebir",
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         },
                         new
                         {
                             Id = 31,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "antrenman",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 6,
                             SortOrder = 1,
-                            Text = "Kişiye özel antrenman planlaması"
+                            Text = "Kişiye Özel Antrenman"
                         },
                         new
                         {
                             Id = 32,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "beslenme",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 6,
                             SortOrder = 2,
-                            Text = "Kalorisi hesaplanmış beslenme planı"
+                            Text = "Kalori & Beslenme Planı"
                         },
                         new
                         {
                             Id = 33,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "tahlil",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 6,
                             SortOrder = 3,
-                            Text = "Kan tahlili analizi & revize"
+                            Text = "Kan Tahlili Analizi & Revize"
                         },
                         new
                         {
                             Id = 34,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "takvim",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 6,
                             SortOrder = 4,
-                            Text = "Haftalık durum değerlendirmesi"
+                            Text = "Haftalık Form Kontrolleri"
                         },
                         new
                         {
                             Id = 35,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "whatsapp",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 6,
                             SortOrder = 5,
-                            Text = "Birebir WhatsApp iletişimi"
+                            Text = "WhatsApp Birebir İletişim"
                         },
                         new
                         {
                             Id = 36,
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IconKey = "zoom",
                             IsDeleted = false,
                             IsLocked = false,
                             PackageId = 6,
                             SortOrder = 6,
+                            SubText = "Her Cumartesi · 20 dk birebir",
                             Text = "Yüz Yüze Zoom Görüşmesi"
                         });
                 });
@@ -3948,6 +3983,17 @@ namespace EmirCoaching.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.DietFormSubmission", b =>
+                {
+                    b.HasOne("EmirCoaching.Entities.Entities.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Package");
                 });

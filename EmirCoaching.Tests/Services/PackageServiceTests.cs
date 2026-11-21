@@ -44,6 +44,22 @@ public class PackageServiceTests
         result.ErrorType.Should().Be(ResultErrorType.NotFound);
     }
 
+    [Theory]
+    [InlineData(15999, 6, 2667)] // 2666,5 → yukarı
+    [InlineData(5999, 3, 2000)]  // 1999,67
+    [InlineData(27999, 12, 2333)] // 2333,25
+    public async Task GetListAsync_ReturnsMonthlyPriceRoundedToWholeNumber(int price, int months, int expected)
+    {
+        // Arrange
+        _packages.Setup(r => r.GetActiveListAsync()).ReturnsAsync([new Package { Id = 1, Price = price, DurationMonths = months }]);
+
+        // Act
+        var result = await _service.GetListAsync();
+
+        // Assert
+        result.Value!.Single().MonthlyPrice.Should().Be(expected);
+    }
+
     [Fact]
     public async Task GetByIdAsync_WithExistingId_ReturnsPackageWithModules()
     {
@@ -220,7 +236,7 @@ public class PackageServiceTests
         _packages.Setup(r => r.GetByIdWithDetailsAsync(1)).ReturnsAsync(ExistingPackage());
         var request = ValidUpdateRequest() with
         {
-            Highlights = [new PackageHighlightRequest { Id = 30, Text = "A" }, new PackageHighlightRequest { Id = 30, Text = "B" }]
+            Highlights = [new PackageHighlightRequest { Id = 30, Text = "A", IconKey = "takvim" }, new PackageHighlightRequest { Id = 30, Text = "B", IconKey = "takvim" }]
         };
 
         // Act
@@ -376,7 +392,7 @@ public class PackageServiceTests
         ShortDescription = "Kısa açıklama",
         PurchaseUrl = "https://emircoaching.com/satin-al",
         IsActive = true,
-        Highlights = [new PackageHighlightRequest { Text = "Haftalık kontrol" }],
+        Highlights = [new PackageHighlightRequest { Text = "Haftalık kontrol", IconKey = "takvim" }],
         Modules = [Module(null, "Antrenman")]
     };
 
@@ -395,7 +411,7 @@ public class PackageServiceTests
             ShortDescription = create.ShortDescription,
             PurchaseUrl = create.PurchaseUrl,
             IsActive = create.IsActive,
-            Highlights = [new PackageHighlightRequest { Id = 30, Text = "Haftalık kontrol" }],
+            Highlights = [new PackageHighlightRequest { Id = 30, Text = "Haftalık kontrol", IconKey = "takvim" }],
             Modules = [Module(10, "Antrenman"), Module(20, "Beslenme")]
         };
     }

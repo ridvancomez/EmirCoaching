@@ -14,10 +14,13 @@ public class DietFormSubmissionConfiguration : IEntityTypeConfiguration<DietForm
         builder.Property(x => x.HeightCm).HasPrecision(5, 1);
         builder.Property(x => x.CurrentWeight).HasPrecision(5, 1);
         builder.Property(x => x.TargetWeight).HasPrecision(5, 1);
-        builder.Property(x => x.WaterLiters).HasPrecision(4, 1);
-        builder.Property(x => x.Allergies).HasMaxLength(500);
-        builder.Property(x => x.AvoidedFoods).HasMaxLength(500);
-        builder.Property(x => x.Supplements).HasMaxLength(500);
+        builder.Property(x => x.ClientFormUrl).HasMaxLength(500);
+
+        // Paket soft delete olur, satır fiziksel olarak kalır; Restrict yanlışlıkla kalıcı silmeyi engeller
+        builder.HasOne(x => x.Package)
+            .WithMany()
+            .HasForeignKey(x => x.PackageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => x.Status);
         builder.HasIndex(x => x.Email);

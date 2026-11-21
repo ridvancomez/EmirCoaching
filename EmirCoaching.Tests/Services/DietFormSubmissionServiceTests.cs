@@ -16,18 +16,23 @@ namespace EmirCoaching.Tests.Services;
 
 public class DietFormSubmissionServiceTests
 {
+    private const int ActivePackageId = 4;
     private static readonly RequestInfo Info = new("10.0.0.1", "Test tarayıcı");
 
     private readonly Mock<IUnitOfWork> _uow = new();
     private readonly Mock<IDietFormSubmissionRepository> _submissions = new();
+    private readonly Mock<IPackageRepository> _packages = new();
     private readonly Mock<IConsentRecordService> _consents = new();
     private readonly DietFormSubmissionService _service;
 
     public DietFormSubmissionServiceTests()
     {
         _uow.Setup(u => u.DietFormSubmissions).Returns(_submissions.Object);
+        _uow.Setup(u => u.Packages).Returns(_packages.Object);
+        _packages.Setup(r => r.GetByIdAsync(ActivePackageId)).ReturnsAsync(new Package { Id = ActivePackageId, IsActive = true });
         _service = new DietFormSubmissionService(_uow.Object, TestMapper.Create(), _consents.Object,
-            new CreateDietFormSubmissionRequestValidator(), NullLogger<DietFormSubmissionService>.Instance);
+            new CreateDietFormSubmissionRequestValidator(), new UpdateDietFormSubmissionClientFormRequestValidator(),
+            NullLogger<DietFormSubmissionService>.Instance);
     }
 
     // ---- SubmitAsync ----
@@ -45,6 +50,7 @@ public class DietFormSubmissionServiceTests
         // Assert — aynı kişinin farklı yazımları mükerrer kontrolünde tek biçime iner
         result.IsSuccess.Should().BeTrue();
         added!.Status.Should().Be(DietFormStatus.Yeni);
+        added.PackageId.Should().Be(ActivePackageId);
         added.Email.Should().Be("ayse@example.com");
         added.PhoneNumber.Should().Be("05551112233");
         _uow.Verify(u => u.SaveChangesAsync(), Times.Once);
@@ -84,6 +90,22 @@ public class DietFormSubmissionServiceTests
         // Assert
         result.ErrorType.Should().Be(ResultErrorType.Conflict);
         _submissions.Verify(r => r.AddAsync(It.IsAny<DietFormSubmission>()), Times.Never);
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Never);
+    }
+
+    [Theory]
+    [InlineData(99)] // yok
+    [InlineData(5)]  // pasif
+    public async Task SubmitAsync_WithMissingOrInactivePackage_ReturnsValidationErrorAndDoesNotSave(int packageId)
+    {
+        // Arrange
+        _packages.Setup(r => r.GetByIdAsync(5)).ReturnsAsync(new Package { Id = 5, IsActive = false });
+
+        // Act
+        var result = await _service.SubmitAsync(ValidRequest() with { PackageId = packageId }, Info);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.Validation);
         _uow.Verify(u => u.SaveChangesAsync(), Times.Never);
     }
 
@@ -132,6 +154,62 @@ public class DietFormSubmissionServiceTests
     {
         // Act
         var result = await _service.UpdateStatusAsync(99, DietFormStatus.Yeni);
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.NotFound);
+    }
+
+    // ---- UpdateClientFormAsync ----
+
+    [Fact]
+    public async Task UpdateClientFormAsync_WithGoogleFormUrl_SavesLink()
+    {
+        // Arrange
+        var submission = new DietFormSubmission { Id = 1 };
+        _submissions.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(submission);
+
+        // Act
+        var result = await _service.UpdateClientFormAsync(1, new() { ClientFormUrl = " https://forms.gle/AbC123 " });
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        submission.ClientFormUrl.Should().Be("https://forms.gle/AbC123");
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("  ")]
+    public async Task UpdateClientFormAsync_WithEmptyUrl_RemovesLink(string? url)
+    {
+        // Arrange
+        var submission = new DietFormSubmission { Id = 1, ClientFormUrl = "https://forms.gle/AbC123" };
+        _submissions.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(submission);
+
+        // Act
+        var result = await _service.UpdateClientFormAsync(1, new() { ClientFormUrl = url });
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        submission.ClientFormUrl.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateClientFormAsync_WithNonGoogleUrl_ReturnsValidationErrorAndDoesNotSave()
+    {
+        // Act
+        var result = await _service.UpdateClientFormAsync(1, new() { ClientFormUrl = "https://example.com/form" });
+
+        // Assert
+        result.ErrorType.Should().Be(ResultErrorType.Validation);
+        _uow.Verify(u => u.SaveChangesAsync(), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateClientFormAsync_WithMissingId_ReturnsNotFound()
+    {
+        // Act
+        var result = await _service.UpdateClientFormAsync(99, new() { ClientFormUrl = "https://forms.gle/AbC123" });
 
         // Assert
         result.ErrorType.Should().Be(ResultErrorType.NotFound);
@@ -210,6 +288,7 @@ public class DietFormSubmissionServiceTests
 
     private static CreateDietFormSubmissionRequest ValidRequest() => new()
     {
+        PackageId = ActivePackageId,
         FullName = "Ayşe Yılmaz",
         Age = 28,
         Email = "ayse@example.com",
@@ -217,7 +296,6 @@ public class DietFormSubmissionServiceTests
         HeightCm = 165,
         CurrentWeight = 70,
         TargetWeight = 60,
-        MealsPerDay = 3,
         PrivacyAccepted = true
     };
 }

@@ -72,6 +72,17 @@ public class ValidationRulesTests
     }
 
     [Theory]
+    [InlineData("https://docs.google.com/forms/d/abc123/edit#response=xyz", true)]
+    [InlineData("https://forms.gle/AbC123", true)]
+    [InlineData("http://forms.gle/AbC123", false)]               // https değil
+    [InlineData("https://docs.google.com/document/d/abc", false)] // form değil
+    [InlineData("https://forms.gle.evil.com/abc", false)]
+    public void GoogleFormUrl_AcceptsOnlyGoogleFormLinks(string url, bool expected)
+    {
+        IsValid(v => v.RuleFor(x => x.Text).GoogleFormUrl(), new Model(url)).Should().Be(expected);
+    }
+
+    [Theory]
     [InlineData(0, true)]
     [InlineData(4.5, true)]
     [InlineData(5, true)]

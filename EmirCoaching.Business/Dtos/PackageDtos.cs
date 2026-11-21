@@ -7,6 +7,8 @@ public record PackageHighlightResponse
 {
     public int Id { get; init; }
     public string Text { get; init; } = string.Empty;
+    public string? SubText { get; init; }
+    public string IconKey { get; init; } = string.Empty;
     public bool IsLocked { get; init; }
     public int SortOrder { get; init; }
 }
@@ -19,6 +21,7 @@ public record PackageResponse
     public string Subtitle { get; init; } = string.Empty;
     public int DurationMonths { get; init; }
     public decimal Price { get; init; }
+    public decimal MonthlyPrice { get; init; } // Price / DurationMonths, tam sayıya yuvarlanmış
     public PackageLocation Location { get; init; }
     public string ShortDescription { get; init; } = string.Empty;
     public string PurchaseUrl { get; init; } = string.Empty;
@@ -69,6 +72,8 @@ public record PackageHighlightRequest
 {
     public int? Id { get; init; }
     public string Text { get; init; } = string.Empty;
+    public string? SubText { get; init; }
+    public string IconKey { get; init; } = string.Empty;
     public bool IsLocked { get; init; }
 }
 

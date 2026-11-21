@@ -13,8 +13,12 @@ public class DietFormSubmissionRepository(AppDbContext context)
     protected override IQueryable<ConsentRecord> ConsentsOf(int id) =>
         Context.ConsentRecords.Where(c => c.DietFormSubmissionId == id);
 
+    // Silinmiş paket de gelsin (panel soluk gösterir): filtre kapatılır, başvurunun kendi filtresi elle yazılır
     public Task<PagedList<DietFormSubmission>> GetPagedAsync(DietFormStatus? status, int page, int size) =>
         Set.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => !x.IsDeleted)
+            .Include(x => x.Package)
             .WhereIf(status is not null, x => x.Status == status)
             .NewestFirst()
             .ToPagedListAsync(page, size);

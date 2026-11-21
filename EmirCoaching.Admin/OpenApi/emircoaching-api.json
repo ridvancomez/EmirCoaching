@@ -2138,6 +2138,56 @@
         ]
       }
     },
+    "/api/v1/admin/diet-form-submissions/{id}/client-form": {
+      "patch": {
+        "tags": [
+          "DietFormSubmissions"
+        ],
+        "operationId": "AdminDietFormSubmissions_UpdateClientForm",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDietFormSubmissionClientFormRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDietFormSubmissionClientFormRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDietFormSubmissionClientFormRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/admin/diet-form-submissions/{id}": {
       "delete": {
         "tags": [
@@ -5702,23 +5752,6 @@
   },
   "components": {
     "schemas": {
-      "ActivityLevel": {
-        "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
-        ],
-        "type": "integer",
-        "x-enumNames": [
-          "Sedentary",
-          "Light",
-          "Moderate",
-          "Active",
-          "VeryActive"
-        ]
-      },
       "AuthResponse": {
         "type": "object",
         "properties": {
@@ -6102,6 +6135,10 @@
       "CreateDietFormSubmissionRequest": {
         "type": "object",
         "properties": {
+          "packageId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "fullName": {
             "type": "string"
           },
@@ -6129,35 +6166,6 @@
           "targetWeight": {
             "type": "number",
             "format": "double"
-          },
-          "mealsPerDay": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "allergies": {
-            "type": "string",
-            "nullable": true
-          },
-          "avoidedFoods": {
-            "type": "string",
-            "nullable": true
-          },
-          "supplements": {
-            "type": "string",
-            "nullable": true
-          },
-          "sleepHours": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "activityLevel": {
-            "$ref": "#/components/schemas/ActivityLevel"
-          },
-          "waterLiters": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
           },
           "privacyAccepted": {
             "type": "boolean"
@@ -6538,6 +6546,19 @@
             "type": "integer",
             "format": "int32"
           },
+          "packageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "packageLocation": {
+            "$ref": "#/components/schemas/PackageLocation"
+          },
+          "packageIsDeleted": {
+            "type": "boolean"
+          },
           "fullName": {
             "type": "string"
           },
@@ -6566,33 +6587,8 @@
             "type": "number",
             "format": "double"
           },
-          "mealsPerDay": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "allergies": {
+          "clientFormUrl": {
             "type": "string",
-            "nullable": true
-          },
-          "avoidedFoods": {
-            "type": "string",
-            "nullable": true
-          },
-          "supplements": {
-            "type": "string",
-            "nullable": true
-          },
-          "sleepHours": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "activityLevel": {
-            "$ref": "#/components/schemas/ActivityLevel"
-          },
-          "waterLiters": {
-            "type": "number",
-            "format": "double",
             "nullable": true
           },
           "status": {
@@ -6918,6 +6914,10 @@
             "type": "number",
             "format": "double"
           },
+          "monthlyPrice": {
+            "type": "number",
+            "format": "double"
+          },
           "location": {
             "$ref": "#/components/schemas/PackageLocation"
           },
@@ -6956,6 +6956,13 @@
           "text": {
             "type": "string"
           },
+          "subText": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconKey": {
+            "type": "string"
+          },
           "isLocked": {
             "type": "boolean"
           }
@@ -6969,6 +6976,13 @@
             "format": "int32"
           },
           "text": {
+            "type": "string"
+          },
+          "subText": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconKey": {
             "type": "string"
           },
           "isLocked": {
@@ -7094,6 +7108,10 @@
             "format": "int32"
           },
           "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "monthlyPrice": {
             "type": "number",
             "format": "double"
           },
@@ -7797,6 +7815,15 @@
         "properties": {
           "status": {
             "$ref": "#/components/schemas/ContactMessageStatus"
+          }
+        }
+      },
+      "UpdateDietFormSubmissionClientFormRequest": {
+        "type": "object",
+        "properties": {
+          "clientFormUrl": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

@@ -6,7 +6,7 @@ namespace EmirCoaching.Entities.Common;
 public enum PackageLocation
 {
     Salonda = 0,
-    Evde = 1 // front-end'de body.tema-evde
+    Evde = 1
 }
 
 /// <summary>Değişimler sayfasında kartın hangi bölümde gösterileceği (admin seçer).</summary>
@@ -49,16 +49,6 @@ public enum DietFormStatus
     Yeni = 0,
     Okundu = 1,
     Donuldu = 2
-}
-
-/// <summary>Diyet formundaki günlük aktivite seviyesi (formdaki 5 seçenek).</summary>
-public enum ActivityLevel
-{
-    Sedentary = 0,  // Hareketsiz (masa başı)
-    Light = 1,      // Az aktif
-    Moderate = 2,   // Orta derece aktif
-    Active = 3,     // Aktif
-    VeryActive = 4  // Çok aktif
 }
 
 /// <summary>Diyet formundaki cinsiyet seçimi.</summary>

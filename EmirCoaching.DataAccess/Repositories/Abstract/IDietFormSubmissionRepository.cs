@@ -5,6 +5,7 @@ namespace EmirCoaching.DataAccess.Repositories.Abstract;
 
 public interface IDietFormSubmissionRepository : IPersonalDataRepository<DietFormSubmission>
 {
+    // Paketiyle birlikte (silinmiş paket dahil)
     Task<PagedList<DietFormSubmission>> GetPagedAsync(DietFormStatus? status, int page, int size);
 
     // Aynı e-posta veya telefonla değerlendirilmeyi bekleyen (Yeni) başvuru var mı

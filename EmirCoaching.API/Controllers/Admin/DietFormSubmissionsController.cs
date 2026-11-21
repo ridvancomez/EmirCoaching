@@ -22,6 +22,11 @@ public class DietFormSubmissionsController(IDietFormSubmissionService dietFormSu
     public async Task<IActionResult> UpdateStatus(int id, UpdateDietFormSubmissionStatusRequest request) =>
         FromResult(await dietFormSubmissionService.UpdateStatusAsync(id, request.Status));
 
+    // Danışanın Google Form yanıt linki; boş gönderilirse silinir → 204 / 400 / 404
+    [HttpPatch("{id:int}/client-form")]
+    public async Task<IActionResult> UpdateClientForm(int id, UpdateDietFormSubmissionClientFormRequest request) =>
+        FromResult(await dietFormSubmissionService.UpdateClientFormAsync(id, request));
+
     // KVKK: kayıt onay kayıtlarıyla birlikte kalıcı silinir → 204 / 404
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) =>
