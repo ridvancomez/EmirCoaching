@@ -114,6 +114,9 @@ public static class FieldNames
         ["Detail"] = "Ek bilgi",
         ["LogoPath"] = "Logo",
 
+        // Satın alma adımları
+        ["TimeLabel"] = "Süre etiketi",
+
         // Formlar
         ["Gender"] = "Cinsiyet",
         ["Age"] = "Yaş",

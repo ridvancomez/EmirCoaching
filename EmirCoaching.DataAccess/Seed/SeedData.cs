@@ -55,6 +55,7 @@ public static class SeedData
         SeedPageContents(builder);
         SeedDietProgram(builder);
         SeedCertificates(builder);
+        SeedPurchaseSteps(builder);
         SeedRoles(builder);
     }
 
@@ -341,6 +342,26 @@ public static class SeedData
         {
             Id = id, Title = title, Issuer = issuer, IssuerFullName = issuerFullName, Detail = detail, Year = year,
             LogoPath = $"/images/{logo}", SortOrder = id, IsActive = true, CreatedAt = SeedDate
+        };
+    }
+
+    // Front-end index.html "Satın aldıktan sonra NE OLUYOR?" adımları
+    private static void SeedPurchaseSteps(ModelBuilder builder)
+    {
+        builder.Entity<PurchaseStep>().HasData(
+            Step(1, "Form + Kan Tahlili", "Ödemeden sonra koçun WhatsApp'tan danışan bilgi formunu ve tahlil rehberini gönderir. " +
+                "Formu doldurur, tahlillerini iletirsin.", "Gün 1", "form"),
+            Step(2, "48 Saatte Program", "Tahlil sonuçların ve hedefine göre kişiye özel antrenman ve beslenme programın hazırlanır.",
+                "En geç 48 saat", "saat"),
+            Step(3, "Haftalık Takip", "Haftalık form kontrolleri (tartı + fotoğraf) ve WhatsApp üzerinden birebir iletişim.",
+                "Her hafta", "takvim"),
+            Step(4, "Revize", "Gelişimine göre program anında güncellenir; plato evresine girmene izin verilmez.",
+                "İhtiyaç oldukça", "revize"));
+
+        static PurchaseStep Step(int id, string title, string description, string timeLabel, string iconKey) => new()
+        {
+            Id = id, Title = title, Description = description, TimeLabel = timeLabel, IconKey = iconKey, SortOrder = id,
+            CreatedAt = SeedDate
         };
     }
 

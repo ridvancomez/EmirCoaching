@@ -32,6 +32,7 @@ public interface IUnitOfWork : IAsyncDisposable
     IPageContentRepository PageContents { get; }
     IDietProgramRepository DietPrograms { get; }
     IDietProgramStepRepository DietProgramSteps { get; }
+    IPurchaseStepRepository PurchaseSteps { get; }
     ILegalDocumentRepository LegalDocuments { get; }
 
     // Formlar ve onaylar

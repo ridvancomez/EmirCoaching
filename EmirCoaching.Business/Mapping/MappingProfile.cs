@@ -107,6 +107,9 @@ public class MappingProfile : Profile
             .ForMember(d => d.IconName, o => o.MapFrom(s => DietProgramStepIcons.NameOf(s.Icon)));
         MapRequests<CreateDietProgramStepRequest, UpdateDietProgramStepRequest, DietProgramStep>();
 
+        CreateMap<PurchaseStep, PurchaseStepResponse>();
+        MapRequests<CreatePurchaseStepRequest, UpdatePurchaseStepRequest, PurchaseStep>();
+
         // Yasal metinler ve formlar
         CreateMap<LegalDocument, LegalDocumentResponse>()
             .ForMember(d => d.FileUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.FilePath));

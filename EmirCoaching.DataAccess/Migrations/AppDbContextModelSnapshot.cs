@@ -3092,6 +3092,100 @@ namespace EmirCoaching.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EmirCoaching.Entities.Entities.PurchaseStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("IconKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeLabel")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PurchaseSteps");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Ödemeden sonra koçun WhatsApp'tan danışan bilgi formunu ve tahlil rehberini gönderir. Formu doldurur, tahlillerini iletirsin.",
+                            IconKey = "form",
+                            IsDeleted = false,
+                            SortOrder = 1,
+                            TimeLabel = "Gün 1",
+                            Title = "Form + Kan Tahlili"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Tahlil sonuçların ve hedefine göre kişiye özel antrenman ve beslenme programın hazırlanır.",
+                            IconKey = "saat",
+                            IsDeleted = false,
+                            SortOrder = 2,
+                            TimeLabel = "En geç 48 saat",
+                            Title = "48 Saatte Program"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Haftalık form kontrolleri (tartı + fotoğraf) ve WhatsApp üzerinden birebir iletişim.",
+                            IconKey = "takvim",
+                            IsDeleted = false,
+                            SortOrder = 3,
+                            TimeLabel = "Her hafta",
+                            Title = "Haftalık Takip"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Gelişimine göre program anında güncellenir; plato evresine girmene izin verilmez.",
+                            IconKey = "revize",
+                            IsDeleted = false,
+                            SortOrder = 4,
+                            TimeLabel = "İhtiyaç oldukça",
+                            Title = "Revize"
+                        });
+                });
+
             modelBuilder.Entity("EmirCoaching.Entities.Entities.SiteSetting", b =>
                 {
                     b.Property<int>("Id")

@@ -33,6 +33,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<PageContent> PageContents { get; set; }
     public DbSet<DietProgram> DietPrograms { get; set; }
     public DbSet<DietProgramStep> DietProgramSteps { get; set; }
+    public DbSet<PurchaseStep> PurchaseSteps { get; set; }
     public DbSet<LegalDocument> LegalDocuments { get; set; }
     public DbSet<LegalDocumentRevision> LegalDocumentRevisions { get; set; }
     public DbSet<ContactMessage> ContactMessages { get; set; }

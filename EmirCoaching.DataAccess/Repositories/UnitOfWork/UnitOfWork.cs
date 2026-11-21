@@ -33,6 +33,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork, IDisposable
     public IPageContentRepository PageContents => Get(() => new PageContentRepository(context));
     public IDietProgramRepository DietPrograms => Get(() => new DietProgramRepository(context));
     public IDietProgramStepRepository DietProgramSteps => Get(() => new DietProgramStepRepository(context));
+    public IPurchaseStepRepository PurchaseSteps => Get(() => new PurchaseStepRepository(context));
     public ILegalDocumentRepository LegalDocuments => Get(() => new LegalDocumentRepository(context));
 
     public IContactMessageRepository ContactMessages => Get(() => new ContactMessageRepository(context));

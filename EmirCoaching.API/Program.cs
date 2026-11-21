@@ -75,6 +75,7 @@ builder.Services.AddScoped<ICertificateService, CertificateService>();
 builder.Services.AddScoped<IPageContentService, PageContentService>();
 builder.Services.AddScoped<IDietProgramService, DietProgramService>();
 builder.Services.AddScoped<IDietProgramStepService, DietProgramStepService>();
+builder.Services.AddScoped<IPurchaseStepService, PurchaseStepService>();
 builder.Services.AddScoped<ILegalDocumentService, LegalDocumentService>();
 
 // Formlar ve onaylar
