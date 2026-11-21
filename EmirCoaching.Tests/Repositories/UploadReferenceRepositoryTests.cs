@@ -27,6 +27,7 @@ public class UploadReferenceRepositoryTests : IDisposable
         "PageContent.BackgroundImagePath",
         "DietProgram.DietitianPhotoPath",
         "AppUser.AvatarPath",
+        "AppUser.CoachVideoCoverPath",
         "LegalDocument.FilePath"
     ];
 

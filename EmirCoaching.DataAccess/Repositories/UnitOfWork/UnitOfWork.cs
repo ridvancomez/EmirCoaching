@@ -42,6 +42,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork, IDisposable
     public IConsentRecordRepository ConsentRecords => Get(() => new ConsentRecordRepository(context));
 
     public IRefreshTokenRepository RefreshTokens => Get(() => new RefreshTokenRepository(context));
+    public IAppUserRepository Users => Get(() => new AppUserRepository(context));
     public ILoginAttemptRepository LoginAttempts => Get(() => new LoginAttemptRepository(context));
 
     public IUploadReferenceRepository UploadReferences => Get(() => new UploadReferenceRepository(context));

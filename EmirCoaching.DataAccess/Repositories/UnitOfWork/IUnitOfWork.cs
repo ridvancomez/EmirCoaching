@@ -5,6 +5,7 @@ namespace EmirCoaching.DataAccess.Repositories.UnitOfWork;
 // Kural: her entity için I{Entity}Repository; property adı AppDbContext'teki DbSet adıyla aynı.
 // Repository'si olmayanlar üst kaydı üzerinden yönetilir:
 // PackageModuleItem → PackageModule (cascade), BlogTag/BlogPostTag → BlogPosts, LegalDocumentRevision → LegalDocuments.
+// Users (AppUser) salt okunurdur; yazma ASP.NET Identity'nin UserManager'ı ile.
 public interface IUnitOfWork : IAsyncDisposable
 {
     // Paketler
@@ -43,6 +44,7 @@ public interface IUnitOfWork : IAsyncDisposable
 
     // Kimlik doğrulama (kullanıcılar UserManager ile yönetilir)
     IRefreshTokenRepository RefreshTokens { get; }
+    IAppUserRepository Users { get; }
     ILoginAttemptRepository LoginAttempts { get; }
 
     // Entity'ye bağlı olmayan sorgu: yüklenen dosyaları kullanan kayıtlar (görsel temizliği)

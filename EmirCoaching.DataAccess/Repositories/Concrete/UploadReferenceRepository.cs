@@ -21,6 +21,7 @@ public class UploadReferenceRepository(AppDbContext context) : IUploadReferenceR
             .Concat(context.PageContents.Select(x => x.BackgroundImagePath))
             .Concat(context.DietPrograms.Select(x => x.DietitianPhotoPath))
             .Concat(context.Users.Select(x => x.AvatarPath))
+            .Concat(context.Users.Select(x => x.CoachVideoCoverPath))
             .Where(p => p != null && p.StartsWith(UploadsPrefix))
             .Distinct()
             .ToListAsync();

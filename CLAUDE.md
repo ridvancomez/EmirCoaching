@@ -93,6 +93,7 @@ GET    /api/v1/blog-posts?category=&page=&size=
 GET    /api/v1/testimonials/home              // ana sayfa yorumları (ShowOnHome), paket adı + süre
 GET    /api/v1/certificates                   // aktif sertifikalar (koç bölümü, Hakkımda)
 GET    /api/v1/purchase-steps                 // ana sayfa "Satın aldıktan sonra ne oluyor?" adımları
+GET    /api/v1/coach-profile                  // koç bölümü (IsCoach kullanıcısı; panelde PUT /auth/me ile)
 POST   /api/v1/diet-form-submissions          // form → 204
 POST   /api/v1/contact-messages
 POST   /api/v1/newsletter-subscribers
@@ -525,8 +526,8 @@ Yalnızca admin paneli giriş yapar. Kullanıcılar ASP.NET Identity (`UserManag
 POST /api/v1/auth/login    { email, password } → 200 { accessToken, expiresAt } + cookie / 400 / 401 / 429
 POST /api/v1/auth/refresh  (cookie)            → 200 { accessToken, expiresAt } + yeni cookie / 401
 POST /api/v1/auth/logout   (cookie)            → 204, refresh token iptal, cookie silinir
-GET  /api/v1/auth/me       [Authorize]         → 200 { id, email, fullName, title, bio, avatarUrl, roles }
-PUT  /api/v1/auth/me       [Authorize]         { fullName, title, bio, avatarPath } → 204 / 400
+GET  /api/v1/auth/me       [Authorize]         → 200 { id, email, fullName, title, bio, avatarUrl, isCoach, coach*, roles }
+PUT  /api/v1/auth/me       [Authorize]         { fullName, title, bio, avatarPath, coachTitle, coachExperience, coachStory, coachVideoUrl, coachVideoCoverPath } → 204 / 400
 POST /api/v1/auth/change-password [Authorize]  { currentPassword, newPassword } → 200 { accessToken, expiresAt } + yeni cookie / 400 / 429
 ```
 

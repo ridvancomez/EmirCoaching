@@ -26,16 +26,27 @@ public record CurrentUserResponse
     public string? Title { get; init; }
     public string? Bio { get; init; }
     public string? AvatarUrl { get; init; }
+    public bool IsCoach { get; init; }
+    public string? CoachTitle { get; init; }
+    public string? CoachExperience { get; init; }
+    public string? CoachStory { get; init; }
+    public string? CoachVideoUrl { get; init; }
+    public string? CoachVideoCoverUrl { get; init; }
     public IReadOnlyList<string> Roles { get; init; } = [];
 }
 
-// Blog yazılarındaki yazar kartında görünür
+// Ad, unvan, biyografi, fotoğraf: blog yazar kartı. Coach* alanları: sitedeki koç bölümü (IsCoach kullanıcısında görünür)
 public record UpdateProfileRequest
 {
     public string FullName { get; init; } = string.Empty;
     public string? Title { get; init; }
     public string? Bio { get; init; }
     public string? AvatarPath { get; init; }
+    public string? CoachTitle { get; init; }
+    public string? CoachExperience { get; init; }
+    public string? CoachStory { get; init; }          // paragraflar boş satırla ayrılır
+    public string? CoachVideoUrl { get; init; }
+    public string? CoachVideoCoverPath { get; init; }
 }
 
 public record ChangePasswordRequest

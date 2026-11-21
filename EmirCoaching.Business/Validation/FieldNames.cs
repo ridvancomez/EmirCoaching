@@ -117,6 +117,13 @@ public static class FieldNames
         // Satın alma adımları
         ["TimeLabel"] = "Süre etiketi",
 
+        // Koç bölümü (profil)
+        ["CoachTitle"] = "Koç unvanı",
+        ["CoachExperience"] = "Deneyim",
+        ["CoachStory"] = "Koç hikâyesi",
+        ["CoachVideoUrl"] = "Tanıtım videosu bağlantısı",
+        ["CoachVideoCoverPath"] = "Video kapak görseli",
+
         // Formlar
         ["Gender"] = "Cinsiyet",
         ["Age"] = "Yaş",

@@ -402,7 +402,13 @@ public static class SeedData
             UserName = email,
             Email = email,
             EmailConfirmed = true,
-            FullName = configuration["AdminUser:FullName"] ?? "Admin"
+            FullName = configuration["AdminUser:FullName"] ?? "Admin",
+            // Sitedeki koç bölümü bu kullanıcıdan gelir; metinler panelden değiştirilir
+            IsCoach = true,
+            CoachTitle = CoachDefaults.Title,
+            CoachExperience = CoachDefaults.Experience,
+            CoachStory = CoachDefaults.Story,
+            CoachVideoCoverPath = CoachDefaults.VideoCoverPath
         };
 
         var result = await userManager.CreateAsync(admin, password);

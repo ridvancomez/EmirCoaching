@@ -33,7 +33,15 @@ public class MappingProfile : Profile
         // Kimlik doğrulama (roller UserManager'dan ayrıca eklenir)
         CreateMap<AppUser, CurrentUserResponse>()
             .ForMember(d => d.Roles, o => o.Ignore())
-            .ForMember(d => d.AvatarUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.AvatarPath));
+            .ForMember(d => d.AvatarUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.AvatarPath))
+            .ForMember(d => d.CoachVideoCoverUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.CoachVideoCoverPath));
+        CreateMap<AppUser, CoachProfileResponse>()
+            .ForMember(d => d.Title, o => o.MapFrom(s => s.CoachTitle))
+            .ForMember(d => d.Experience, o => o.MapFrom(s => s.CoachExperience))
+            .ForMember(d => d.StoryParagraphs, o => o.MapFrom(s => CoachStory.Paragraphs(s.CoachStory)))
+            .ForMember(d => d.VideoUrl, o => o.MapFrom(s => s.CoachVideoUrl))
+            .ForMember(d => d.AvatarUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.AvatarPath))
+            .ForMember(d => d.VideoCoverUrl, o => o.ConvertUsing<PublicUrlConverter, string?>(s => s.CoachVideoCoverPath));
         CreateMap<UpdateProfileRequest, AppUser>(); // yalnızca aynı adlı alanlar: ad, unvan, biyografi, fotoğraf
 
         // Blog
