@@ -96,8 +96,8 @@ public static class SeedData
                     Location = location,
                     PurchaseUrl = ShopierPlaceholder,
                     IsFeatured = p.Months == 6, // "En Çok Tercih Edilen": her kategoride Dönüşüm Protokolü
-                    ShortDescription = $"{(isEvde ? "Evde antrenmanla " : "")}{p.Months} aylık program: " +
-                                       "antrenman, beslenme, takip ve koçluk modülleri.",
+                    ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan " +
+                                       $"{p.Months} aylık kapsamlı gelişim planı.",
                     SortOrder = i + 1,
                     IsActive = true,
                     MetaTitle = $"{p.Name}{(isEvde ? " (Evde)" : "")} Paket Detayı | Emir Coaching",

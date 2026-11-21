@@ -1145,7 +1145,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "Başlangıç & Deneme",
                             Price = 8999m,
                             PurchaseUrl = "https://www.shopier.com/",
-                            ShortDescription = "3 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
+                            ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 3 aylık kapsamlı gelişim planı.",
                             Slug = "baslangic-deneme",
                             SortOrder = 1,
                             Subtitle = "3 Aylık Başlangıç Programı"
@@ -1164,7 +1164,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "Dönüşüm Protokolü",
                             Price = 15999m,
                             PurchaseUrl = "https://www.shopier.com/",
-                            ShortDescription = "6 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
+                            ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 6 aylık kapsamlı gelişim planı.",
                             Slug = "donusum-protokolu",
                             SortOrder = 2,
                             Subtitle = "6 Aylık Dönüşüm Programı"
@@ -1183,7 +1183,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "VIP Yaşam Tarzı",
                             Price = 27999m,
                             PurchaseUrl = "https://www.shopier.com/",
-                            ShortDescription = "12 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
+                            ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 12 aylık kapsamlı gelişim planı.",
                             Slug = "vip-yasam-tarzi",
                             SortOrder = 3,
                             Subtitle = "12 Aylık Yaşam Tarzı Programı"
@@ -1202,7 +1202,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "Başlangıç & Deneme",
                             Price = 5999m,
                             PurchaseUrl = "https://www.shopier.com/",
-                            ShortDescription = "Evde antrenmanla 3 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
+                            ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 3 aylık kapsamlı gelişim planı.",
                             Slug = "baslangic-deneme-evde",
                             SortOrder = 1,
                             Subtitle = "3 Aylık Başlangıç Programı"
@@ -1221,7 +1221,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "Dönüşüm Protokolü",
                             Price = 10999m,
                             PurchaseUrl = "https://www.shopier.com/",
-                            ShortDescription = "Evde antrenmanla 6 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
+                            ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 6 aylık kapsamlı gelişim planı.",
                             Slug = "donusum-protokolu-evde",
                             SortOrder = 2,
                             Subtitle = "6 Aylık Dönüşüm Programı"
@@ -1240,7 +1240,7 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "VIP Yaşam Tarzı",
                             Price = 18999m,
                             PurchaseUrl = "https://www.shopier.com/",
-                            ShortDescription = "Evde antrenmanla 12 aylık program: antrenman, beslenme, takip ve koçluk modülleri.",
+                            ShortDescription = "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 12 aylık kapsamlı gelişim planı.",
                             Slug = "vip-yasam-tarzi-evde",
                             SortOrder = 3,
                             Subtitle = "12 Aylık Yaşam Tarzı Programı"

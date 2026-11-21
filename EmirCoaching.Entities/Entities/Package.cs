@@ -16,7 +16,7 @@ public class Package : BaseEntity, ISluggable, ISortable, IActivatable
     public int DurationMonths { get; set; }
     public decimal Price { get; set; }
     public PackageLocation Location { get; set; }
-    public string ShortDescription { get; set; } = string.Empty;
+    public string ShortDescription { get; set; } = string.Empty; // paket detay hero metni ("...6 aylık kapsamlı gelişim planı.")
 
     // Shopier ürün linki (diyet formu gönderildikten sonraki ödeme düğmesi)
     public string PurchaseUrl { get; set; } = string.Empty;

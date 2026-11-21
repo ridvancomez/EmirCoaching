@@ -3,8 +3,8 @@ using EmirCoaching.Entities.Common;
 namespace EmirCoaching.Entities.Entities;
 
 /// <summary>
-/// Sayaç istatistiği (100+ Mutlu Danışan, %95 Başarı Oranı, 8+ Yıllık Deneyim...).
-/// Ana sayfa, değişimler ve hakkımda sayfalarında gösterilir.
+/// İstatistik maddesi ("8+ Yıl Deneyim", "100+ Danışan", "%95 Başarı").
+/// Yalnızca Hakkımda hero'sunda gösterilir (ana sayfa ve değişimler şeridi kaldırıldı).
 /// </summary>
 public class SiteStat : BaseEntity, ISortable
 {
