@@ -67,7 +67,6 @@ builder.Services.AddScoped<ITransformationService, TransformationService>();
 
 // Site içeriği
 builder.Services.AddScoped<IFaqService, FaqService>();
-builder.Services.AddScoped<IVideoQuestionService, VideoQuestionService>();
 builder.Services.AddScoped<ISiteStatService, SiteStatService>();
 builder.Services.AddScoped<ISiteSettingService, SiteSettingService>();
 builder.Services.AddScoped<ISocialLinkService, SocialLinkService>();

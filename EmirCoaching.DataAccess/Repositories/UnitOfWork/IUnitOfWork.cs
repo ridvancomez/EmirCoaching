@@ -24,7 +24,6 @@ public interface IUnitOfWork : IAsyncDisposable
 
     // Site içeriği
     IFaqRepository Faqs { get; }
-    IVideoQuestionRepository VideoQuestions { get; }
     ISiteStatRepository SiteStats { get; }
     ISiteSettingRepository SiteSettings { get; }
     ISocialLinkRepository SocialLinks { get; }

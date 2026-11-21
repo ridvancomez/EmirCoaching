@@ -5,6 +5,7 @@ using EmirCoaching.Business.Services.Concrete;
 using EmirCoaching.Business.Validation;
 using EmirCoaching.DataAccess.Repositories.Abstract;
 using EmirCoaching.DataAccess.Repositories.UnitOfWork;
+using EmirCoaching.Entities.Common;
 using EmirCoaching.Entities.Entities;
 using EmirCoaching.Tests.Helpers;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -13,25 +14,25 @@ using Moq;
 namespace EmirCoaching.Tests.Services;
 
 // CrudService'in görsel temizliği (ReleaseUploadsAsync) bu servis üzerinden sınanır
-public class VideoQuestionServiceTests
+public class SocialPostServiceTests
 {
     private readonly Mock<IUnitOfWork> _uow = new();
-    private readonly Mock<IVideoQuestionRepository> _questions = new();
+    private readonly Mock<ISocialPostRepository> _posts = new();
     private readonly Mock<IUploadCleanupService> _uploadCleanup = new();
-    private readonly VideoQuestionService _service;
+    private readonly SocialPostService _service;
 
-    public VideoQuestionServiceTests()
+    public SocialPostServiceTests()
     {
-        _uow.Setup(u => u.VideoQuestions).Returns(_questions.Object);
-        _questions.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new VideoQuestion { Id = 1, ThumbnailPath = "/uploads/video/eski.jpg" });
+        _uow.Setup(u => u.SocialPosts).Returns(_posts.Object);
+        _posts.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new SocialPost { Id = 1, ImagePath = "/uploads/video/eski.jpg" });
 
-        _service = new VideoQuestionService(_uow.Object, TestMapper.Create(),
-            new CreateVideoQuestionRequestValidator(), new UpdateVideoQuestionRequestValidator(),
-            _uploadCleanup.Object, NullLogger<VideoQuestionService>.Instance);
+        _service = new SocialPostService(_uow.Object, TestMapper.Create(),
+            new CreateSocialPostRequestValidator(), new UpdateSocialPostRequestValidator(),
+            _uploadCleanup.Object, NullLogger<SocialPostService>.Instance);
     }
 
     [Fact]
-    public async Task UpdateAsync_WhenThumbnailChanges_ReleasesOldThumbnail()
+    public async Task UpdateAsync_WhenImageChanges_ReleasesOldImage()
     {
         // Act
         var result = await _service.UpdateAsync(Request("/uploads/video/yeni.jpg"));
@@ -43,7 +44,7 @@ public class VideoQuestionServiceTests
     }
 
     [Fact]
-    public async Task UpdateAsync_WhenThumbnailUnchanged_ReleasesNothing()
+    public async Task UpdateAsync_WhenImageUnchanged_ReleasesNothing()
     {
         // Act
         await _service.UpdateAsync(Request("/uploads/video/eski.jpg"));
@@ -53,7 +54,7 @@ public class VideoQuestionServiceTests
     }
 
     [Fact]
-    public async Task DeleteAsync_ReleasesThumbnailAfterSave()
+    public async Task DeleteAsync_ReleasesImageAfterSave()
     {
         // Arrange — kayıt sırası: önce SaveChanges, sonra dosya temizliği
         var calls = new List<string>();
@@ -68,12 +69,12 @@ public class VideoQuestionServiceTests
         calls.Should().Equal("save", "cleanup");
     }
 
-    private static UpdateVideoQuestionRequest Request(string thumbnailPath) => new()
+    private static UpdateSocialPostRequest Request(string imagePath) => new()
     {
         Id = 1,
-        Question = "Kaç gün antrenman?",
-        Description = "Açıklama",
-        ThumbnailPath = thumbnailPath,
-        YouTubeUrl = "https://www.youtube.com/watch?v=abc"
+        Platform = SocialPlatform.YouTube,
+        Title = "Kardionun Önemi",
+        ImagePath = imagePath,
+        Url = "https://www.youtube.com/watch?v=abc"
     };
 }

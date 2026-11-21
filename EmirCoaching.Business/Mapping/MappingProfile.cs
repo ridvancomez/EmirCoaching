@@ -78,9 +78,6 @@ public class MappingProfile : Profile
         CreateMap<SiteSetting, SiteSettingResponse>();
         CreateMap<UpdateSiteSettingRequest, SiteSetting>();
 
-        CreateMap<VideoQuestion, VideoQuestionResponse>()
-            .ForMember(d => d.ThumbnailUrl, o => o.ConvertUsing<RequiredPublicUrlConverter, string>(s => s.ThumbnailPath));
-        MapRequests<CreateVideoQuestionRequest, UpdateVideoQuestionRequest, VideoQuestion>();
 
         CreateMap<SocialLink, SocialLinkResponse>();
         MapRequests<CreateSocialLinkRequest, UpdateSocialLinkRequest, SocialLink>();

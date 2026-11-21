@@ -22,7 +22,6 @@ public class UploadReferenceRepositoryTests : IDisposable
         "Transformation.AfterImagePath",
         "Transformation.BeforeSquarePath",
         "Transformation.AfterSquarePath",
-        "VideoQuestion.ThumbnailPath",
         "SocialPost.ImagePath",
         "PageContent.BackgroundImagePath",
         "DietProgram.DietitianPhotoPath",
@@ -53,7 +52,7 @@ public class UploadReferenceRepositoryTests : IDisposable
         // Arrange
         await using (var context = _db.CreateContext())
         {
-            context.VideoQuestions.Add(new VideoQuestion { Question = "S", ThumbnailPath = "/uploads/video/a.jpg" });
+            context.SocialPosts.Add(new SocialPost { Url = "https://youtube.com/a", ImagePath = "/uploads/video/a.jpg" });
             await context.SaveChangesAsync();
         }
 
@@ -72,10 +71,10 @@ public class UploadReferenceRepositoryTests : IDisposable
         // Arrange
         await using (var context = _db.CreateContext())
         {
-            var deleted = new VideoQuestion { Question = "Silinen", ThumbnailPath = "/uploads/video/silinen.jpg" };
-            context.VideoQuestions.AddRange(deleted, new VideoQuestion { Question = "Site", ThumbnailPath = "/images/site.jpg" });
+            var deleted = new SocialPost { Url = "https://youtube.com/s", ImagePath = "/uploads/video/silinen.jpg" };
+            context.SocialPosts.AddRange(deleted, new SocialPost { Url = "https://youtube.com/i", ImagePath = "/images/site.jpg" });
             await context.SaveChangesAsync();
-            context.VideoQuestions.Remove(deleted);
+            context.SocialPosts.Remove(deleted);
             await context.SaveChangesAsync();
         }
 

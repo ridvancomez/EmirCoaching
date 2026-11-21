@@ -4,7 +4,6 @@ namespace EmirCoaching.Entities.Entities;
 
 /// <summary>
 /// Sıkça sorulan soru; ana sayfadaki akordeon SSS bölümünde listelenir.
-/// Videolu soru-cevap slider'ı için VideoQuestion kullanılır.
 /// </summary>
 public class Faq : BaseEntity, ISortable
 {

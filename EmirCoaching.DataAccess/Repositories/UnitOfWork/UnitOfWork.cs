@@ -25,7 +25,6 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork, IDisposable
     public ITransformationMetricRepository TransformationMetrics => Get(() => new TransformationMetricRepository(context));
 
     public IFaqRepository Faqs => Get(() => new FaqRepository(context));
-    public IVideoQuestionRepository VideoQuestions => Get(() => new VideoQuestionRepository(context));
     public ISiteStatRepository SiteStats => Get(() => new SiteStatRepository(context));
     public ISiteSettingRepository SiteSettings => Get(() => new SiteSettingRepository(context));
     public ISocialLinkRepository SocialLinks => Get(() => new SocialLinkRepository(context));

@@ -25,7 +25,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Transformation> Transformations { get; set; }
     public DbSet<TransformationMetric> TransformationMetrics { get; set; }
     public DbSet<Faq> Faqs { get; set; }
-    public DbSet<VideoQuestion> VideoQuestions { get; set; }
     public DbSet<SiteStat> SiteStats { get; set; }
     public DbSet<SiteSetting> SiteSettings { get; set; }
     public DbSet<SocialLink> SocialLinks { get; set; }

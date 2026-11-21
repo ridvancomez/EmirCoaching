@@ -89,8 +89,6 @@ public static class FieldNames
         ["Question"] = "Soru",
         ["Answer"] = "Cevap",
         ["Group"] = "Grup",
-        ["YouTubeUrl"] = "YouTube bağlantısı",
-        ["ThumbnailPath"] = "Kapak görseli",
         ["Suffix"] = "Son ek",
         ["Platform"] = "Platform",
         ["Caption"] = "Açıklama",

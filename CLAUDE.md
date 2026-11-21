@@ -106,7 +106,7 @@ PUT    /api/v1/admin/packages/{id}/modules/order   // gövde: [3, 1, 2]
 // Admin — diğer kaynaklar
 // Tam CRUD (GET, GET {id}, POST, PUT {id}, DELETE {id}):
 //   blog-categories, transformation-types, transformations (pasifler dahil), testimonials (?packageId=), faqs,
-//   video-questions, site-stats, social-links, social-posts, diet-program-steps ("Nasıl Çalışır?" adımları)
+//   site-stats, social-links, social-posts, diet-program-steps ("Nasıl Çalışır?" adımları)
 GET    /api/v1/admin/blog-posts?categoryId=&isPublished=&page=&size=   // taslaklar dahil
 POST   /api/v1/admin/blog-posts               // taslak; AuthorId yoksa giriş yapan kullanıcı
 POST   /api/v1/admin/blog-posts/{id}/publish  // 204
@@ -478,7 +478,7 @@ public class TestimonialRepository(AppDbContext context)
 
 ### Basit CRUD: `CrudService` tabanı
 
-Ek iş akışı olmayan içerikler (SSS, sayaç, yorum, video, sosyal link/post, blog kategorisi, dönüşüm tipi) `CrudService<TEntity, TResponse, TCreateRequest, TUpdateRequest>`'ten türer. Taban; doğrulama → `CheckAsync` → kaydet → log akışını ve NotFound'u yönetir. Türeyen servis yalnızca farklı olanı ezer:
+Ek iş akışı olmayan içerikler (SSS, sayaç, yorum, sosyal link/post, blog kategorisi, dönüşüm tipi) `CrudService<TEntity, TResponse, TCreateRequest, TUpdateRequest>`'ten türer. Taban; doğrulama → `CheckAsync` → kaydet → log akışını ve NotFound'u yönetir. Türeyen servis yalnızca farklı olanı ezer:
 
 ```csharp
 public interface IBlogCategoryService
