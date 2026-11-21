@@ -405,6 +405,75 @@
         }
       }
     },
+    "/api/v1/certificates": {
+      "get": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "Certificates_GetActive",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CertificateResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CertificateResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CertificateResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coach-profile": {
+      "get": {
+        "tags": [
+          "CoachProfile"
+        ],
+        "operationId": "CoachProfile_Get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoachProfileResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoachProfileResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoachProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/contact-messages": {
       "post": {
         "tags": [
@@ -829,6 +898,45 @@
         }
       }
     },
+    "/api/v1/purchase-steps": {
+      "get": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "PurchaseSteps_GetAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseStepResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseStepResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseStepResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/site-settings": {
       "get": {
         "tags": [
@@ -986,6 +1094,45 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/SocialPostResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/testimonials/home": {
+      "get": {
+        "tags": [
+          "Testimonials"
+        ],
+        "operationId": "Testimonials_GetHome",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestimonialResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestimonialResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestimonialResponse"
                   }
                 }
               }
@@ -1161,45 +1308,6 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/TransformationTypeResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/video-questions": {
-      "get": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "VideoQuestions_GetActive",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoQuestionResponse"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoQuestionResponse"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoQuestionResponse"
                   }
                 }
               }
@@ -1822,6 +1930,276 @@
             }
           }
         ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/certificates": {
+      "get": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "AdminCertificates_GetAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CertificateResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CertificateResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CertificateResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "AdminCertificates_Create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCertificateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCertificateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCertificateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/certificates/{id}": {
+      "get": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "AdminCertificates_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "AdminCertificates_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCertificateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCertificateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCertificateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "AdminCertificates_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/certificates/bulk-delete": {
+      "post": {
+        "tags": [
+          "Certificates"
+        ],
+        "operationId": "AdminCertificates_DeleteMany",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": "No Content"
@@ -2983,7 +3361,7 @@
         "tags": [
           "LegalDocuments"
         ],
-        "operationId": "AdminLegalDocuments_UploadNewVersion",
+        "operationId": "AdminLegalDocuments_PublishNewVersion",
         "parameters": [
           {
             "name": "type",
@@ -2996,27 +3374,19 @@
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "file": {
-                        "$ref": "#/components/schemas/IFormFile"
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "note": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                ]
+                "$ref": "#/components/schemas/PublishLegalDocumentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishLegalDocumentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishLegalDocumentRequest"
               }
             }
           },
@@ -3698,6 +4068,276 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdatePageContentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/purchase-steps": {
+      "get": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "AdminPurchaseSteps_GetAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseStepResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseStepResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseStepResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "AdminPurchaseSteps_Create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseStepRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseStepRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseStepRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/purchase-steps/{id}": {
+      "get": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "AdminPurchaseSteps_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseStepResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseStepResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseStepResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "AdminPurchaseSteps_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseStepRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseStepRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseStepRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "AdminPurchaseSteps_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/purchase-steps/bulk-delete": {
+      "post": {
+        "tags": [
+          "PurchaseSteps"
+        ],
+        "operationId": "AdminPurchaseSteps_DeleteMany",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
               }
             }
           },
@@ -5478,276 +6118,6 @@
           }
         ]
       }
-    },
-    "/api/v1/admin/video-questions": {
-      "get": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "AdminVideoQuestions_GetAll",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoQuestionResponse"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoQuestionResponse"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoQuestionResponse"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "AdminVideoQuestions_Create",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVideoQuestionRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVideoQuestionRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVideoQuestionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreatedResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreatedResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreatedResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/video-questions/{id}": {
-      "get": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "AdminVideoQuestions_GetById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VideoQuestionResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VideoQuestionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VideoQuestionResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "AdminVideoQuestions_Update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVideoQuestionRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVideoQuestionRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVideoQuestionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "AdminVideoQuestions_Delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/video-questions/bulk-delete": {
-      "post": {
-        "tags": [
-          "VideoQuestions"
-        ],
-        "operationId": "AdminVideoQuestions_DeleteMany",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
     }
   },
   "components": {
@@ -5956,6 +6326,42 @@
           }
         }
       },
+      "CertificateResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "issuer": {
+            "type": "string"
+          },
+          "issuerFullName": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "logoUrl": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
       "ChangePasswordRequest": {
         "type": "object",
         "properties": {
@@ -5964,6 +6370,40 @@
           },
           "newPassword": {
             "type": "string"
+          }
+        }
+      },
+      "CoachProfileResponse": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "experience": {
+            "type": "string",
+            "nullable": true
+          },
+          "storyParagraphs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "videoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "videoCoverUrl": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -6099,6 +6539,38 @@
           "metaDescription": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "CreateCertificateRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "issuer": {
+            "type": "string"
+          },
+          "issuerFullName": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "logoPath": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         }
       },
@@ -6284,6 +6756,27 @@
           }
         }
       },
+      "CreatePurchaseStepRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timeLabel": {
+            "type": "string"
+          },
+          "iconKey": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "CreateSiteStatRequest": {
         "type": "object",
         "properties": {
@@ -6382,6 +6875,9 @@
           "isActive": {
             "type": "boolean"
           },
+          "showOnHome": {
+            "type": "boolean"
+          },
           "packageId": {
             "type": "integer",
             "format": "int32"
@@ -6469,30 +6965,6 @@
           }
         }
       },
-      "CreateVideoQuestionRequest": {
-        "type": "object",
-        "properties": {
-          "question": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "thumbnailPath": {
-            "type": "string"
-          },
-          "youTubeUrl": {
-            "type": "string"
-          },
-          "sortOrder": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        }
-      },
       "CurrentUserResponse": {
         "type": "object",
         "properties": {
@@ -6515,6 +6987,29 @@
             "nullable": true
           },
           "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCoach": {
+            "type": "boolean"
+          },
+          "coachTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachExperience": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachStory": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachVideoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachVideoCoverUrl": {
             "type": "string",
             "nullable": true
           },
@@ -6605,14 +7100,6 @@
         "properties": {
           "title": {
             "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "durationWeeks": {
-            "type": "integer",
-            "format": "int32"
           },
           "dietitianTitle": {
             "type": "string"
@@ -6774,7 +7261,8 @@
           2,
           3,
           4,
-          5
+          5,
+          6
         ],
         "type": "integer",
         "x-enumNames": [
@@ -6783,7 +7271,8 @@
           "Cerez",
           "IptalIade",
           "TicariIleti",
-          "Gizlilik"
+          "Gizlilik",
+          "MesafeliSatis"
         ]
       },
       "LoginAttemptResponse": {
@@ -7338,6 +7827,42 @@
           }
         }
       },
+      "PublishLegalDocumentRequest": {
+        "type": "object",
+        "properties": {
+          "contentHtml": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
+      "PurchaseStepResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timeLabel": {
+            "type": "string"
+          },
+          "iconKey": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "SiteSettingResponse": {
         "type": "object",
         "properties": {
@@ -7515,7 +8040,17 @@
           "isActive": {
             "type": "boolean"
           },
+          "showOnHome": {
+            "type": "boolean"
+          },
           "packageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "packageDurationMonths": {
             "type": "integer",
             "format": "int32"
           }
@@ -7810,6 +8345,42 @@
           }
         }
       },
+      "UpdateCertificateRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "issuer": {
+            "type": "string"
+          },
+          "issuerFullName": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "logoPath": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
       "UpdateContactMessageStatusRequest": {
         "type": "object",
         "properties": {
@@ -7840,14 +8411,6 @@
         "properties": {
           "title": {
             "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "durationWeeks": {
-            "type": "integer",
-            "format": "int32"
           },
           "dietitianTitle": {
             "type": "string"
@@ -8014,6 +8577,51 @@
           "avatarPath": {
             "type": "string",
             "nullable": true
+          },
+          "coachTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachExperience": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachStory": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachVideoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "coachVideoCoverPath": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdatePurchaseStepRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timeLabel": {
+            "type": "string"
+          },
+          "iconKey": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -8160,6 +8768,9 @@
           "isActive": {
             "type": "boolean"
           },
+          "showOnHome": {
+            "type": "boolean"
+          },
           "packageId": {
             "type": "integer",
             "format": "int32"
@@ -8255,34 +8866,6 @@
           }
         }
       },
-      "UpdateVideoQuestionRequest": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "question": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "thumbnailPath": {
-            "type": "string"
-          },
-          "youTubeUrl": {
-            "type": "string"
-          },
-          "sortOrder": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        }
-      },
       "UploadedFileResponse": {
         "type": "object",
         "properties": {
@@ -8291,34 +8874,6 @@
           },
           "url": {
             "type": "string"
-          }
-        }
-      },
-      "VideoQuestionResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "question": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "thumbnailUrl": {
-            "type": "string"
-          },
-          "youTubeUrl": {
-            "type": "string"
-          },
-          "sortOrder": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isActive": {
-            "type": "boolean"
           }
         }
       }
@@ -8341,6 +8896,12 @@
     },
     {
       "name": "BlogPosts"
+    },
+    {
+      "name": "Certificates"
+    },
+    {
+      "name": "CoachProfile"
     },
     {
       "name": "ContactMessages"
@@ -8370,6 +8931,9 @@
       "name": "PageContents"
     },
     {
+      "name": "PurchaseSteps"
+    },
+    {
       "name": "SiteSettings"
     },
     {
@@ -8382,19 +8946,16 @@
       "name": "SocialPosts"
     },
     {
+      "name": "Testimonials"
+    },
+    {
       "name": "Transformations"
     },
     {
       "name": "TransformationTypes"
     },
     {
-      "name": "VideoQuestions"
-    },
-    {
       "name": "LoginAttempts"
-    },
-    {
-      "name": "Testimonials"
     },
     {
       "name": "Uploads"
