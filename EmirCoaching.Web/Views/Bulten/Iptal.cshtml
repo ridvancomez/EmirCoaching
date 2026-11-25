@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Abonelikten Çıktın | Emir Coaching";
+    ViewData["Description"] = "Emir Coaching e-bülten aboneliğinden çıktın. Kampanya ve duyuru e-postaları artık sana gönderilmez.";
+    ViewData["Robots"] = "noindex";
+    ViewData["BodyClass"] = "hata-sayfa";
+    ViewData["SimpleFooter"] = true;
+}
+
+  <main>
+    <!-- ==================== Bülten İptal Hero ==================== -->
+    <!-- Abonelikten çıkma işlemini Brevo yapar (e-postadaki "Abonelikten çık" linki → Brevo sayfası).
+         Bu sayfa yalnızca çıkış sonrası onay ekranıdır; Brevo'da yönlendirme adresi olarak kullanılır. -->
+    <section class="paketler-hero paketler-hero--compact hata-404 hata-404--sunucu bulten-iptal"
+      aria-labelledby="bulten-iptal-title">
+      <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+        title="Emir Coaching" class="paketler-hero__bg">
+      <div class="paketler-hero__overlay" aria-hidden="true"></div>
+      <div class="paketler-hero__fade" aria-hidden="true"></div>
+
+      <div class="paketler-hero__content">
+        <nav class="paketler-hero__breadcrumb" aria-label="Sayfa konumu">
+          <ul class="paketler-hero__breadcrumb-list">
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="/" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
+            </li>
+            <li class="paketler-hero__breadcrumb-item">
+              <a href="/bulten-iptal" class="paketler-hero__breadcrumb-link" title="Bülten Aboneliği" aria-current="page">Bülten Aboneliği</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Dev ikon (dekoratif): 404/501'deki rakamın yerini alır -->
+        <iconify-icon icon="mdi:email-check-outline" mode="svg" noobserver class="bulten-iptal__ikon"
+          aria-hidden="true"></iconify-icon>
+
+        <h1 id="bulten-iptal-title" class="hata-404__title">
+          Abonelikten <span class="hata-404__title-vurgu">Çıktın</span>
+        </h1>
+        <p class="hata-404__text">E-posta adresin bülten listemizden çıkarıldı. Fikrini değiştirirsen sitenin altındaki alandan yeniden abone olabilirsin.</p>
+
+        <div class="cta__actions hata-404__actions">
+          <a href="/" class="hero__button hero__button--primary" title="Ana sayfaya dön">Ana Sayfaya Dön</a>
+        </div>
+      </div>
+    </section>
+  </main>

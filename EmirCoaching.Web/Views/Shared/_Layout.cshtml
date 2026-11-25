@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ViewData["Title"]</title>
+  <link rel="icon" href="/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="description" content="@ViewData["Description"]">
+  @if (ViewData["Robots"] is string robots)
+  {
+  <meta name="robots" content="@robots">
+  }
+
+  <link rel="preload" href="/fonts/geologica/geologica-v5-latin_latin-ext-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter/inter-v20-latin_latin-ext-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <link rel="stylesheet" href="/style.css">
+  @await RenderSectionAsync("Head", required: false)
+</head>
+
+<body class="@ViewData["BodyClass"]">
+
+  @await Html.PartialAsync("_Header")
+
+  @RenderBody()
+
+  @if (ViewData["SimpleFooter"] is true)
+  {
+  @await Html.PartialAsync("_FooterSade")
+  }
+  else
+  {
+  @await Html.PartialAsync("_Footer")
+
+  @await Html.PartialAsync("_ContactModals")
+  }
+
+  @await RenderSectionAsync("Modals", required: false)
+
+  <script src="/js/main.js"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
