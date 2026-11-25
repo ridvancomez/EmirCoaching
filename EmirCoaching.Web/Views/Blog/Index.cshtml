@@ -1,3 +1,4 @@
+@model BlogListViewModel
 @{
     ViewData["Title"] = "Blog | Emir Coaching — Beslenme, Hipertrofi ve Kuvvet Yazıları";
     ViewData["Description"] = "Emir Coaching blogunda beslenme, hipertrofi, kuvvet, toparlanma ve mentalite üzerine bilimsel temelli yazılar. Antrenmanını ve beslenmeni bilinçli yönet.";
@@ -7,7 +8,7 @@
   <main>
     <!-- ==================== Blog Hero (sade) ==================== -->
     <section class="paketler-hero paketler-hero--compact blog-hero" aria-labelledby="blog-title">
-      <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+      <img src="@(Model.Hero?.BackgroundImageUrl ?? "/images/paketlerslider.png")" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
         title="Emir Coaching Blog" class="paketler-hero__bg">
       <div class="paketler-hero__overlay" aria-hidden="true"></div>
       <div class="paketler-hero__fade" aria-hidden="true"></div>
@@ -28,165 +29,84 @@
 
         <nav class="blog-filters" aria-label="Blog kategorileri">
           <ul class="blog-filters__list">
+            @foreach (var category in Model.Categories)
+            {
             <li>
-              <a href="/blog?kategori=beslenme" class="blog-filters__pill" data-category="beslenme"
-                title="Beslenme yazılarını göster">Beslenme</a>
+              <a href="/blog?kategori=@category.Slug" class="blog-filters__pill" data-category="@category.Slug"
+                title="@category.Name yazılarını göster">@category.Name</a>
             </li>
-            <li>
-              <a href="/blog?kategori=hipertrofi" class="blog-filters__pill" data-category="hipertrofi"
-                title="Hipertrofi yazılarını göster">Hipertrofi</a>
-            </li>
-            <li>
-              <a href="/blog?kategori=kuvvet" class="blog-filters__pill" data-category="kuvvet"
-                title="Kuvvet yazılarını göster">Kuvvet</a>
-            </li>
-            <li>
-              <a href="/blog?kategori=toparlanma" class="blog-filters__pill" data-category="toparlanma"
-                title="Toparlanma yazılarını göster">Toparlanma</a>
-            </li>
-            <li>
-              <a href="/blog?kategori=mentalite" class="blog-filters__pill" data-category="mentalite"
-                title="Mentalite yazılarını göster">Mentalite</a>
-            </li>
+            }
           </ul>
         </nav>
       </div>
     </section>
 
     <!-- ==================== Öne Çıkan Yazı ==================== -->
+    @if (Model.Featured is { } featured)
+    {
     <section class="blog-featured container" aria-labelledby="blog-featured-title">
       <p class="blog-divider">Öne Çıkan</p>
-
       <article class="blog-featured__card">
         <div class="blog-featured__media">
-          <img src="/images/blog-makro-besinler.jpg"
-            alt="Peynir, domates, ekmek çubukları ve zeytinyağıyla hazırlanmış kahvaltı tabağı"
-            title="Makro Besinlerin Gücü" width="616" height="549" class="blog-featured__img">
+          <img src="@featured.CoverImageUrl"
+            alt="@featured.Title"
+            title="@featured.Title" width="616" height="549" class="blog-featured__img">
           <span class="blog-featured__badge">Öne Çıkan</span>
         </div>
-
         <div class="blog-featured__body">
-          <p class="blog-featured__category">Beslenme</p>
-          <h2 id="blog-featured-title" class="blog-featured__title">Makro Besinlerin Gücü: Performans İçin Yakıtınızı Doğru Seçin</h2>
+          <p class="blog-featured__category">@featured.CategoryName</p>
+          <h2 id="blog-featured-title" class="blog-featured__title">@featured.Title</h2>
           <p class="blog-featured__excerpt">
-            Vücudunuzun bir spor araba olduğunu düşünün. Sadece kalori saymak yetmez, yakıtın kalitesi
-            belirleyicidir. Protein, karb ve yağ dengesini optimize etmenin yolları.
+            @featured.Summary
           </p>
           <ul class="blog-featured__meta">
+            @if (Model.AuthorName is { } author)
+            {
             <li class="blog-featured__author">
-              <span class="blog-featured__avatar" aria-hidden="true">İE</span>
-              İbrahim Emir
+              <span class="blog-featured__avatar" aria-hidden="true">@SiteFormat.Initials(author)</span>
+              @author
             </li>
-            <li><time datetime="2026-03-12">12 Mart 2026</time></li>
+            }
+            @if (featured.PublishedAt is { } published)
+            {
+            <li><time datetime="@published.ToString("yyyy-MM-dd")">@SiteFormat.Date(published)</time></li>
+            }
             <li class="blog-featured__read-time">
               <iconify-icon icon="mdi:clock-outline" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-              8 dk okuma
+              @featured.ReadingMinutes dk okuma
             </li>
           </ul>
-          <a href="/blog/kalori-acigi-nedir" class="blog-featured__button" title="Makro Besinlerin Gücü yazısını oku">Yazıyı Oku</a>
+          <a href="/blog/@featured.Slug" class="blog-featured__button" title="@featured.Title yazısını oku">Yazıyı Oku</a>
         </div>
       </article>
     </section>
+    }
 
     <!-- ==================== Tüm Yazılar ==================== -->
     <section class="blog-posts container" aria-labelledby="blog-posts-title">
       <h2 id="blog-posts-title" class="blog-posts__title">Tüm Yazılar</h2>
       <div class="blog-grid">
-        <article class="blog-card" data-category="hipertrofi">
-          <a href="/blog/kalori-acigi-nedir" class="blog-card__link" title="Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı yazısını oku">
-            <img src="/images/blog-mekanik-gerilim.jpg" alt="Elinde salata kâsesiyle gülümseyen sporcu kadın" title="Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı" width="394" height="207"
+        @foreach (var post in Model.Posts)
+        {
+        <article class="blog-card" data-category="@post.CategorySlug">
+          <a href="/blog/@post.Slug" class="blog-card__link" title="@post.Title yazısını oku">
+            <img src="@post.CoverImageUrl" alt="@post.Title" title="@post.Title" width="394" height="207"
               class="blog-card__img" loading="lazy">
             <div class="blog-card__body">
-              <p class="blog-card__category">Hipertrofi</p>
-              <h3 class="blog-card__title">Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı</h3>
-              <p class="blog-card__excerpt">Kas geliştirmek istiyorsanız antrenmanlarınızda mekanik gerilimi nasıl maksimize edeceğinizi öğrenmelisiniz.</p>
+              <p class="blog-card__category">@post.CategoryName</p>
+              <h3 class="blog-card__title">@post.Title</h3>
+              <p class="blog-card__excerpt">@post.Summary</p>
               <p class="blog-card__meta">
-                <time datetime="2026-03-10">10 Mart 2026</time>
-                <span>5 dk</span>
+                @if (post.PublishedAt is { } published)
+                {
+                <time datetime="@published.ToString("yyyy-MM-dd")">@SiteFormat.Date(published)</time>
+                }
+                <span>@post.ReadingMinutes dk</span>
               </p>
             </div>
           </a>
         </article>
-
-        <article class="blog-card" data-category="toparlanma">
-          <a href="/blog/kalori-acigi-nedir" class="blog-card__link" title="Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ yazısını oku">
-            <img src="/images/blog-uyku-kas-gelisimi.jpg" alt="Masada sebze ve salatayla gülümseyen genç kadın" title="Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ" width="394" height="207"
-              class="blog-card__img" loading="lazy">
-            <div class="blog-card__body">
-              <p class="blog-card__category">Toparlanma</p>
-              <h3 class="blog-card__title">Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ</h3>
-              <p class="blog-card__excerpt">Antrenmanda yıkılan kaslar yatakta inşa edilir. Kaliteli bir uykunun anabolik hormonlara etkisi.</p>
-              <p class="blog-card__meta">
-                <time datetime="2026-03-05">5 Mart 2026</time>
-                <span>6 dk</span>
-              </p>
-            </div>
-          </a>
-        </article>
-
-        <article class="blog-card" data-category="kuvvet">
-          <a href="/blog/kalori-acigi-nedir" class="blog-card__link" title="Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak yazısını oku">
-            <img src="/images/blog-deadlift-biyomekanigi.jpg" alt="Mutfakta taze salata hazırlayan kadın" title="Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak" width="394" height="207"
-              class="blog-card__img" loading="lazy" style="object-position: 50% 0%;">
-            <div class="blog-card__body">
-              <p class="blog-card__category">Kuvvet</p>
-              <h3 class="blog-card__title">Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak</h3>
-              <p class="blog-card__excerpt">Kral egzersiz deadlift'i anatominize uygun şekilde nasıl optimize edebilirsiniz?</p>
-              <p class="blog-card__meta">
-                <time datetime="2026-03-01">1 Mart 2026</time>
-                <span>10 dk</span>
-              </p>
-            </div>
-          </a>
-        </article>
-
-        <article class="blog-card" data-category="hipertrofi">
-          <a href="/blog/kalori-acigi-nedir" class="blog-card__link" title="Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı yazısını oku">
-            <img src="/images/blog-mekanik-gerilim-2.jpg" alt="Ahşap tahta üzerinde siyah zeytinler" title="Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı" width="394" height="207"
-              class="blog-card__img" loading="lazy" style="object-position: 50% 86%;">
-            <div class="blog-card__body">
-              <p class="blog-card__category">Hipertrofi</p>
-              <h3 class="blog-card__title">Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı</h3>
-              <p class="blog-card__excerpt">Kas geliştirmek istiyorsanız antrenmanlarınızda mekanik gerilimi nasıl maksimize edeceğinizi öğrenmelisiniz.</p>
-              <p class="blog-card__meta">
-                <time datetime="2026-03-10">10 Mart 2026</time>
-                <span>5 dk</span>
-              </p>
-            </div>
-          </a>
-        </article>
-
-        <article class="blog-card" data-category="toparlanma">
-          <a href="/blog/kalori-acigi-nedir" class="blog-card__link" title="Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ yazısını oku">
-            <img src="/images/blog-uyku-kas-gelisimi-2.jpg" alt="Ahşap masada çeşitli peynirler ve üzüm" title="Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ" width="394" height="207"
-              class="blog-card__img" loading="lazy">
-            <div class="blog-card__body">
-              <p class="blog-card__category">Toparlanma</p>
-              <h3 class="blog-card__title">Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ</h3>
-              <p class="blog-card__excerpt">Antrenmanda yıkılan kaslar yatakta inşa edilir. Kaliteli bir uykunun anabolik hormonlara etkisi.</p>
-              <p class="blog-card__meta">
-                <time datetime="2026-03-05">5 Mart 2026</time>
-                <span>6 dk</span>
-              </p>
-            </div>
-          </a>
-        </article>
-
-        <article class="blog-card" data-category="kuvvet">
-          <a href="/blog/kalori-acigi-nedir" class="blog-card__link" title="Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak yazısını oku">
-            <img src="/images/blog-deadlift-biyomekanigi-2.jpg" alt="Ahşap kâsede siyah zeytin ve zeytin dalları" title="Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak" width="394" height="207"
-              class="blog-card__img" loading="lazy" style="object-position: 50% 71%;">
-            <div class="blog-card__body">
-              <p class="blog-card__category">Kuvvet</p>
-              <h3 class="blog-card__title">Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak</h3>
-              <p class="blog-card__excerpt">Kral egzersiz deadlift'i anatominize uygun şekilde nasıl optimize edebilirsiniz?</p>
-              <p class="blog-card__meta">
-                <time datetime="2026-03-01">1 Mart 2026</time>
-                <span>10 dk</span>
-              </p>
-            </div>
-          </a>
-        </article>
+        }
       </div>
       <p class="blog-posts__empty" hidden>Bu kategoride henüz yazı yok.</p>
     </section>
@@ -199,7 +119,7 @@
         <div class="cta__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>

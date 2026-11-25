@@ -4,7 +4,7 @@
 
 N-Tier mimarisi (Entities → DataAccess → Business → API) kesinleşti. Sapmaya kapalıdır.
 Tüm iş mantığı Business katmanında, veri erişimi DataAccess katmanında, HTTP sadece API'de.
-Web projesi yalnızca statik siteyi sunar; veriyi API'den alır.
+Web projesi siteyi MVC ile sunar; veriyi sunucu tarafında API'den alır (Business/DataAccess referansı yok).
 Entity asla HTTP yanıtında dışarı çıkmaz — DTO kullanılır.
 
 ---
@@ -72,8 +72,13 @@ Entity asla HTTP yanıtında dışarı çıkmaz — DTO kullanılır.
 - **Önemli:** iş mantığı YOK; sadece Service çağırma
 
 ### **Web** (`EmirCoaching.Web`)
-- Yalnızca statik site (`wwwroot`: HTML/CSS/JS); Business/DataAccess referansı yok
-- Veri `fetch` ile API'den alınır
+- MVC: `Controllers/SiteControllers.cs` (attribute route, temiz adresler: `/paketler/{slug}`, `/blog/{slug}`, `/yasal/{tur}`) + `Views` (Razor). Business/DataAccess referansı yok
+- Veri sunucuda API'den alınır: istemci ve DTO'lar panelle aynı OpenAPI belgesinden (`EmirCoaching.Admin/OpenApi/emircoaching-api.json`) NSwag ile üretilir (`EmirCoaching.Web.Api`); tek kapı `Services/SiteApi.cs` (`Api:CacheSeconds` kadar bellekte önbellek, 404 → null → sayfa 404)
+- `Api:BaseUrl` sunucunun API adresi; tarayıcının kullandığı adres `Api:PublicUrl` (yoksa BaseUrl) layout'ta `<meta name="api-base">` olarak basılır
+- Formlar (iletişim, bülten, diyet başvurusu) tarayıcıdan doğrudan API'ye gider (`wwwroot/js/api.js` → `EmirApi.send`); hata mesajları API'nin Türkçe ProblemDetails'inden gösterilir. Sitenin adresi API'de `Cors:AllowedOrigins`'te olmalı
+- View yardımcıları: `SiteFormat` (fiyat, tarih, vurgulu başlık, ikon anahtarı → iconify), `PackagePerks` ("Pakete Özel" / "6 ve 12 Aylık Pakette" etiketleri), `ContentToc` (editör HTML'inin h2'lerinden içindekiler; AngleSharp)
+- Tag helper kullanılmaz (`<form>`'a antiforgery alanı eklenmesin, işaretleme tasarımla birebir kalsın); partial'lar `Html.PartialAsync` ile
+- Eski `.html` adresleri `Infrastructure/LegacyHtmlRedirectMiddleware` ile 301 yönlenir; 404/5xx tasarımdaki hata sayfalarıdır
 
 ---
 

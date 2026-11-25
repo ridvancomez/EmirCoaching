@@ -278,8 +278,9 @@ public static partial class SeedData
         };
 
         builder.Entity<PageContent>().HasData(
-            Page("home", "Kendini, bahanelerinden daha GÜÇLÜ hale getir", "GÜÇLÜ", lorem, "/images/slider.png",
-                "/paketler.html"),
+            // Başlıktaki satır sonu sitede <br> olur (tasarımdaki kırılım)
+            Page("home", "Kendini, bahanelerinden\ndaha GÜÇLÜ hale getir", "GÜÇLÜ", lorem, "/images/slider.png",
+                "/paketler"),
             Page("paketler", "SANA UYGUN PAKETİ SEÇ, DÖNÜŞÜMÜ BAŞLAT", "DÖNÜŞÜMÜ", lorem, heroBg),
             Page("paket-detay", "Detaylı İnceleme", null,
                 "Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan kapsamlı gelişim planı.",

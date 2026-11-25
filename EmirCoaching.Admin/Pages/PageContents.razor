@@ -25,10 +25,10 @@
 </CrudTable>
 
 <FormDialog @bind-Visible="_dialogOpen" Title="@($"İçerik: {_pageKey}")" Saving="_saving" OnSave="SaveAsync">
-    <MudTextField @bind-Value="_form.Title" Label="Başlık" />
+    <MudTextField @bind-Value="_form.Title" Label="Başlık" Lines="2" HelperText="Enter ile yeni satır: sitede de alt satıra geçer" />
     <MudTextField @bind-Value="_form.HighlightText" Label="Vurgulu kelime" HelperText="Başlıkta mavi görünen kısım" />
     <MudTextField @bind-Value="_form.Description" Label="Açıklama" Lines="3" Sizing="InputSizing.Auto" Class="form-grid__full" />
-    <MudTextField @bind-Value="_form.ButtonUrl" Label="Düğme adresi" HelperText="İsteğe bağlı; site içi (/paketler.html) veya https://" Class="form-grid__full" />
+    <MudTextField @bind-Value="_form.ButtonUrl" Label="Düğme adresi" HelperText="İsteğe bağlı; site içi (/paketler) veya https://" Class="form-grid__full" />
     <div class="form-grid__full">
         <ImageUpload @bind-Value="_form.BackgroundImagePath" Label="Arka plan görseli" Folder="pages" />
     </div>

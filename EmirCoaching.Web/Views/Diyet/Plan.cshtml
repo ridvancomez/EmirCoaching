@@ -1,3 +1,4 @@
+@model DietPlanViewModel
 @{
     ViewData["Title"] = "Kişiye Özel Diyet Planı | Emir Coaching — Uzman Diyetisyen Desteği";
     ViewData["Description"] = "Uzman diyetisyen tarafından hazırlanan kişiye özel diyet planı: kalori ve makro hesabı, günlük 5 öğün, haftalık menü güncellemesi ve WhatsApp ile 1-1 destek.";
@@ -7,7 +8,7 @@
   <main>
     <!-- ==================== Hero (paketler hero'su) ==================== -->
     <section class="paketler-hero" aria-labelledby="diyet-hero-title">
-      <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+      <img src="@(Model.Hero?.BackgroundImageUrl ?? "/images/paketlerslider.png")" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
         title="Emir Coaching Kişiye Özel Diyet Planı" class="paketler-hero__bg">
       <div class="paketler-hero__overlay" aria-hidden="true"></div>
       <div class="paketler-hero__fade" aria-hidden="true"></div>
@@ -25,12 +26,10 @@
         </nav>
 
         <h1 id="diyet-hero-title" class="paketler-hero__title paketler-hero__title--wide">
-          UZMANLARLA ÇALIŞMAK <span class="paketler-hero__title-accent">PROFESYONELLİK</span> GEREKTİRİR
+          @SiteFormat.Highlight(Model.Hero?.Title, Model.Hero?.HighlightText, "paketler-hero__title-accent")
         </h1>
-
         <p class="paketler-hero__text">
-          Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı
-          olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.
+          @Model.Hero?.Description
         </p>
 
         <nav class="paketler-hero__filter" aria-label="Paket kategorileri">
@@ -47,14 +46,17 @@
     <!-- ==================== Program Detay ==================== -->
     <section class="program-detay container" aria-label="Program detayı">
       <article class="program-detay__card" aria-labelledby="program-icerik-title">
+        @if (Model.Program is { } program)
+        {
         <div class="program-detay__author">
-          <img src="/images/uzman-ceyda.jpg" alt="Uzm. Dr. Ceyda Güler" title="Uzm. Dr. Ceyda Güler" width="76"
+          <img src="@(program.DietitianPhotoUrl ?? "/images/uzman-ceyda.jpg")" alt="@program.DietitianTitle @program.DietitianFullName" title="@program.DietitianTitle @program.DietitianFullName" width="76"
             height="76" class="program-detay__avatar">
           <p class="program-detay__author-text">
-            <span class="program-detay__author-name">Uzm. Dr. <strong>Ceyda Güler</strong></span>
+            <span class="program-detay__author-name">@program.DietitianTitle <strong>@program.DietitianFullName</strong></span>
             <span class="program-detay__author-role">Tarafından Hazırlanır</span>
           </p>
         </div>
+        }
 
         <h2 id="program-icerik-title" class="program-detay__title">Program İçeriği</h2>
 
@@ -101,9 +103,10 @@
         <p class="program-ucret__note">Seçtiğin koçluk paketiyle birlikte hazırlanır.</p>
         <hr class="program-ucret__divider">
         <ul class="program-ucret__packages">
-          <li><a href="/paketler#temel-paket" class="program-ucret__package" title="Başlangıç &amp; Deneme paketini incele"><span>Başlangıç &amp; Deneme</span><span class="program-ucret__package-time">3 Aylık</span></a></li>
-          <li><a href="/paketler#orta-paket" class="program-ucret__package" title="Dönüşüm Protokolü paketini incele"><span>Dönüşüm Protokolü</span><span class="program-ucret__package-time">6 Aylık</span></a></li>
-          <li><a href="/paketler#premium-paket" class="program-ucret__package" title="VIP Yaşam Tarzı paketini incele"><span>VIP Yaşam Tarzı</span><span class="program-ucret__package-time">12 Aylık</span></a></li>
+          @foreach (var p in Model.Layout.MenuPackages)
+          {
+          <li><a href="/paketler#@p.Slug" class="program-ucret__package" title="@p.Name paketini incele"><span>@p.Name</span><span class="program-ucret__package-time">@p.DurationMonths Aylık</span></a></li>
+          }
         </ul>
         <a href="/paketler" class="program-ucret__button" title="Koçluk paketlerini incele">Paketleri İncele</a>
       </aside>
@@ -114,27 +117,17 @@
       <div class="container nasil-calisir__inner">
         <h2 id="nasil-calisir-title" class="nasil-calisir__title">Nasıl Çalışır?</h2>
         <ol class="nasil-calisir__steps">
+          @for (var i = 0; i < Model.Steps.Count; i++)
+          {
+              var step = Model.Steps[i];
           <li class="nasil-calisir__step">
             <span class="nasil-calisir__icon" aria-hidden="true">
-              <iconify-icon icon="mdi:clipboard-text" mode="svg" noobserver></iconify-icon>
+              <iconify-icon icon="@step.IconName" mode="svg" noobserver></iconify-icon>
             </span>
-            <h3 class="nasil-calisir__step-title">1. Formu Doldur</h3>
-            <p class="nasil-calisir__step-text">Paketini aldıktan sonra koçun WhatsApp'tan danışan bilgi formunu gönderir; hedeflerini ve beslenme alışkanlıklarını orada paylaşırsın.</p>
+            <h3 class="nasil-calisir__step-title">@(i + 1). @step.Title</h3>
+            <p class="nasil-calisir__step-text">@step.Description</p>
           </li>
-          <li class="nasil-calisir__step">
-            <span class="nasil-calisir__icon" aria-hidden="true">
-              <iconify-icon icon="mdi:silverware-fork-knife" mode="svg" noobserver></iconify-icon>
-            </span>
-            <h3 class="nasil-calisir__step-title">2. Planın Hazırlanır</h3>
-            <p class="nasil-calisir__step-text">Formun ve tahlillerin ulaşınca uzmanımız planını 48 saat içinde hazırlar.</p>
-          </li>
-          <li class="nasil-calisir__step">
-            <span class="nasil-calisir__icon" aria-hidden="true">
-              <iconify-icon icon="mdi:message-text" mode="svg" noobserver></iconify-icon>
-            </span>
-            <h3 class="nasil-calisir__step-title">3. WhatsApp'tan Ulaşılır</h3>
-            <p class="nasil-calisir__step-text">Planın sana WhatsApp üzerinden iletilir ve destek sürecimiz başlar.</p>
-          </li>
+          }
         </ol>
       </div>
     </section>
@@ -147,7 +140,7 @@
         <div class="cta__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>

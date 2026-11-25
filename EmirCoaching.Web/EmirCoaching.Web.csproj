@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="1.10.5" />
     <PackageReference Include="NSwag.ApiDescription.Client" Version="14.7.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -17,11 +18,7 @@
        (tek kaynak: EmirCoaching.Admin/OpenApi/emircoaching-api.json; yenilemek için oradaki Update-OpenApi.ps1).
        Business katmanına referans yoktur. -->
   <ItemGroup>
-    <OpenApiReference Include="..\EmirCoaching.Admin\OpenApi\emircoaching-api.json"
-                      CodeGenerator="NSwagCSharp"
-                      Namespace="EmirCoaching.Web.Api"
-                      ClassName="{controller}Client"
-                      Options="/OperationGenerationMode:MultipleClientsFromOperationId /UseBaseUrl:false /GenerateClientInterfaces:true /JsonLibrary:SystemTextJson /GenerateNullableReferenceTypes:true /GenerateOptionalPropertiesAsNullable:false /DateTimeType:System.DateTime /ArrayType:System.Collections.Generic.List /ArrayInstanceType:System.Collections.Generic.List /ResponseArrayType:System.Collections.Generic.List /GenerateDtoTypes:true /ClassStyle:Poco" />
+    <OpenApiReference Include="..\EmirCoaching.Admin\OpenApi\emircoaching-api.json" CodeGenerator="NSwagCSharp" Namespace="EmirCoaching.Web.Api" ClassName="{controller}Client" Options="/OperationGenerationMode:MultipleClientsFromOperationId /UseBaseUrl:false /GenerateClientInterfaces:true /JsonLibrary:SystemTextJson /GenerateNullableReferenceTypes:true /GenerateOptionalPropertiesAsNullable:false /DateTimeType:System.DateTime /ArrayType:System.Collections.Generic.List /ArrayInstanceType:System.Collections.Generic.List /ResponseArrayType:System.Collections.Generic.List /GenerateDtoTypes:true /ClassStyle:Poco" />
   </ItemGroup>
 
 </Project>

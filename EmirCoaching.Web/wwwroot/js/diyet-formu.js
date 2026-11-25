@@ -1,16 +1,11 @@
-// Diyet formu — 2 adımlı sihirbaz (Kişisel, İletişim), istemci tarafı doğrulama, taslak kaydı (backend yok)
-// Akış: Paket Detay "Satın Al" (?paket=orta&yer=salonda) → bu form → "Bilgilerin alındı" → Shopier (yeni sekme)
+// Diyet formu — 2 adımlı sihirbaz (Kişisel, İletişim), istemci tarafı doğrulama, taslak kaydı, API'ye gönderim
+// Akış: Paket Detay "Satın Al" (/diyet-formu?paket=slug) → bu form → "Bilgilerin alındı" → Shopier (yeni sekme)
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("diyet-form");
   if (!form) return;
 
   const ERROR_CLASS = "diyet-form__field--error";
   const STORAGE_KEY = "emir-diyet-formu-taslak";
-  const PAKET_ADLARI = {
-    temel: "Başlangıç & Deneme",
-    orta: "Dönüşüm Protokolü",
-    premium: "VIP Yaşam Tarzı",
-  };
 
   const messageFor = (control) => {
     if (control.validity.valueMissing) {
@@ -107,16 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("input", saveDraft);
   form.addEventListener("change", saveDraft);
 
-  /* ---------- Paket: URL'den gelen seçim taslağın önüne geçer ---------- */
+  /* ---------- Paket: sunucu ?paket=slug seçimini basar; taslak bunu ezmesin ---------- */
   const paketSelect = form.querySelector("#paket");
-  const params = new URLSearchParams(location.search);
-  if (paketSelect && params.get("paket")) {
-    const yer = params.get("yer") === "evde" ? "evde" : "salonda";
-    const value = `${params.get("paket")}-${yer}`;
-    if (paketSelect.querySelector(`option[value="${value}"]`)) {
-      paketSelect.value = value;
-      saveDraft();
-    }
+  const urlPaket = new URLSearchParams(location.search).get("paket");
+  if (paketSelect && urlPaket && paketSelect.querySelector(`option[value="${CSS.escape(urlPaket)}"]`)) {
+    paketSelect.value = urlPaket;
+    saveDraft();
   }
 
   /* ---------- Sihirbaz ---------- */
@@ -202,20 +193,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const lastControls = [...stepControls(steps.length - 1), ...consents.querySelectorAll("input")];
     if (!validate(lastControls)) return;
 
-    // Backend: form verisi burada sunucuya gönderilir; Shopier linki yanıtla gelir
-    const [kod, yer] = (paketSelect.value || "orta-salonda").split("-");
-    const paketAdi = (PAKET_ADLARI[kod] || PAKET_ADLARI.orta) + (yer === "evde" ? " (Evde)" : "");
+    // Başvuru API'ye gider; başarıda seçilen paketin Shopier linki gösterilir
+    const option = paketSelect.selectedOptions[0];
+    const evde = option.parentElement.label === "Evde";
+    const paketAdi = option.dataset.name + (evde ? " (Evde)" : "");
+    const value = (name) => form.elements[name].value;
 
-    clearDraft();
-    form.reset();
-    form.hidden = true;
-    if (done) {
+    EmirApi.send(form, "/diet-form-submissions", {
+      packageId: Number(option.dataset.id),
+      fullName: value("ad-soyad"),
+      gender: value("cinsiyet") === "kadin" ? 1 : 0,
+      age: Number(value("yas")),
+      email: value("eposta"),
+      phoneNumber: value("telefon"),
+      heightCm: Number(value("boy")),
+      currentWeight: Number(value("mevcut-kilo")),
+      targetWeight: Number(value("hedef-kilo")),
+      privacyAccepted: form.elements["kvkk-aydinlatma"].checked,
+      healthDataConsent: form.elements["saglik-acik-riza"].checked,
+    }).then((ok) => {
+      if (!ok) return;
+      clearDraft();
+      form.reset();
+      form.hidden = true;
+      if (!done) return;
       const adEl = done.querySelector(".diyet-form__done-paket");
       if (adEl) adEl.textContent = paketAdi;
+      const pay = done.querySelector(".diyet-form__pay");
+      if (pay && option.dataset.purchaseUrl) pay.href = option.dataset.purchaseUrl;
       done.hidden = false;
       done.focus({ preventScroll: true });
       const top = done.getBoundingClientRect().top + window.scrollY - 110;
       window.scrollTo({ top: Math.max(0, top) });
-    }
+    });
   });
 });

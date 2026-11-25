@@ -52,7 +52,7 @@
         <div class="cta__actions hata-404__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>

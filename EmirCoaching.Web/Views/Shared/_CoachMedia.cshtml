@@ -1,0 +1,15 @@
+@model CoachProfileResponse?
+        <div class="coach__media">
+          <img src="@(Model?.VideoCoverUrl ?? "/images/hakkimda-video.png")" alt="@Model?.FullName tanıtım videosundan bir kare" title="Emir Coaching tanıtım videosu"
+            width="1238" height="664" class="coach__poster" loading="lazy">
+          <button type="button" class="coach__play" title="Tanıtım videosunu oynat" aria-label="Tanıtım videosunu oynat"
+            data-video-src="@Model?.VideoUrl" data-video-open>
+            <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
+          </button>
+          <div class="coach__label">
+            <img src="@(Model?.AvatarUrl ?? "/images/yazar-ibrahim-emir-kucuk.jpg")" alt="@Model?.FullName" title="@Model?.FullName" width="52" height="52"
+              class="coach__avatar" loading="lazy">
+            <span class="coach__label-text"><strong class="coach__name">@Model?.FullName</strong><span class="coach__role">@string.Join(" · ", new[] { Model?.Title, Model?.Experience }.Where(x => !string.IsNullOrWhiteSpace(x)))</span></span>
+          </div>
+        </div>
+

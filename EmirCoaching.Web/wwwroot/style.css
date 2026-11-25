@@ -16352,3 +16352,15 @@ iconify-icon[icon="bi:award-fill"] {
 .yasal-icerik>:is(p, ul, ol) strong {
   color: #dee2f6;
 }
+
+/* Form gönderim bildirimi (js/api.js): API'den gelen Türkçe hata veya başarı mesajı */
+.form-feedback {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ff7a7a;
+}
+
+.form-feedback--success {
+  color: #4ade80;
+}

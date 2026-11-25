@@ -134,11 +134,25 @@
     });
 
     if (form) {
+      // Mesaj API'ye gider (js/api.js); hata olursa Türkçe mesaj formun altında görünür
       form.addEventListener("submit", function (event) {
         event.preventDefault();
-        closeModal();
-        openContactSuccessModal();
-        form.reset();
+        var data = new FormData(form);
+        var packageId = parseInt(data.get("package"), 10);
+        EmirApi.send(form, "/contact-messages", {
+          name: data.get("name"),
+          phone: data.get("phone"),
+          email: data.get("email"),
+          packageId: isNaN(packageId) ? null : packageId,
+          location: data.get("location") || null,
+          message: data.get("message") || null,
+          privacyAccepted: form.querySelector("#contact-consent").checked
+        }).then(function (ok) {
+          if (!ok) return;
+          closeModal();
+          openContactSuccessModal();
+          form.reset();
+        });
       });
     }
   }
@@ -383,8 +397,34 @@
     });
   }
 
+  // Footer bülten formu: tek onay kutusu Gizlilik + Ticari İleti onayını birlikte kapsar
+  function initNewsletter() {
+    var form = document.querySelector(".footer__form");
+    if (!form) {
+      return;
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      var privacy = form.querySelector("#footer-privacy").checked;
+      EmirApi.send(form, "/newsletter-subscribers", {
+        email: form.querySelector("#footer-email").value,
+        consents: { Gizlilik: privacy, TicariIleti: privacy }
+      }).then(function (ok) {
+        if (!ok) return;
+        form.reset();
+        EmirApi.feedback(form, ["Bültene kaydoldunuz, teşekkürler!"], true);
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initReveal();
+    initNewsletter();
     initMobileDrawer();
     initHideOnScroll();
     initContactModal();

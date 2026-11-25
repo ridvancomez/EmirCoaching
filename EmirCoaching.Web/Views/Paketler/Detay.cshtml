@@ -1,6 +1,8 @@
+@model PackageDetailViewModel
 @{
-    ViewData["Title"] = "Dönüşüm Protokolü Paket Detayı | Emir Coaching — 6 Aylık Dönüşüm Programı";
-    ViewData["Description"] = "Emir Coaching Dönüşüm Protokolü: 6 aylık dönüşüm programı. Antrenman, beslenme, takip ve koçluk modülleriyle toplam 15 kalem içerik, WhatsApp ile 7/24 iletişim.";
+    var package = Model.Package;
+    ViewData["Title"] = package.MetaTitle ?? $"{package.Name} Paket Detayı | Emir Coaching — {package.Subtitle}";
+    ViewData["Description"] = package.MetaDescription ?? package.ShortDescription;
     ViewData["ActiveNav"] = "paketler";
 }
 
@@ -8,7 +10,7 @@
     <!-- ==================== Hero (sade varyant) ==================== -->
     <section class="paketler-hero paketler-hero--compact" aria-labelledby="paket-detay-title">
       <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
-        title="Emir Coaching Dönüşüm Protokolü" class="paketler-hero__bg">
+        title="Emir Coaching @package.Name" class="paketler-hero__bg">
       <div class="paketler-hero__overlay" aria-hidden="true"></div>
       <div class="paketler-hero__fade" aria-hidden="true"></div>
 
@@ -19,7 +21,7 @@
               <a href="/" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
             </li>
             <li class="paketler-hero__breadcrumb-item">
-              <a href="/paketler/donusum-protokolu" class="paketler-hero__breadcrumb-link" title="Dönüşüm Protokolü" aria-current="page">Dönüşüm Protokolü</a>
+              <a href="/paketler/@package.Slug" class="paketler-hero__breadcrumb-link" title="@package.Name" aria-current="page">@package.Name</a>
             </li>
           </ul>
         </nav>
@@ -27,8 +29,7 @@
         <div class="container paketler-hero__intro">
           <h1 id="paket-detay-title" class="paketler-hero__heading">Detaylı İnceleme</h1>
           <p class="paketler-hero__lead">
-            Hedeflerinize ulaşmanız için özel olarak tasarlanmış, bilimsel temellere dayanan 6 aylık kapsamlı
-            gelişim planı.
+            @package.ShortDescription
           </p>
         </div>
       </div>
@@ -38,126 +39,63 @@
     <section class="paket-detay paket-detay--sticky-kaydirmali container" aria-label="Paket içeriği">
       <div class="paket-detay__modules">
         <div class="paket-detay__grid">
-          <article class="modul-card" aria-labelledby="modul-1-title">
+          @for (var m = 0; m < package.Modules.Count; m++)
+          {
+              var module = package.Modules[m];
+          <article class="modul-card" aria-labelledby="modul-@(m + 1)-title">
             <header class="modul-card__header">
-              <span class="modul-card__icon"><iconify-icon icon="mdi:dumbbell" mode="svg" noobserver class="modul-card__icon-svg" aria-hidden="true"></iconify-icon></span>
-              <h2 id="modul-1-title" class="modul-card__title">Antrenman</h2>
-              <span class="modul-card__badge">4 Modül</span>
+              <span class="modul-card__icon"><iconify-icon icon="@SiteFormat.ModuleIcon(module.IconKey)" mode="svg" noobserver class="modul-card__icon-svg" aria-hidden="true"></iconify-icon></span>
+              <h2 id="modul-@(m + 1)-title" class="modul-card__title">@module.Title</h2>
+              <span class="modul-card__badge">@module.Items.Count(i => !i.IsLocked) Modül</span>
             </header>
             <ul class="modul-card__list">
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Kişiye Özel Antrenman Planlaması</span>
+              @foreach (var item in module.Items.OrderBy(i => i.SortOrder))
+              {
+                  // Kilitli satır modül sayısına ve toplama dahil edilmez (js/paket-detay-moduller.js)
+                  var perk = Model.Perks.Label(item.Text, item.IsLocked);
+                  if (item.IsLocked)
+                  {
+              <li class="modul-card__item modul-card__item--kilitli">
+                <iconify-icon icon="mdi:lock-outline" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
+                <span>
+                  @if (perk is not null) {<span class="modul-card__ozel-label">@perk</span>}
+                  @item.Text
+                </span>
               </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Haftalık Program Güncellemesi</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Hareket Tekniği Videoları</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Sakatlık Uyarlaması</span>
-              </li>
-            </ul>
-          </article>
-          <article class="modul-card" aria-labelledby="modul-2-title">
-            <header class="modul-card__header">
-              <span class="modul-card__icon"><iconify-icon icon="mdi:silverware-fork-knife" mode="svg" noobserver class="modul-card__icon-svg" aria-hidden="true"></iconify-icon></span>
-              <h2 id="modul-2-title" class="modul-card__title">Beslenme</h2>
-              <span class="modul-card__badge">4 Modül</span>
-            </header>
-            <ul class="modul-card__list">
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Kalorisi Hesaplanmış Beslenme Planı</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Öğün Şablonları</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Dışarıda Yeme Rehberi</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Supplement Planlaması</span>
-              </li>
-            </ul>
-            <a href="/diyet-plani" class="modul-card__link" title="Kişiye özel beslenme planının nasıl hazırlandığını incele">Beslenme planı nasıl hazırlanır? <span aria-hidden="true">→</span></a>
-          </article>
-          <article class="modul-card" aria-labelledby="modul-3-title">
-            <header class="modul-card__header">
-              <span class="modul-card__icon"><iconify-icon icon="mdi:chart-line" mode="svg" noobserver class="modul-card__icon-svg" aria-hidden="true"></iconify-icon></span>
-              <h2 id="modul-3-title" class="modul-card__title">Takip &amp; Ölçüm</h2>
-              <span class="modul-card__badge">3 Modül</span>
-            </header>
-            <ul class="modul-card__list">
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Haftalık Durum Değerlendirmesi</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Vücut Kompozisyonu Takibi</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Aylık Detaylı Rapor</span>
-              </li>
-            </ul>
-          </article>
-          <article class="modul-card" aria-labelledby="modul-4-title">
-            <header class="modul-card__header">
-              <span class="modul-card__icon"><iconify-icon icon="mdi:whistle" mode="svg" noobserver class="modul-card__icon-svg" aria-hidden="true"></iconify-icon></span>
-              <h2 id="modul-4-title" class="modul-card__title">Koçluk</h2>
-              <span class="modul-card__badge">4 Modül</span>
-            </header>
-            <ul class="modul-card__list">
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Birebir WhatsApp İletişimi</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Anlık Program Revizeleri</span>
-              </li>
-              <li class="modul-card__item">
-                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                <span>Kan Tahlili Analizi &amp; Revize</span>
-              </li>
-              <!-- Pakete özel ayrıcalık: Zoom görüşmesi 6 Aylık Dönüşüm Protokolü ve 12 Aylık VIP Yaşam Tarzı
-                   paketlerinde var. Backend pakete göre iki halden birini basar; kilitli satır modül sayısına ve
-                   toplama dahil edilmez (js/paket-detay-moduller.js).
-                   İçermeyen pakette (3 Aylık Başlangıç &amp; Deneme):
-                   <li class="modul-card__item modul-card__item--kilitli">
-                     <iconify-icon icon="mdi:lock-outline" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
-                     <span>
-                       <span class="modul-card__ozel-label">6 ve 12 Aylık Pakette</span>
-                       Yüz Yüze Zoom Görüşmesi
-                     </span>
-                   </li>
-                   İçeren pakette (6 ve 12 Aylık; bu sayfa 6 Aylık Dönüşüm Protokolü): aşağıdaki satır. -->
+                  }
+                  else if (perk is not null)
+                  {
               <li class="modul-card__item modul-card__item--ozel">
                 <iconify-icon icon="mdi:star" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
                 <span>
-                  <span class="modul-card__ozel-label">Pakete Özel</span>
-                  Yüz Yüze Zoom Görüşmesi
+                  <span class="modul-card__ozel-label">@perk</span>
+                  @item.Text
                 </span>
               </li>
+                  }
+                  else
+                  {
+              <li class="modul-card__item">
+                <iconify-icon icon="mdi:check-circle" mode="svg" noobserver class="modul-card__check" aria-hidden="true"></iconify-icon>
+                <span>@item.Text</span>
+              </li>
+                  }
+              }
             </ul>
+            @if (module.IconKey == "beslenme")
+            {
+            <a href="/diyet-plani" class="modul-card__link" title="Kişiye özel beslenme planının nasıl hazırlandığını incele">Beslenme planı nasıl hazırlanır? <span aria-hidden="true">→</span></a>
+            }
           </article>
+          }
         </div>
-        <p class="paket-detay__total">Toplam <span class="paket-detay__total-count">15</span> kalem içerik</p>
+        <p class="paket-detay__total">Toplam <span class="paket-detay__total-count">@package.TotalItemCount</span> kalem içerik</p>
       </div>
 
       <aside class="fiyat-karti" aria-labelledby="fiyat-karti-title">
-        <h2 id="fiyat-karti-title" class="fiyat-karti__title">Dönüşüm Protokolü</h2>
-        <p class="fiyat-karti__subtitle">6 Aylık Dönüşüm Programı</p>
-        <p class="fiyat-karti__price">₺ 15.999</p>
+        <h2 id="fiyat-karti-title" class="fiyat-karti__title">@package.Name</h2>
+        <p class="fiyat-karti__subtitle">@package.Subtitle</p>
+        <p class="fiyat-karti__price">@SiteFormat.Price(package.Price).Replace("₺", "₺ ")</p>
         <ul class="fiyat-karti__list">
           <li class="fiyat-karti__item">
             <iconify-icon icon="mdi:star-outline" mode="svg" noobserver class="fiyat-karti__star" aria-hidden="true"></iconify-icon>
@@ -193,8 +131,8 @@
           </li>
         </ul>
         <!-- Satın Al → bilgi formu (paket seçili gelir); ödeme formdan sonra Shopier'de -->
-        <a href="/diyet-formu?paket=orta&amp;yer=salonda" class="hero__button hero__button--secondary fiyat-karti__button fiyat-karti__button--shopier"
-          title="Dönüşüm Protokolü paketi için bilgi formuna geç">
+        <a href="/diyet-formu?paket=@package.Slug" class="hero__button hero__button--secondary fiyat-karti__button fiyat-karti__button--shopier"
+          title="@package.Name paketi için bilgi formuna geç">
           <span>Satın Al</span>
         </a>
         <p class="fiyat-karti__note">Kredi kartı ile taksit imkanı mevcuttur.</p>
@@ -220,8 +158,8 @@
           </li>
         </ul>
         <div class="assurance__legal">
-          <a href="#" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
-          <a href="#" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
+          <a href="/yasal/mesafeli-satis" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
+          <a href="/yasal/iptal-iade" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
         </div>
       </div>
     </section>
@@ -230,45 +168,22 @@
     <section class="yorumlar container" aria-labelledby="yorumlar-title">
       <h2 id="yorumlar-title" class="paket-detay__heading">Öğrenci Yorumları</h2>
       <div class="yorumlar__grid">
+        @foreach (var review in package.Testimonials)
+        {
+            var stars = (int)Math.Round(review.Rating);
         <article class="yorum-card">
-          <div class="yorum-card__stars" role="img" aria-label="5 üzerinden 5 yıldız">
+          <div class="yorum-card__stars" role="img" aria-label="5 üzerinden @stars yıldız">
+            @for (var s = 0; s < stars; s++)
+            {
               <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
+            }
           </div>
           <blockquote class="yorum-card__text">
-            <p>"Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."</p>
+            <p>"@review.Text"</p>
           </blockquote>
-          <p class="yorum-card__author">- Ahmet Y.</p>
+          <p class="yorum-card__author">- @review.Name</p>
         </article>
-        <article class="yorum-card">
-          <div class="yorum-card__stars" role="img" aria-label="5 üzerinden 5 yıldız">
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-          </div>
-          <blockquote class="yorum-card__text">
-            <p>"Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."</p>
-          </blockquote>
-          <p class="yorum-card__author">- Caner K.</p>
-        </article>
-        <article class="yorum-card">
-          <div class="yorum-card__stars" role="img" aria-label="5 üzerinden 5 yıldız">
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-              <iconify-icon icon="mdi:star" mode="svg" noobserver class="yorum-card__star" aria-hidden="true"></iconify-icon>
-          </div>
-          <blockquote class="yorum-card__text">
-            <p>"Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."</p>
-          </blockquote>
-          <p class="yorum-card__author">- Burak M.</p>
-        </article>
+        }
       </div>
     </section>
 
@@ -280,7 +195,7 @@
         <div class="cta__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>
@@ -291,6 +206,5 @@
   </main>
 
 @section Scripts {
-  <script src="/js/paket-detay.js"></script>
   <script src="/js/paket-detay-moduller.js"></script>
 }

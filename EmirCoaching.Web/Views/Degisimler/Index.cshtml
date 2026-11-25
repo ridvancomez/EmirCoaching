@@ -1,3 +1,4 @@
+@model TransformationsViewModel
 @{
     ViewData["Title"] = "Değişimler | Emir Coaching — Gerçek Danışan Dönüşümleri";
     ViewData["Description"] = "Emir Coaching danışanlarının gerçek önce/sonra değişimleri. Yağ kaybı, kas kazanımı ve kondisyon hedeflerine ulaşan danışanlarımızın hikayelerini ve sonuçlarını inceleyin.";
@@ -7,7 +8,7 @@
   <main>
     <!-- ==================== Değişimler Hero + Stats ==================== -->
     <section class="paketler-hero paketler-hero--compact blog-hero degisim-hero" aria-labelledby="degisim-title">
-      <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+      <img src="@(Model.Hero?.BackgroundImageUrl ?? "/images/paketlerslider.png")" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
         title="Emir Coaching Değişimler" class="paketler-hero__bg">
       <div class="paketler-hero__overlay" aria-hidden="true"></div>
       <div class="paketler-hero__fade" aria-hidden="true"></div>
@@ -25,15 +26,14 @@
         </nav>
 
         <h1 id="degisim-title" class="paketler-hero__title degisim-hero__title">
-          Rakamlar Değil, <span class="paketler-hero__title-accent">Gerçek İnsanlar</span>
+          @SiteFormat.Highlight(Model.Hero?.Title, Model.Hero?.HighlightText, "paketler-hero__title-accent")
         </h1>
         <p class="degisim-hero__lead">
-          Herkesin başlangıç noktası farklıdır. Önemli olan, hedefe giden yolda gösterilen kararlılık ve doğru
-          stratejidir. İşte kanıtı.
+          @Model.Hero?.Description
         </p>
         <div class="cta__actions degisim-hero__actions">
           <a href="/paketler" class="hero__button hero__button--primary" title="Paketleri incele ve hemen başla">Hemen Başla</a>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>
@@ -76,18 +76,21 @@
       <div class="degisim-carousel" data-carousel data-filter-animate>
         <div class="degisim-carousel__viewport">
           <div class="degisim-carousel__track">
-        <article class="degisim-card" data-category="yag-kaybi" aria-labelledby="degisim-mert-title">
-          <figure class="compare compare--kart" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-1-before-kare.jpg" alt="Mert adlı erkek danışanın programdan önceki hali" title="Mert — öncesi" width="514" height="600"
+        @foreach (var t in Model.Carousel)
+        {
+            var key = $"{ContentToc.Slug(t.ClientName)}-{t.Id}";
+        <article class="degisim-card" data-category="@t.TransformationTypeSlug" aria-labelledby="degisim-@key-title">
+          <figure class="compare compare--kart@(t.AlignBottom ? " compare--alta-yasli" : "")" data-compare data-compare-tap="only-popup">
+            <img src="@(t.BeforeSquareUrl ?? t.BeforeImageUrl)" alt="@t.ClientName adlı danışanın programdan önceki hali" title="@t.ClientName — öncesi" width="514" height="600"
               class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-1-after-kare.jpg" alt="Mert adlı erkek danışanın programdan sonraki hali" title="Mert — sonrası" width="604" height="600"
+            <img src="@(t.AfterSquareUrl ?? t.AfterImageUrl)" alt="@t.ClientName adlı danışanın programdan sonraki hali" title="@t.ClientName — sonrası" width="604" height="600"
               class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
             <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
               width="568" height="136" class="compare__logo" draggable="false">
             <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
             <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="mert"
-              title="Mert'in değişim hikayesini büyüt" aria-label="Mert'in değişim hikayesini büyüt">
+            <button type="button" class="compare__zoom" data-hikaye-open="@key"
+              title="@t.ClientName'in değişim hikayesini büyüt" aria-label="@t.ClientName'in değişim hikayesini büyüt">
               <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             </button>
             <span class="compare__divider" aria-hidden="true">
@@ -95,394 +98,35 @@
                 <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
               </span>
             </span>
-            <label for="degisim-range-mert" class="visually-hidden">Mert: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-mert" class="compare__range" min="0" max="100" step="1" value="50">
+            <label for="degisim-range-@key" class="visually-hidden">@t.ClientName: öncesi ve sonrası karşılaştırma</label>
+            <input type="range" id="degisim-range-@key" class="compare__range" min="0" max="100" step="1" value="50">
           </figure>
           <div class="degisim-card__body">
-            <h3 id="degisim-mert-title" class="degisim-card__name">Mert, 28</h3>
+            <h3 id="degisim-@key-title" class="degisim-card__name">@t.ClientName, @t.Age</h3>
             <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">12 Hafta</li>
-              <li class="degisim-card__tag">Yağ Kaybı</li>
+              <li class="degisim-card__tag">@t.DurationWeeks Hafta</li>
+              <li class="degisim-card__tag">@t.TransformationTypeName</li>
             </ul>
             <blockquote class="degisim-card__quote">
-              <p>"Sadece fiziksel değil, mental olarak da büyük bir değişim yaşadım. Disiplin kelimesinin anlamını öğrendim."</p>
+              <p>"@t.Quote"</p>
             </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">-12 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">-%8</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+2 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="mert"
-              title="Mert'in değişim hikayesini oku">
+            @await Html.PartialAsync("_TransformationMetrics", t.Metrics)
+            <button type="button" class="degisim-card__link" data-hikaye-open="@key"
+              title="@t.ClientName'in değişim hikayesini oku">
               Hikayeyi Oku
               <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             </button>
           </div>
           <template class="degisim-card__story">
-            <p>Programa başladığımda 98 kiloydum ve merdiven çıkarken bile nefes nefese kalıyordum. Yıllarca farklı diyetler denemiş, her seferinde birkaç hafta sonra bırakmıştım.</p>
-            <p>İlk haftalarda en zorlandığım şey düzen oldu: öğünleri tartmak, antrenmanları kaçırmamak, uykuyu ciddiye almak. Haftalık kontrollerde planım küçük adımlarla güncellendi; hiçbir zaman aç kalmadım.</p>
-            <p>12 haftanın sonunda 12 kilo verdim, yağ oranım %8 düştü ve kas kütlemi korudum. Ama asıl kazancım disiplin oldu: artık antrenmana motivasyon beklemeden gidiyorum.</p>
+            @foreach (var paragraph in SiteFormat.Paragraphs(t.Story))
+            {
+            <p>@paragraph</p>
+            }
           </template>
         </article>
-        <article class="degisim-card" data-category="kas-kazanimi" aria-labelledby="degisim-can-title">
-          <figure class="compare compare--kart" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-1-before-kare.jpg" alt="Can adlı erkek danışanın programdan önceki hali" title="Can — öncesi" width="514" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-1-after-kare.jpg" alt="Can adlı erkek danışanın programdan sonraki hali" title="Can — sonrası" width="604" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="can"
-              title="Can'in değişim hikayesini büyüt" aria-label="Can'in değişim hikayesini büyüt">
-              <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="degisim-range-can" class="visually-hidden">Can: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-can" class="compare__range" min="0" max="100" step="1" value="40">
-          </figure>
-          <div class="degisim-card__body">
-            <h3 id="degisim-can-title" class="degisim-card__name">Can, 32</h3>
-            <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">16 Hafta</li>
-              <li class="degisim-card__tag">Kas Kazanımı</li>
-            </ul>
-            <blockquote class="degisim-card__quote">
-              <p>"Kilo alamıyordum, yıllardır aynı formdaydım. Doğru yükleme ve beslenme planı ile tabularımı yıktım."</p>
-            </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">+8 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">Sabit</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+6.5 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="can"
-              title="Can'in değişim hikayesini oku">
-              Hikayeyi Oku
-              <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-          </div>
-          <template class="degisim-card__story">
-            <p>Yıllardır spor salonuna gidiyordum ama tartıdaki rakam hiç değişmiyordu. Ne kadar yesem de kilo alamadığımı düşünüyordum; aslında ne yediğimi hiç ölçmemiştim.</p>
-            <p>Koçumla önce gerçek kalori ihtiyacımı hesapladık. Antrenmanlarımı ilerleyici yüklemeye göre yeniden kurduk ve her hafta ağırlıkları kayıt altına aldık.</p>
-            <p>16 haftada 8 kilo aldım ve bunun 6.5 kilosu kas kütlesiydi; yağ oranım sabit kaldı. Aynada gördüğüm değişimden daha önemlisi, kendime olan güvenimin geri gelmesi oldu.</p>
-          </template>
-        </article>
-        <article class="degisim-card" data-category="yag-kaybi" aria-labelledby="degisim-elif-title">
-          <figure class="compare compare--kart compare--alta-yasli" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Elif adlı kadın danışanın programdan önceki hali" title="Elif — öncesi" width="556" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Elif adlı kadın danışanın programdan sonraki hali" title="Elif — sonrası" width="548" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="elif"
-              title="Elif'in değişim hikayesini büyüt" aria-label="Elif'in değişim hikayesini büyüt">
-              <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="degisim-range-elif" class="visually-hidden">Elif: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-elif" class="compare__range" min="0" max="100" step="1" value="60">
-          </figure>
-          <div class="degisim-card__body">
-            <h3 id="degisim-elif-title" class="degisim-card__name">Elif, 26</h3>
-            <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">20 Hafta</li>
-              <li class="degisim-card__tag">Kondisyon &amp; Yağ Kaybı</li>
-            </ul>
-            <blockquote class="degisim-card__quote">
-              <p>"Sürekli diyet yapıp bırakıyordum. Sürdürülebilir bir sistemin ne demek olduğunu burada anladım."</p>
-            </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">-8 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">-%6</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+1 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="elif"
-              title="Elif'in değişim hikayesini oku">
-              Hikayeyi Oku
-              <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-          </div>
-          <template class="degisim-card__story">
-            <p>Sürekli diyet yapıp bırakıyordum. Her yeni programın ilk haftasında çok heyecanlı olur, sonra kısıtlamalardan sıkılıp eski alışkanlıklarıma dönerdim.</p>
-            <p>Bu kez yasaklar yerine sürdürülebilir bir sistem kurduk: sevdiğim yemekler planın içindeydi, antrenmanlarım kondisyonumu adım adım artıracak şekilde ilerledi.</p>
-            <p>20 haftanın sonunda 8 kilo verdim, yağ oranım %6 azaldı ve 1 kilo kas kazandım. Artık merdivenleri koşarak çıkıyorum ve bir diyete değil, bir yaşam tarzına bağlıyım.</p>
-          </template>
-        </article>
-
-        <article class="degisim-card" data-category="yag-kaybi" aria-labelledby="degisim-mert-2-title">
-          <figure class="compare compare--kart" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-1-before-kare.jpg" alt="Mert adlı erkek danışanın programdan önceki hali" title="Mert — öncesi" width="514" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-1-after-kare.jpg" alt="Mert adlı erkek danışanın programdan sonraki hali" title="Mert — sonrası" width="604" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="mert"
-              title="Mert'in değişim hikayesini büyüt" aria-label="Mert'in değişim hikayesini büyüt">
-              <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="degisim-range-mert-2" class="visually-hidden">Mert: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-mert-2" class="compare__range" min="0" max="100" step="1" value="50">
-          </figure>
-          <div class="degisim-card__body">
-            <h3 id="degisim-mert-2-title" class="degisim-card__name">Mert, 28</h3>
-            <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">12 Hafta</li>
-              <li class="degisim-card__tag">Yağ Kaybı</li>
-            </ul>
-            <blockquote class="degisim-card__quote">
-              <p>"Sadece fiziksel değil, mental olarak da büyük bir değişim yaşadım. Disiplin kelimesinin anlamını öğrendim."</p>
-            </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">-12 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">-%8</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+2 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="mert"
-              title="Mert'in değişim hikayesini oku">
-              Hikayeyi Oku
-              <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-          </div>
-          <template class="degisim-card__story">
-            <p>Programa başladığımda 98 kiloydum ve merdiven çıkarken bile nefes nefese kalıyordum. Yıllarca farklı diyetler denemiş, her seferinde birkaç hafta sonra bırakmıştım.</p>
-            <p>İlk haftalarda en zorlandığım şey düzen oldu: öğünleri tartmak, antrenmanları kaçırmamak, uykuyu ciddiye almak. Haftalık kontrollerde planım küçük adımlarla güncellendi; hiçbir zaman aç kalmadım.</p>
-            <p>12 haftanın sonunda 12 kilo verdim, yağ oranım %8 düştü ve kas kütlemi korudum. Ama asıl kazancım disiplin oldu: artık antrenmana motivasyon beklemeden gidiyorum.</p>
-          </template>
-        </article>
-        <article class="degisim-card" data-category="kas-kazanimi" aria-labelledby="degisim-can-2-title">
-          <figure class="compare compare--kart" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-1-before-kare.jpg" alt="Can adlı erkek danışanın programdan önceki hali" title="Can — öncesi" width="514" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-1-after-kare.jpg" alt="Can adlı erkek danışanın programdan sonraki hali" title="Can — sonrası" width="604" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="can"
-              title="Can'in değişim hikayesini büyüt" aria-label="Can'in değişim hikayesini büyüt">
-              <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="degisim-range-can-2" class="visually-hidden">Can: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-can-2" class="compare__range" min="0" max="100" step="1" value="40">
-          </figure>
-          <div class="degisim-card__body">
-            <h3 id="degisim-can-2-title" class="degisim-card__name">Can, 32</h3>
-            <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">16 Hafta</li>
-              <li class="degisim-card__tag">Kas Kazanımı</li>
-            </ul>
-            <blockquote class="degisim-card__quote">
-              <p>"Kilo alamıyordum, yıllardır aynı formdaydım. Doğru yükleme ve beslenme planı ile tabularımı yıktım."</p>
-            </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">+8 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">Sabit</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+6.5 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="can"
-              title="Can'in değişim hikayesini oku">
-              Hikayeyi Oku
-              <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-          </div>
-          <template class="degisim-card__story">
-            <p>Yıllardır spor salonuna gidiyordum ama tartıdaki rakam hiç değişmiyordu. Ne kadar yesem de kilo alamadığımı düşünüyordum; aslında ne yediğimi hiç ölçmemiştim.</p>
-            <p>Koçumla önce gerçek kalori ihtiyacımı hesapladık. Antrenmanlarımı ilerleyici yüklemeye göre yeniden kurduk ve her hafta ağırlıkları kayıt altına aldık.</p>
-            <p>16 haftada 8 kilo aldım ve bunun 6.5 kilosu kas kütlesiydi; yağ oranım sabit kaldı. Aynada gördüğüm değişimden daha önemlisi, kendime olan güvenimin geri gelmesi oldu.</p>
-          </template>
-        </article>
-          <article class="degisim-card" data-category="yag-kaybi" aria-labelledby="degisim-elif-2-title">
-          <figure class="compare compare--kart compare--alta-yasli" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Elif adlı kadın danışanın programdan önceki hali" title="Elif — öncesi" width="556" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Elif adlı kadın danışanın programdan sonraki hali" title="Elif — sonrası" width="548" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="elif"
-              title="Elif'in değişim hikayesini büyüt" aria-label="Elif'in değişim hikayesini büyüt">
-              <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="degisim-range-elif-2" class="visually-hidden">Elif: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-elif-2" class="compare__range" min="0" max="100" step="1" value="60">
-          </figure>
-          <div class="degisim-card__body">
-            <h3 id="degisim-elif-2-title" class="degisim-card__name">Elif, 26</h3>
-            <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">20 Hafta</li>
-              <li class="degisim-card__tag">Kondisyon &amp; Yağ Kaybı</li>
-            </ul>
-            <blockquote class="degisim-card__quote">
-              <p>"Sürekli diyet yapıp bırakıyordum. Sürdürülebilir bir sistemin ne demek olduğunu burada anladım."</p>
-            </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">-8 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">-%6</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+1 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="elif"
-              title="Elif'in değişim hikayesini oku">
-              Hikayeyi Oku
-              <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-          </div>
-            <template class="degisim-card__story">
-              <p>Sürekli diyet yapıp bırakıyordum. Her yeni programın ilk haftasında çok heyecanlı olur, sonra kısıtlamalardan sıkılıp eski alışkanlıklarıma dönerdim.</p>
-              <p>Bu kez yasaklar yerine sürdürülebilir bir sistem kurduk: sevdiğim yemekler planın içindeydi, antrenmanlarım kondisyonumu adım adım artıracak şekilde ilerledi.</p>
-              <p>20 haftanın sonunda 8 kilo verdim, yağ oranım %6 azaldı ve 1 kilo kas kazandım. Artık merdivenleri koşarak çıkıyorum ve bir diyete değil, bir yaşam tarzına bağlıyım.</p>
-            </template>
-        </article>
-        <article class="degisim-card" data-category="yag-kaybi" aria-labelledby="degisim-elif-3-title">
-          <figure class="compare compare--kart compare--alta-yasli" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Elif adlı kadın danışanın programdan önceki hali" title="Elif — öncesi" width="556" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Elif adlı kadın danışanın programdan sonraki hali" title="Elif — sonrası" width="548" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Önce</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonra</span>
-            <button type="button" class="compare__zoom" data-hikaye-open="elif"
-              title="Elif'in değişim hikayesini büyüt" aria-label="Elif'in değişim hikayesini büyüt">
-              <iconify-icon icon="mdi:arrow-expand" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="degisim-range-elif-3" class="visually-hidden">Elif: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="degisim-range-elif-3" class="compare__range" min="0" max="100" step="1" value="60">
-          </figure>
-          <div class="degisim-card__body">
-            <h3 id="degisim-elif-3-title" class="degisim-card__name">Elif, 26</h3>
-            <ul class="degisim-card__tags" aria-label="Program bilgisi">
-              <li class="degisim-card__tag">20 Hafta</li>
-              <li class="degisim-card__tag">Kondisyon &amp; Yağ Kaybı</li>
-            </ul>
-            <blockquote class="degisim-card__quote">
-              <p>"Sürekli diyet yapıp bırakıyordum. Sürdürülebilir bir sistemin ne demek olduğunu burada anladım."</p>
-            </blockquote>
-            <dl class="degisim-card__metrics">
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Ağırlık</dt>
-                <dd class="degisim-card__metric-value">-8 KG</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                <dd class="degisim-card__metric-value">-%6</dd>
-              </div>
-              <div class="degisim-card__metric">
-                <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                <dd class="degisim-card__metric-value">+1 KG</dd>
-              </div>
-            </dl>
-            <button type="button" class="degisim-card__link" data-hikaye-open="elif"
-              title="Elif'in değişim hikayesini oku">
-              Hikayeyi Oku
-              <iconify-icon icon="mdi:arrow-right" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-            </button>
-          </div>
-          <template class="degisim-card__story">
-            <p>Sürekli diyet yapıp bırakıyordum. Her yeni programın ilk haftasında çok heyecanlı olur, sonra kısıtlamalardan sıkılıp eski alışkanlıklarıma dönerdim.</p>
-            <p>Bu kez yasaklar yerine sürdürülebilir bir sistem kurduk: sevdiğim yemekler planın içindeydi, antrenmanlarım kondisyonumu adım adım artıracak şekilde ilerledi.</p>
-            <p>20 haftanın sonunda 8 kilo verdim, yağ oranım %6 azaldı ve 1 kilo kas kazandım. Artık merdivenleri koşarak çıkıyorum ve bir diyete değil, bir yaşam tarzına bağlıyım.</p>
-          </template>
-        </article>
-
-        
+        }
           </div>
         </div>
-
-        <!-- Kategori filtresi kapalıyken gerekmez -->
-        <!-- <p class="degisim-toolbar__empty" role="status" hidden>Bu kategoride henüz paylaşılmış bir değişim yok.</p> -->
 
         <div class="degisim-carousel__nav">
           <button type="button" class="degisim-carousel__arrow" data-carousel-prev aria-label="Önceki değişim" title="Önceki değişim">
@@ -497,11 +141,17 @@
     </section>
 
     <!-- ==================== Önce/Sonra galerisi (2×2) ==================== -->
+    @if (Model.Gallery.Count > 0)
+    {
     <section class="degisim-galeri container" aria-label="Önce ve sonra galerisi">
-        <figure class="compare" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Kadın danışanın programdan önceki hali" title="Danışan değişimi 1 — öncesi" width="556" height="600"
+      @for (var i = 0; i < Model.Gallery.Count; i++)
+      {
+          var t = Model.Gallery[i];
+          var no = i + 1;
+        <figure class="compare@(t.AlignBottom ? " compare--alta-yasli" : "")" data-compare data-compare-tap="only-popup">
+            <img src="@(t.BeforeSquareUrl ?? t.BeforeImageUrl)" alt="@t.ClientName adlı danışanın programdan önceki hali" title="Danışan değişimi @no — öncesi" width="556" height="600"
               class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Kadın danışanın programdan sonraki fit hali" title="Danışan değişimi 1 — sonrası" width="548" height="600"
+            <img src="@(t.AfterSquareUrl ?? t.AfterImageUrl)" alt="@t.ClientName adlı danışanın programdan sonraki hali" title="Danışan değişimi @no — sonrası" width="548" height="600"
               class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
             <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
               width="568" height="136" class="compare__logo" draggable="false">
@@ -512,165 +162,26 @@
                 <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
               </span>
             </span>
-            <label for="galeri-range-1" class="visually-hidden">Danışan değişimi 1: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="galeri-range-1" class="compare__range" min="0" max="100" step="1" value="50">
+            <label for="galeri-range-@no" class="visually-hidden">Danışan değişimi @no: öncesi ve sonrası karşılaştırma</label>
+            <input type="range" id="galeri-range-@no" class="compare__range" min="0" max="100" step="1" value="50">
             <template class="degisim-galeri__hikaye">
-              <h3 class="degisim-card__name">Zeynep, 29</h3>
+              <h3 class="degisim-card__name">@t.ClientName, @t.Age</h3>
               <ul class="degisim-card__tags">
-                <li class="degisim-card__tag">16 Hafta</li>
-                <li class="degisim-card__tag">Yağ Kaybı</li>
+                <li class="degisim-card__tag">@t.DurationWeeks Hafta</li>
+                <li class="degisim-card__tag">@t.TransformationTypeName</li>
               </ul>
-              <dl class="degisim-card__metrics">
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Ağırlık</dt>
-                  <dd class="degisim-card__metric-value">-9 KG</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                  <dd class="degisim-card__metric-value">-%7</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                  <dd class="degisim-card__metric-value">+1 KG</dd>
-                </div>
-              </dl>
+              @await Html.PartialAsync("_TransformationMetrics", t.Metrics)
               <div class="degisim-card__story">
-                <p>Doğumdan sonra eski formuma dönemeyeceğimi düşünüyordum. Gün içinde vakit bulmak zordu, bu yüzden antrenmanlarım evde 40 dakikaya sığacak şekilde planlandı.</p>
-                <p>Beslenmede yasaklar yerine porsiyon ve öğün düzeni üzerinde çalıştık. Haftalık kontrollerde ölçülerim düzenli takip edildi, takıldığım haftalarda plan küçük dokunuşlarla güncellendi.</p>
-                <p>16 haftanın sonunda 9 kilo verdim ve yağ oranım %7 düştü. En önemlisi, enerjim geri geldi ve bu düzeni artık zorlanmadan sürdürebiliyorum.</p>
+                @foreach (var paragraph in SiteFormat.Paragraphs(t.Story))
+                {
+                <p>@paragraph</p>
+                }
               </div>
             </template>
           </figure>
-        <figure class="compare" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Kadın danışanın programdan önceki hali" title="Danışan değişimi 2 — öncesi" width="556" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Kadın danışanın programdan sonraki fit hali" title="Danışan değişimi 2 — sonrası" width="548" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Öncesi</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonrası</span>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="galeri-range-2" class="visually-hidden">Danışan değişimi 2: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="galeri-range-2" class="compare__range" min="0" max="100" step="1" value="50">
-            <template class="degisim-galeri__hikaye">
-              <h3 class="degisim-card__name">Ayşe, 34</h3>
-              <ul class="degisim-card__tags">
-                <li class="degisim-card__tag">12 Hafta</li>
-                <li class="degisim-card__tag">Form Koruma</li>
-              </ul>
-              <dl class="degisim-card__metrics">
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Ağırlık</dt>
-                  <dd class="degisim-card__metric-value">-3 KG</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                  <dd class="degisim-card__metric-value">-%4</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                  <dd class="degisim-card__metric-value">+2 KG</dd>
-                </div>
-              </dl>
-              <div class="degisim-card__story">
-                <p>Kilom normaldi ama vücudum sıkı değildi; yıllardır sadece kardiyo yapıyordum. Hedefim tartıdaki sayıdan çok aynadaki görüntüydü.</p>
-                <p>Programa ağırlık antrenmanı ve yeterli protein ekledik. İlk haftalarda tartı neredeyse hiç değişmedi, ama mezura ölçüleri her hafta biraz daha azaldı.</p>
-                <p>12 haftada 3 kilo verip 2 kilo kas kazandım. Kıyafetlerim artık farklı oturuyor ve kendimi hiç olmadığım kadar güçlü hissediyorum.</p>
-              </div>
-            </template>
-          </figure>
-        <figure class="compare" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Kadın danışanın programdan önceki hali" title="Danışan değişimi 3 — öncesi" width="556" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Kadın danışanın programdan sonraki fit hali" title="Danışan değişimi 3 — sonrası" width="548" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Öncesi</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonrası</span>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="galeri-range-3" class="visually-hidden">Danışan değişimi 3: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="galeri-range-3" class="compare__range" min="0" max="100" step="1" value="50">
-            <template class="degisim-galeri__hikaye">
-              <h3 class="degisim-card__name">Selin, 27</h3>
-              <ul class="degisim-card__tags">
-                <li class="degisim-card__tag">20 Hafta</li>
-                <li class="degisim-card__tag">Yağ Kaybı</li>
-              </ul>
-              <dl class="degisim-card__metrics">
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Ağırlık</dt>
-                  <dd class="degisim-card__metric-value">-14 KG</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                  <dd class="degisim-card__metric-value">-%10</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                  <dd class="degisim-card__metric-value">+1.5 KG</dd>
-                </div>
-              </dl>
-              <div class="degisim-card__story">
-                <p>Ofiste uzun saatler oturmak ve düzensiz yemek yüzünden birkaç yılda ciddi kilo almıştım. Daha önce denediğim sert diyetlerin hepsi kısa sürede bitmişti.</p>
-                <p>Bu sefer acele etmedik: kalori açığı küçük tutuldu, adım hedefi ve haftada üç antrenman eklendi. Zor haftalarda koçumla konuşup planı birlikte ayarladık.</p>
-                <p>20 haftanın sonunda 14 kilo verdim ve yağ oranım %10 düştü. Verdiğim kiloları geri almadan korumak benim için en büyük başarı oldu.</p>
-              </div>
-            </template>
-          </figure>
-        <figure class="compare" data-compare data-compare-tap="only-popup">
-            <img src="/images/hakkimda-degisim-2-before-kare.jpg" alt="Kadın danışanın programdan önceki hali" title="Danışan değişimi 4 — öncesi" width="556" height="600"
-              class="compare__img compare__img--follow" loading="lazy" draggable="false">
-            <img src="/images/hakkimda-degisim-2-after-kare.jpg" alt="Kadın danışanın programdan sonraki fit hali" title="Danışan değişimi 4 — sonrası" width="548" height="600"
-              class="compare__img compare__img--follow compare__img--after" loading="lazy" draggable="false">
-            <img src="/images/emircoaching-neon-logo.png" alt="EmirCoaching neon logosu" title="EmirCoaching"
-              width="568" height="136" class="compare__logo" draggable="false">
-            <span class="compare__label compare__label--before" aria-hidden="true">Öncesi</span>
-            <span class="compare__label compare__label--after" aria-hidden="true">Sonrası</span>
-            <span class="compare__divider" aria-hidden="true">
-              <span class="compare__handle">
-                <iconify-icon icon="mdi:swap-horizontal" mode="svg" noobserver></iconify-icon>
-              </span>
-            </span>
-            <label for="galeri-range-4" class="visually-hidden">Danışan değişimi 4: öncesi ve sonrası karşılaştırma</label>
-            <input type="range" id="galeri-range-4" class="compare__range" min="0" max="100" step="1" value="50">
-            <template class="degisim-galeri__hikaye">
-              <h3 class="degisim-card__name">Derya, 31</h3>
-              <ul class="degisim-card__tags">
-                <li class="degisim-card__tag">14 Hafta</li>
-                <li class="degisim-card__tag">Kas Kazanımı</li>
-              </ul>
-              <dl class="degisim-card__metrics">
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Ağırlık</dt>
-                  <dd class="degisim-card__metric-value">+2 KG</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Yağ Oranı</dt>
-                  <dd class="degisim-card__metric-value">Sabit</dd>
-                </div>
-                <div class="degisim-card__metric">
-                  <dt class="degisim-card__metric-label">Kas Kütlesi</dt>
-                  <dd class="degisim-card__metric-value">+3 KG</dd>
-                </div>
-              </dl>
-              <div class="degisim-card__story">
-                <p>Çok zayıf görünmekten ve çabuk yorulmaktan şikayetçiydim. Spora başlamak istiyordum ama ağırlık çalışmaktan çekiniyordum.</p>
-                <p>Temel hareketlerin tekniğini öğrenerek başladık, yükleri haftadan haftaya kontrollü artırdık. Öğünlerimi atlamamam için pratik bir beslenme planı hazırlandı.</p>
-                <p>14 haftada yağ oranımı koruyarak 3 kilo kas kazandım. Artık hem daha dinç hissediyorum hem de duruşum tamamen değişti.</p>
-              </div>
-            </template>
-          </figure>
+      }
     </section>
+    }
 
     <!-- ==================== CTA ==================== -->
     <section class="cta" aria-labelledby="cta-title">
@@ -680,7 +191,7 @@
         <div class="cta__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>

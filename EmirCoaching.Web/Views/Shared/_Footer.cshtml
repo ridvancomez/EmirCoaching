@@ -1,3 +1,6 @@
+@{
+    var layout = await Api.GetLayoutAsync();
+}
   <footer class="footer">
     <img src="/images/footer-e.png" alt="Emir Coaching dekoratif E harfi" title="Emir Coaching" width="752" height="394" class="footer__deco" aria-hidden="true">
 
@@ -21,18 +24,22 @@
         <div class="footer__col footer__col--packages">
           <h3 class="footer__col-title">Paketler</h3>
           <ul class="footer__links">
-            <li><a href="/paketler#temel-paket" title="Başlangıç &amp; Deneme">Başlangıç &amp; Deneme</a></li>
-            <li><a href="/paketler#orta-paket" title="Dönüşüm Protokolü">Dönüşüm Protokolü</a></li>
-            <li><a href="/paketler#premium-paket" title="VIP Yaşam Tarzı">VIP Yaşam Tarzı</a></li>
+            @foreach (var p in layout.MenuPackages)
+            {
+            <li><a href="/paketler#@p.Slug" title="@p.Name">@p.Name</a></li>
+            }
           </ul>
         </div>
 
         <div class="footer__col footer__col--hours">
           <h3 class="footer__col-title">Çalışma saatleri</h3>
-          <p class="footer__subtitle">Pazartesi - Cumartesi</p>
-          <p class="footer__text">08:00 - 22:00</p>
-          <p class="footer__subtitle footer__subtitle--spaced">Pazar</p>
-          <p class="footer__text">10:00 - 20:00</p>
+          <p class="footer__subtitle">@layout.Settings.WorkingDays1</p>
+          <p class="footer__text">@layout.Settings.WorkingHours1</p>
+          @if (!string.IsNullOrWhiteSpace(layout.Settings.WorkingDays2))
+          {
+          <p class="footer__subtitle footer__subtitle--spaced">@layout.Settings.WorkingDays2</p>
+          <p class="footer__text">@layout.Settings.WorkingHours2</p>
+          }
         </div>
 
         <div class="footer__col footer__col--contact">

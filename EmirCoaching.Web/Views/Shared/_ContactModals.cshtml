@@ -1,3 +1,6 @@
+@{
+    var layout = await Api.GetLayoutAsync();
+}
   <div class="contact-modal" id="contact-modal" aria-hidden="true">
     <div class="contact-modal__overlay" data-contact-close></div>
     <div class="contact-modal__box" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
@@ -26,9 +29,10 @@
             <div class="contact-modal__select-wrap">
               <select id="contact-package" name="package" class="contact-modal__select" required>
                 <option value="" disabled selected>Seçiniz</option>
-                <option value="baslangic-deneme">Başlangıç &amp; Deneme</option>
-                <option value="donusum-protokolu">Dönüşüm Protokolü</option>
-                <option value="vip-yasam-tarzi">VIP Yaşam Tarzı</option>
+                @foreach (var p in layout.MenuPackages)
+                {
+                <option value="@p.Id">@p.Name</option>
+                }
               </select>
               <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="contact-modal__select-icon" aria-hidden="true"></iconify-icon>
             </div>
@@ -61,7 +65,7 @@
         <button type="submit" class="contact-modal__submit">MESAJI GÖNDER</button>
 
         <p class="contact-modal__whatsapp-note">
-          Formu doldurmak yerine <a href="https://wa.me/" class="contact-modal__whatsapp-link" title="WhatsApp'tan yaz">WhatsApp'tan yazmak</a> daha hızlı.
+          Formu doldurmak yerine <a href="@(await Api.GetWhatsAppUrlAsync())" class="contact-modal__whatsapp-link" title="WhatsApp'tan yaz">WhatsApp'tan yazmak</a> daha hızlı.
         </p>
       </form>
     </div>

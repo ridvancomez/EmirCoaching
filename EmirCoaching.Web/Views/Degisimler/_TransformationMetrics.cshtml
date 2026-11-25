@@ -1,0 +1,10 @@
+@model IReadOnlyList<TransformationMetricResponse>
+            <dl class="degisim-card__metrics">
+              @foreach (var metric in Model)
+              {
+              <div class="degisim-card__metric">
+                <dt class="degisim-card__metric-label">@metric.Label</dt>
+                <dd class="degisim-card__metric-value">@metric.Value</dd>
+              </div>
+              }
+            </dl>

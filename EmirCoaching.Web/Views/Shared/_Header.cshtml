@@ -1,5 +1,6 @@
 @{
-    var Nav = new EmirCoaching.Web.Services.NavState(ViewData["ActiveNav"] as string);
+    var Nav = new NavState(ViewData["ActiveNav"] as string);
+    var layout = await Api.GetLayoutAsync();
 }
   <header class="navbar">
     <div class="navbar__inner">
@@ -24,9 +25,10 @@
             <a href="/paketler" class="navbar__menu-link@(Nav.Active("paketler", " navbar__menu-link--active")) navbar__menu-link--dropdown" title="Paketler sayfasına git" aria-haspopup="true">Paketler
               <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="navbar__chevron" aria-hidden="true"></iconify-icon></a>
             <ul class="navbar__dropdown" aria-label="Paketler">
-              <li><a href="/paketler#temel-paket" class="navbar__dropdown-link" title="Başlangıç & Deneme paketine git">Başlangıç &amp; Deneme</a></li>
-              <li><a href="/paketler#orta-paket" class="navbar__dropdown-link" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a></li>
-              <li><a href="/paketler#premium-paket" class="navbar__dropdown-link" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a></li>
+              @foreach (var p in layout.MenuPackages)
+              {
+              <li><a href="/paketler#@p.Slug" class="navbar__dropdown-link" title="@p.Name paketine git">@p.Name</a></li>
+              }
             </ul>
           </li>
           <li class="navbar__menu-item">
@@ -67,15 +69,12 @@
               aria-hidden="true"></iconify-icon>
           </button>
           <ul id="mobile-drawer-packages" class="mobile-drawer__submenu">
+            @foreach (var p in layout.MenuPackages)
+            {
             <li>
-              <a href="/paketler#temel-paket" class="mobile-drawer__sublink" title="Başlangıç &amp; Deneme paketine git">Başlangıç &amp; Deneme</a>
+              <a href="/paketler#@p.Slug" class="mobile-drawer__sublink" title="@p.Name paketine git">@p.Name</a>
             </li>
-            <li>
-              <a href="/paketler#orta-paket" class="mobile-drawer__sublink" title="Dönüşüm Protokolü paketine git">Dönüşüm Protokolü</a>
-            </li>
-            <li>
-              <a href="/paketler#premium-paket" class="mobile-drawer__sublink" title="VIP Yaşam Tarzı paketine git">VIP Yaşam Tarzı</a>
-            </li>
+            }
           </ul>
         </li>
         <li class="mobile-drawer__item">

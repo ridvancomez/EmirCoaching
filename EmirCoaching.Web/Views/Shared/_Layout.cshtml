@@ -1,3 +1,4 @@
+@inject IConfiguration Configuration
 <!DOCTYPE html>
 <html lang="tr">
 
@@ -9,6 +10,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <meta name="description" content="@ViewData["Description"]">
+  <meta name="api-base" content="@(Configuration["Api:PublicUrl"] ?? Configuration["Api:BaseUrl"])">
   @if (ViewData["Robots"] is string robots)
   {
   <meta name="robots" content="@robots">
@@ -41,6 +43,7 @@
 
   @await RenderSectionAsync("Modals", required: false)
 
+  <script src="/js/api.js"></script>
   <script src="/js/main.js"></script>
   @await RenderSectionAsync("Scripts", required: false)
 </body>

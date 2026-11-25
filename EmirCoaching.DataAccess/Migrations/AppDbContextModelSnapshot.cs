@@ -3256,13 +3256,13 @@ namespace EmirCoaching.DataAccess.Migrations
                         {
                             Id = 1,
                             BackgroundImagePath = "/images/slider.png",
-                            ButtonUrl = "/paketler.html",
+                            ButtonUrl = "/paketler",
                             CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.",
                             HighlightText = "GÜÇLÜ",
                             IsDeleted = false,
                             PageKey = "home",
-                            Title = "Kendini, bahanelerinden daha GÜÇLÜ hale getir"
+                            Title = "Kendini, bahanelerinden\ndaha GÜÇLÜ hale getir"
                         },
                         new
                         {

@@ -1,3 +1,4 @@
+@model DietFormViewModel
 @{
     ViewData["Title"] = "Diyet Formu | Emir Coaching — Kişiye Özel Diyet Planı Başvurusu";
     ViewData["Description"] = "Seçtiğin koçluk paketi için kişisel ve iletişim bilgilerini bırak, ödemeni Shopier'de güvenle tamamla; koçun WhatsApp'tan sana ulaşsın.";
@@ -7,7 +8,7 @@
   <main>
     <!-- ==================== Hero (paketler hero'su) ==================== -->
     <section class="paketler-hero" aria-labelledby="diyet-form-hero-title">
-      <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+      <img src="@(Model.Hero?.BackgroundImageUrl ?? "/images/paketlerslider.png")" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
         title="Emir Coaching Diyet Formu" class="paketler-hero__bg">
       <div class="paketler-hero__overlay" aria-hidden="true"></div>
       <div class="paketler-hero__fade" aria-hidden="true"></div>
@@ -25,12 +26,10 @@
         </nav>
 
         <h1 id="diyet-form-hero-title" class="paketler-hero__title paketler-hero__title--wide">
-          UZMANLARLA ÇALIŞMAK <span class="paketler-hero__title-accent">PROFESYONELLİK</span> GEREKTİRİR
+          @SiteFormat.Highlight(Model.Hero?.Title, Model.Hero?.HighlightText, "paketler-hero__title-accent")
         </h1>
-
         <p class="paketler-hero__text">
-          Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı
-          olan, onun giriş bölümü, hayattır; böylece bir şey olabilir.
+          @Model.Hero?.Description
         </p>
 
         <nav class="paketler-hero__filter" aria-label="Paket kategorileri">
@@ -54,17 +53,18 @@
             <label for="paket" class="diyet-form__label">Seçilen Paket</label>
             <div class="diyet-form__select-wrap">
               <select id="paket" name="paket" class="diyet-form__input diyet-form__select" required>
-                <option value="" disabled selected>Paket seçin</option>
-                <optgroup label="Salonda">
-                  <option value="temel-salonda">Başlangıç &amp; Deneme · 3 Aylık · ₺8.999</option>
-                  <option value="orta-salonda">Dönüşüm Protokolü · 6 Aylık · ₺15.999</option>
-                  <option value="premium-salonda">VIP Yaşam Tarzı · 12 Aylık · ₺27.999</option>
+                <option value="" disabled selected="@(Model.SelectedSlug is null)">Paket seçin</option>
+                @foreach (var group in Model.Layout.Packages.GroupBy(p => p.Location))
+                {
+                    var evde = group.Key == PackageLocation.Evde;
+                <optgroup label="@(evde ? "Evde" : "Salonda")">
+                  @foreach (var p in group)
+                  {
+                  <option value="@p.Slug" data-id="@p.Id" data-name="@p.Name" data-purchase-url="@p.PurchaseUrl"
+                    selected="@(p.Slug == Model.SelectedSlug)">@p.Name@(evde ? " (Evde)" : "") · @p.DurationMonths Aylık · @SiteFormat.Price(p.Price)</option>
+                  }
                 </optgroup>
-                <optgroup label="Evde">
-                  <option value="temel-evde">Başlangıç &amp; Deneme (Evde) · 3 Aylık · ₺5.999</option>
-                  <option value="orta-evde">Dönüşüm Protokolü (Evde) · 6 Aylık · ₺10.999</option>
-                  <option value="premium-evde">VIP Yaşam Tarzı (Evde) · 12 Aylık · ₺18.999</option>
-                </optgroup>
+                }
               </select>
               <iconify-icon icon="akar-icons:chevron-down" mode="svg" noobserver class="diyet-form__select-icon" aria-hidden="true"></iconify-icon>
             </div>
@@ -137,7 +137,7 @@
               </div>
               <div class="diyet-form__field">
                 <label for="telefon" class="diyet-form__label">Telefon Numarası</label>
-                <input type="tel" id="telefon" name="telefon" class="diyet-form__input" placeholder="05xx xxx xx xx" autocomplete="tel" inputmode="tel" pattern="\+?[0-9 ()\-]{10,20}" required>
+                <input type="tel" id="telefon" name="telefon" class="diyet-form__input" placeholder="05xx xxx xx xx" autocomplete="tel" inputmode="tel" pattern="\+?[0-9 \(\)\-]{10,20}" required>
               </div>
             </div>
           </div>
@@ -210,7 +210,7 @@
         <div class="cta__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>

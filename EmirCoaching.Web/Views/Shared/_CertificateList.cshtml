@@ -1,0 +1,10 @@
+@model IReadOnlyList<CertificateResponse>
+          <ul class="coach__certs" aria-label="Sertifikalar">
+            @foreach (var cert in Model)
+            {
+            <li class="coach__cert">
+              <span class="coach__cert-logo"><img src="@cert.LogoUrl" alt="@cert.IssuerFullName logosu" title="@cert.IssuerFullName" width="160" height="160" loading="lazy"></span>
+              <span class="coach__cert-body"><strong class="coach__cert-title">@cert.Title</strong><span class="coach__cert-meta">@string.Join(" · ", new[] { cert.Issuer, cert.Detail, cert.Year.ToString() }.Where(x => !string.IsNullOrWhiteSpace(x)))</span></span>
+            </li>
+            }
+          </ul>

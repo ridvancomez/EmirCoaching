@@ -1,3 +1,4 @@
+@model HomeViewModel
 @{
     ViewData["Title"] = "Emir Coaching | Kişiye Özel Fitness ve Beslenme Koçluğu";
     ViewData["Description"] = "Emir Coaching ile hedefine özel antrenman ve beslenme planlarıyla dönüşümünü başlat. Profesyonel koçluk, WhatsApp üzerinden bizzat destek.";
@@ -7,25 +8,24 @@
   <main>
     <section class="hero hero--home" aria-labelledby="hero-title">
       <div class="hero__media">
-        <img src="/images/slider.png" alt="Emir Coaching danışanlarının dönüşüm fotoğrafları"
+        <img src="@(Model.Hero?.BackgroundImageUrl ?? "/images/slider.png")" alt="Emir Coaching danışanlarının dönüşüm fotoğrafları"
           title="Emir Coaching danışan dönüşümleri" width="1440" height="897" class="hero__media-img">
       </div>
 
       <div class="container">
         <div class="hero__content">
           <h1 id="hero-title" class="hero__title">
-            Kendini, bahanelerinden <br /> daha <span class="hero__title-accent">GÜÇLÜ</span> hale getir
+            @SiteFormat.Highlight(Model.Hero?.Title, Model.Hero?.HighlightText, "hero__title-accent")
           </h1>
 
           <p class="hero__description">
-            Ya da ona benzer bir şey. Bedenin yoldaşları rahattır, ancak seçkin değildirler. Ve nibh, o alacalı olan,
-            onun giriş bölümü, hayattır; böylece bir şey olabilir.
+            @Model.Hero?.Description
           </p>
 
           <div class="hero__actions">
-            <a href="/paketler" class="hero__button hero__button--primary"
+            <a href="@(Model.Hero?.ButtonUrl ?? "/paketler")" class="hero__button hero__button--primary"
               title="Paketleri incele ve hemen başla">Hemen Başla</a>
-            <a href="https://wa.me/" class="hero__button hero__button--secondary"
+            <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
               title="WhatsApp üzerinden bize ulaşın">
               <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
               <span>WhatsApp İletişim</span>
@@ -45,86 +45,36 @@
           <a href="#paketler" class="home-outline-btn" title="Paketleri incele">Paketleri İncele</a>
         </div>
         <ol class="process__steps">
-          <li class="process__step" style="--step:0">
+          @for (var i = 0; i < Model.PurchaseSteps.Count; i++)
+          {
+              var step = Model.PurchaseSteps[i];
+          <li class="process__step" style="--step:@i">
             <div class="process__step-top">
-              <span class="process__icon"><iconify-icon icon="solar:clipboard-list-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-              <span class="process__number" aria-hidden="true">01</span>
+              <span class="process__icon"><iconify-icon icon="@SiteFormat.PurchaseStepIcon(step.IconKey)" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
+              <span class="process__number" aria-hidden="true">@SiteFormat.StepNumber(i)</span>
             </div>
-            <h3 class="process__step-title">Form + Kan Tahlili</h3>
-            <p class="process__step-text">Ödemeden sonra koçun WhatsApp'tan danışan bilgi formunu ve tahlil rehberini gönderir. Formu doldurur, tahlillerini iletirsin.</p>
-            <span class="process__step-time">Gün 1</span>
+            <h3 class="process__step-title">@step.Title</h3>
+            <p class="process__step-text">@step.Description</p>
+            <span class="process__step-time">@step.TimeLabel</span>
           </li>
-          <li class="process__step" style="--step:1">
-            <div class="process__step-top">
-              <span class="process__icon"><iconify-icon icon="solar:clock-circle-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-              <span class="process__number" aria-hidden="true">02</span>
-            </div>
-            <h3 class="process__step-title">48 Saatte Program</h3>
-            <p class="process__step-text">Tahlil sonuçların ve hedefine göre kişiye özel antrenman ve beslenme programın hazırlanır.</p>
-            <span class="process__step-time">En geç 48 saat</span>
-          </li>
-          <li class="process__step" style="--step:2">
-            <div class="process__step-top">
-              <span class="process__icon"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-              <span class="process__number" aria-hidden="true">03</span>
-            </div>
-            <h3 class="process__step-title">Haftalık Takip</h3>
-            <p class="process__step-text">Haftalık form kontrolleri (tartı + fotoğraf) ve WhatsApp üzerinden birebir iletişim.</p>
-            <span class="process__step-time">Her hafta</span>
-          </li>
-          <li class="process__step" style="--step:3">
-            <div class="process__step-top">
-              <span class="process__icon"><iconify-icon icon="solar:refresh-circle-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-              <span class="process__number" aria-hidden="true">04</span>
-            </div>
-            <h3 class="process__step-title">Revize</h3>
-            <p class="process__step-text">Gelişimine göre program anında güncellenir; plato evresine girmene izin verilmez.</p>
-            <span class="process__step-time">İhtiyaç oldukça</span>
-          </li>
+          }
         </ol>
       </div>
     </section>
 
     <section class="coach" aria-labelledby="coach-title">
       <div class="container coach__inner">
-        <div class="coach__media">
-          <img src="/images/hakkimda-video.png" alt="İbrahim Emir'in tanıtım videosundan bir kare" title="Emir Coaching tanıtım videosu"
-            width="1238" height="664" class="coach__poster" loading="lazy">
-          <button type="button" class="coach__play" title="Tanıtım videosunu oynat" aria-label="Tanıtım videosunu oynat"
-            data-video-src="" data-video-open>
-            <iconify-icon icon="ph:play-fill" mode="svg" noobserver aria-hidden="true"></iconify-icon>
-          </button>
-          <div class="coach__label">
-            <img src="/images/yazar-ibrahim-emir-kucuk.jpg" alt="İbrahim Emir" title="İbrahim Emir" width="52" height="52"
-              class="coach__avatar" loading="lazy">
-            <span class="coach__label-text"><strong class="coach__name">İbrahim Emir</strong><span class="coach__role">Online Fitness &amp; Beslenme Koçu · 8+ yıl</span></span>
-          </div>
-        </div>
+        @await Html.PartialAsync("_CoachMedia", Model.Coach)
 
         <div class="coach__content">
           <h2 id="coach-title" class="home-title">Bir salondan, <span class="home-title__accent">BİNLERCE</span> dönüşüme</h2>
           <div class="coach__story">
-            <p>Gerçek değişim geçici motivasyonlarla değil, sürdürülebilir sistemlerle başlar. Emircoaching olarak, fiziksel potansiyelinizi ortaya çıkarmak için bilimsel temelli bir yaklaşım sunuyoruz.</p>
-            <p>Buraya 2-3 satırlık kişisel hikaye gelecek: nasıl başladın, neden online koçluk, danışana neyi farklı veriyorsun.</p>
+            @foreach (var paragraph in Model.Coach?.StoryParagraphs ?? [])
+            {
+            <p>@paragraph</p>
+            }
           </div>
-          <ul class="coach__certs" aria-label="Sertifikalar">
-            <li class="coach__cert">
-              <span class="coach__cert-logo"><img src="/images/sertifika-tvgfbf.png" alt="Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu logosu" title="Türkiye Vücut Geliştirme, Fitness ve Bilek Güreşi Federasyonu" width="160" height="160" loading="lazy"></span>
-              <span class="coach__cert-body"><strong class="coach__cert-title">2. Kademe Temel Antrenör Belgesi</strong><span class="coach__cert-meta">TVGFBF · 2021</span></span>
-            </li>
-            <li class="coach__cert">
-              <span class="coach__cert-logo"><img src="/images/sertifika-fmi.png" alt="Fitness Movement Institute logosu" title="Fitness Movement Institute" width="160" height="160" loading="lazy"></span>
-              <span class="coach__cert-body"><strong class="coach__cert-title">Nefes, Nörolojik Düzenleme ve Postür Eğitimi</strong><span class="coach__cert-meta">FMI · EREPS Seviye 4 · 2022</span></span>
-            </li>
-            <li class="coach__cert">
-              <span class="coach__cert-logo"><img src="/images/sertifika-fmi.png" alt="Fitness Movement Institute logosu" title="Fitness Movement Institute" width="160" height="160" loading="lazy"></span>
-              <span class="coach__cert-body"><strong class="coach__cert-title">Personal Trainer EQF Level 4</strong><span class="coach__cert-meta">FMI · 2023</span></span>
-            </li>
-            <li class="coach__cert">
-              <span class="coach__cert-logo"><img src="/images/sertifika-biopeak.png" alt="Biopeak logosu" title="Biopeak" width="160" height="160" loading="lazy"></span>
-              <span class="coach__cert-body"><strong class="coach__cert-title">Shoulder Performance Specialist</strong><span class="coach__cert-meta">Biopeak · 2024</span></span>
-            </li>
-          </ul>
+          @await Html.PartialAsync("_CertificateList", Model.Certificates)
           <a href="/hakkimda" class="coach__more" title="Hikayemin tamamını oku">
             <iconify-icon icon="ph:user-bold" mode="svg" noobserver aria-hidden="true" class="coach__more-icon"></iconify-icon>
             <span class="coach__more-body"><strong class="coach__cert-title">Hikayemin Tamamı</strong><span class="coach__cert-meta">Nasıl başladım, nasıl çalışıyorum</span></span>
@@ -141,59 +91,23 @@
             <div class="story__carousel">
               <div class="story__carousel-viewport">
                 <div class="story__carousel-track">
-                  <div class="story__slide story__slide--active">
+                  @{ string[] slideStates = ["story__slide--active", "story__slide--stack-2", "story__slide--stack-3"]; }
+                  @for (var i = 0; i < Model.Transformations.Count; i++)
+                  {
+                      var t = Model.Transformations[i];
+                  <div class="story__slide @(i < slideStates.Length ? slideStates[i] : "story__slide--hidden")">
                     <div class="story__slide-wrapper">
-                      <img src="/images/home_donusum1.png" alt="Emir Coaching danışan dönüşüm hikayesi 1" title="Emir Coaching danışan dönüşüm hikayesi 1" width="477" height="477" class="story__slide-img">
+                      <img src="@(t.AfterSquareUrl ?? t.AfterImageUrl)" alt="@t.ClientName, @t.TransformationTypeName dönüşümü" title="@t.ClientName — @t.TransformationTypeName" width="477" height="477" class="story__slide-img">
                     </div>
                     <button type="button" class="story__privacy-toggle" aria-pressed="false" title="Fotoğrafı göster / bulanıklaştır">
                       <span class="story__privacy-label">Fotoğrafı Göster</span>
                       <span class="story__privacy-switch" aria-hidden="true"><span class="story__privacy-knob"></span></span>
                     </button>
                   </div>
-
-                  <div class="story__slide story__slide--stack-2">
-                    <div class="story__slide-wrapper">
-                      <img src="/images/home_donusum1.png" alt="Emir Coaching danışan dönüşüm hikayesi 2" title="Emir Coaching danışan dönüşüm hikayesi 2" width="477" height="477" class="story__slide-img">
-                    </div>
-                    <button type="button" class="story__privacy-toggle" aria-pressed="false" title="Fotoğrafı göster / bulanıklaştır">
-                      <span class="story__privacy-label">Fotoğrafı Göster</span>
-                      <span class="story__privacy-switch" aria-hidden="true"><span class="story__privacy-knob"></span></span>
-                    </button>
-                  </div>
-
-                  <div class="story__slide story__slide--stack-3">
-                    <div class="story__slide-wrapper">
-                      <img src="/images/home_donusum1.png" alt="Emir Coaching danışan dönüşüm hikayesi 3" title="Emir Coaching danışan dönüşüm hikayesi 3" width="477" height="477" class="story__slide-img">
-                    </div>
-                    <button type="button" class="story__privacy-toggle" aria-pressed="false" title="Fotoğrafı göster / bulanıklaştır">
-                      <span class="story__privacy-label">Fotoğrafı Göster</span>
-                      <span class="story__privacy-switch" aria-hidden="true"><span class="story__privacy-knob"></span></span>
-                    </button>
-                  </div>
-
-                  <div class="story__slide story__slide--hidden">
-                    <div class="story__slide-wrapper">
-                      <img src="/images/home_donusum1.png" alt="Emir Coaching danışan dönüşüm hikayesi 4" title="Emir Coaching danışan dönüşüm hikayesi 4" width="477" height="477" class="story__slide-img">
-                    </div>
-                    <button type="button" class="story__privacy-toggle" aria-pressed="false" title="Fotoğrafı göster / bulanıklaştır">
-                      <span class="story__privacy-label">Fotoğrafı Göster</span>
-                      <span class="story__privacy-switch" aria-hidden="true"><span class="story__privacy-knob"></span></span>
-                    </button>
-                  </div>
-
-                  <div class="story__slide story__slide--hidden">
-                    <div class="story__slide-wrapper">
-                      <img src="/images/home_donusum1.png" alt="Emir Coaching danışan dönüşüm hikayesi 5" title="Emir Coaching danışan dönüşüm hikayesi 5" width="477" height="477" class="story__slide-img">
-                    </div>
-                    <button type="button" class="story__privacy-toggle" aria-pressed="false" title="Fotoğrafı göster / bulanıklaştır">
-                      <span class="story__privacy-label">Fotoğrafı Göster</span>
-                      <span class="story__privacy-switch" aria-hidden="true"><span class="story__privacy-knob"></span></span>
-                    </button>
-                  </div>
+                  }
                 </div>
               </div>
             </div>
-
             <div class="story__carousel-nav">
               <button type="button" class="story__carousel-arrow story__carousel-arrow--prev" title="Önceki slide'a geç">
                 <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon>
@@ -238,9 +152,13 @@
           <p class="home-lead">Üç paketin içeriği aynı temele dayanır; fark süre ve birebir Zoom görüşmesinde.</p>
         </div>
 
+        @{
+            var homePackages = Model.Layout.MenuPackages.ToList();
+            var homePerks = new PackagePerks(Model.Layout.Packages, PackageLocation.Salonda);
+        }
         <div class="packages__slider" data-pkg-slider>
           <div class="packages__nav">
-            <p class="packages__counter" aria-live="polite"><b data-pkg-current>1</b> / 3</p>
+            <p class="packages__counter" aria-live="polite"><b data-pkg-current>1</b> / @homePackages.Count</p>
             <div class="packages__arrows">
               <button type="button" class="round-arrow" data-pkg-prev title="Önceki paket" aria-label="Önceki paket">
                 <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
@@ -249,91 +167,11 @@
             </div>
           </div>
           <div class="packages__track" data-pkg-track>
-            <article class="pkg pkg--1" aria-labelledby="pkg-1-title">
-              <div class="pkg__top">
-                <img src="/images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
-                <div class="pkg__top-row">
-                  <div class="pkg__identity"><svg class="pkg__rank" width="28" height="15" viewBox="0 0 28 15" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="pkg-1-title" class="pkg__name"><a href="/paketler#temel-paket" class="pkg__name-link" title="Başlangıç & Deneme paketinin detaylarını incele">Başlangıç &amp; Deneme</a></h3></div>
-                  <span class="pkg__duration">3 Aylık</span>
-                </div>
-              </div>
-              <div class="pkg__body">
-                <p class="pkg__price"><span class="pkg__total">₺8.999</span><span class="pkg__total-label">toplam</span></p>
-                <p class="pkg__monthly">ayda ≈ <b>₺3.000</b></p>
-                <ul class="pkg__list">
-                <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
-                <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
-                <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
-                <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
-                <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
-                <li class="pkg__item pkg__item--locked"><iconify-icon icon="mdi:lock-outline" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">6 ve 12 Aylık Pakette</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
-                </ul>
-                <div class="pkg__actions">
-                  <a href="/paketler/donusum-protokolu" class="pkg__buy" title="Başlangıç & Deneme paketini incele ve satın al">
-                    <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
-                  <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
-                  <a href="https://wa.me/905453712515" class="pkg__ask" title="Başlangıç & Deneme paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
-                    <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
-                </div>
-              </div>
-            </article>
-            <article class="pkg pkg--2" aria-labelledby="pkg-2-title">
-              <span class="pkg__badge">En Çok Tercih Edilen</span>
-              <div class="pkg__top">
-                <img src="/images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
-                <div class="pkg__top-row">
-                  <div class="pkg__identity"><svg class="pkg__rank" width="28" height="23" viewBox="0 0 28 23" aria-hidden="true"><path d="M3 12 L14 3 L25 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 id="pkg-2-title" class="pkg__name"><a href="/paketler#orta-paket" class="pkg__name-link" title="Dönüşüm Protokolü paketinin detaylarını incele">Dönüşüm Protokolü</a></h3></div>
-                  <span class="pkg__duration">6 Aylık</span>
-                </div>
-              </div>
-              <div class="pkg__body">
-                <p class="pkg__price"><span class="pkg__total">₺15.999</span><span class="pkg__total-label">toplam</span></p>
-                <p class="pkg__monthly">ayda ≈ <b>₺2.667</b></p>
-                <ul class="pkg__list">
-                <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
-                <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
-                <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
-                <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
-                <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
-                <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
-                </ul>
-                <div class="pkg__actions">
-                  <a href="/paketler/donusum-protokolu" class="pkg__buy" title="Dönüşüm Protokolü paketini incele ve satın al">
-                    <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
-                  <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
-                  <a href="https://wa.me/905453712515" class="pkg__ask" title="Dönüşüm Protokolü paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
-                    <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
-                </div>
-              </div>
-            </article>
-            <article class="pkg pkg--3" aria-labelledby="pkg-3-title">
-              <div class="pkg__top">
-                <img src="/images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
-                <div class="pkg__top-row">
-                  <div class="pkg__identity"><svg class="pkg__rank" width="28" height="48" viewBox="0 0 28 48" aria-hidden="true"><path d="M14 .5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L14 13.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/><g transform="translate(0 17)"><path d="M3 11 L14 2 L25 11" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20 L14 11 L25 20" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 29 L14 20 L25 29" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></g></svg><h3 id="pkg-3-title" class="pkg__name"><a href="/paketler#premium-paket" class="pkg__name-link" title="VIP Yaşam Tarzı paketinin detaylarını incele">VIP Yaşam Tarzı</a></h3></div>
-                  <span class="pkg__duration">12 Aylık</span>
-                </div>
-              </div>
-              <div class="pkg__body">
-                <p class="pkg__price"><span class="pkg__total">₺27.999</span><span class="pkg__total-label">toplam</span></p>
-                <p class="pkg__monthly">ayda ≈ <b>₺2.333</b></p>
-                <ul class="pkg__list">
-                <li class="pkg__item"><iconify-icon icon="solar:cup-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kişiye Özel Antrenman</span></li>
-                <li class="pkg__item"><iconify-icon icon="fluent:food-apple-24-regular" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kalori &amp; Beslenme Planı</span></li>
-                <li class="pkg__item"><iconify-icon icon="solar:test-tube-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Kan Tahlili Analizi &amp; Revize</span></li>
-                <li class="pkg__item"><iconify-icon icon="solar:calendar-broken" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Haftalık Form Kontrolleri</span></li>
-                <li class="pkg__item"><iconify-icon icon="ic:outline-whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>WhatsApp Birebir İletişim</span></li>
-                <li class="pkg__item pkg__item--zoom"><iconify-icon icon="mdi:star" mode="svg" noobserver aria-hidden="true"></iconify-icon><span><span class="pkg__tag">Pakete Özel</span>Yüz Yüze Zoom Görüşmesi<span class="pkg__sub">Her Cumartesi · 20 dk birebir</span></span></li>
-                </ul>
-                <div class="pkg__actions">
-                  <a href="/paketler/donusum-protokolu" class="pkg__buy" title="VIP Yaşam Tarzı paketini incele ve satın al">
-                    <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
-                  <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
-                  <a href="https://wa.me/905453712515" class="pkg__ask" title="VIP Yaşam Tarzı paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
-                    <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
-                </div>
-              </div>
-            </article>
+          @for (var i = 0; i < homePackages.Count; i++)
+          {
+              @await Html.PartialAsync("_PackageCard", new PackageCardModel(homePackages[i], Math.Min(i + 1, 3), homePerks,
+                  null, $"/paketler#{homePackages[i].Slug}", Model.Layout.WhatsAppUrl))
+          }
           </div>
           <div class="packages__dots" data-pkg-dots></div>
         </div>
@@ -343,21 +181,15 @@
             <iconify-icon icon="fa6-solid:chevron-left" mode="svg" noobserver aria-hidden="true"></iconify-icon></button>
           <div class="reviews__viewport">
             <div class="reviews__track" data-reviews-track>
-              <figure class="reviews__item" aria-roledescription="slide" aria-label="1 / 3">
+              @for (var i = 0; i < Model.Testimonials.Count; i++)
+              {
+                  var review = Model.Testimonials[i];
+              <figure class="reviews__item" aria-roledescription="slide" aria-label="@(i + 1) / @Model.Testimonials.Count">
                 <iconify-icon icon="ri:double-quotes-l" mode="svg" noobserver aria-hidden="true" class="reviews__mark"></iconify-icon>
-                <blockquote class="reviews__quote">İlk ayda 6 kilo verdim ama asıl kazancım, neyi neden yaptığımı öğrenmek oldu.</blockquote>
-                <figcaption class="reviews__author"><b>A.K.</b> · Dönüşüm Protokolü, 6 ay</figcaption>
+                <blockquote class="reviews__quote">@review.Text</blockquote>
+                <figcaption class="reviews__author"><b>@review.Name</b> · @review.PackageName, @review.PackageDurationMonths ay</figcaption>
               </figure>
-              <figure class="reviews__item" aria-roledescription="slide" aria-label="2 / 3">
-                <iconify-icon icon="ri:double-quotes-l" mode="svg" noobserver aria-hidden="true" class="reviews__mark"></iconify-icon>
-                <blockquote class="reviews__quote">Programı hayatıma göre kurdu; ilk kez bir beslenme planını üç ay boyunca bırakmadan sürdürebildim.</blockquote>
-                <figcaption class="reviews__author"><b>M.Y.</b> · Başlangıç &amp; Deneme, 3 ay</figcaption>
-              </figure>
-              <figure class="reviews__item" aria-roledescription="slide" aria-label="3 / 3">
-                <iconify-icon icon="ri:double-quotes-l" mode="svg" noobserver aria-hidden="true" class="reviews__mark"></iconify-icon>
-                <blockquote class="reviews__quote">Her hafta form kontrolü olunca bırakmak aklıma bile gelmedi. Bir yıl sonra bambaşka biriyim.</blockquote>
-                <figcaption class="reviews__author"><b>E.D.</b> · VIP Yaşam Tarzı, 12 ay</figcaption>
-              </figure>
+              }
             </div>
           </div>
           <button type="button" class="round-arrow reviews__arrow reviews__arrow--next" data-reviews-next title="Sonraki yorum" aria-label="Sonraki yorum">
@@ -381,8 +213,8 @@
             </li>
           </ul>
           <div class="assurance__legal">
-            <a href="#" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
-            <a href="#" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
+            <a href="/yasal/mesafeli-satis" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a>
+            <a href="/yasal/iptal-iade" title="İade ve İptal Politikası">İade ve İptal Politikası</a>
           </div>
         </div>
       </div>
@@ -430,108 +262,28 @@
           </div>
 
           <div class="faq__accordion">
-            <div class="faq__item faq__item--open">
-              <button type="button" class="faq__item-header" aria-expanded="true" aria-controls="faq-answer-1">
-                <span class="faq__item-question">Kan tahlili yaptırmak zorunlu mu, süreç nasıl işliyor?</span>
+            @for (var i = 0; i < Model.Faqs.Count; i++)
+            {
+                var faq = Model.Faqs[i];
+                var open = i == 0;
+            <div class="faq__item@(open ? " faq__item--open" : "")">
+              <button type="button" class="faq__item-header" aria-expanded="@(open ? "true" : "false")" aria-controls="faq-answer-@(i + 1)">
+                <span class="faq__item-question">@faq.Question</span>
                 <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:minus" mode="svg" noobserver></iconify-icon>
+                  <iconify-icon icon="fa6-solid:@(open ? "minus" : "plus")" mode="svg" noobserver></iconify-icon>
                 </span>
               </button>
-              <div class="faq__item-body" id="faq-answer-1">
+              <div class="faq__item-body" id="faq-answer-@(i + 1)">
                 <p class="faq__item-answer">
-                  Evet, programın temel taşı kan tahlilinizdir. Tahlil sonuçlarınız detaylıca analiz edilerek hormon, vitamin ve mineral seviyelerinize tam uyumlu kişiselleştirilmiş bir beslenme ve takviye protokolü hazırlanır.
+                  @faq.Answer
                 </p>
               </div>
             </div>
-
-            <div class="faq__item">
-              <button type="button" class="faq__item-header" aria-expanded="false" aria-controls="faq-answer-2">
-                <span class="faq__item-question">Spor salonuna gitmiyorum, evde antrenman paketi yeterli verimi sağlar mı?</span>
-                <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:plus" mode="svg" noobserver></iconify-icon>
-                </span>
-              </button>
-              <div class="faq__item-body" id="faq-answer-2">
-                <p class="faq__item-answer">
-                  Kesinlikle. Evde sahip olduğunuz ekipmanlara (dumbbell, direnç bandı vb.) veya tamamen kendi vücut ağırlığınıza özel antrenman programı hazırlanır. Doğru mekanik ve tükeniş prensibiyle evde de maksimum gelişim sağlanır.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq__item">
-              <button type="button" class="faq__item-header" aria-expanded="false" aria-controls="faq-answer-3">
-                <span class="faq__item-question">Hazırlanan beslenme programı matbu (standart) bir liste mi olacak?</span>
-                <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:plus" mode="svg" noobserver></iconify-icon>
-                </span>
-              </button>
-              <div class="faq__item-body" id="faq-answer-3">
-                <p class="faq__item-answer">
-                  Asla. Bütçenize, günlük yaşam akışınıza, sevdiğiniz/sevemediğiniz gıdalara ve tahlil sonuçlarınıza özel kalori ve makro hesaplaması yapılarak tamamen sürdürülebilir bir liste oluşturulur.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq__item">
-              <button type="button" class="faq__item-header" aria-expanded="false" aria-controls="faq-answer-4">
-                <span class="faq__item-question">Süreç boyunca iletişim ve takip nasıl yapılıyor?</span>
-                <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:plus" mode="svg" noobserver></iconify-icon>
-                </span>
-              </button>
-              <div class="faq__item-body" id="faq-answer-4">
-                <p class="faq__item-answer">
-                  Haftalık düzenli form kontrolleri (tartı ve fotoğraf analizi) ile gelişiminiz takip edilir. Ayrıca WhatsApp üzerinden bizzat birebir iletişim kurarak sorularınızı anında iletebilirsiniz.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq__item">
-              <button type="button" class="faq__item-header" aria-expanded="false" aria-controls="faq-answer-5">
-                <span class="faq__item-question">Antrenman veya beslenme programım ne sıklıkla güncelleniyor?</span>
-                <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:plus" mode="svg" noobserver></iconify-icon>
-                </span>
-              </button>
-              <div class="faq__item-body" id="faq-answer-5">
-                <p class="faq__item-answer">
-                  Gelişiminize ve haftalık form kontrollerinize göre ihtiyaç duyulan anlarda programınız anında revize edilir. Vücudunuzun plato evresine girmesine izin verilmeden sürekli gelişim hedeflenir.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq__item">
-              <button type="button" class="faq__item-header" aria-expanded="false" aria-controls="faq-answer-6">
-                <span class="faq__item-question">6 ve 12 Aylık paketlerdeki VIP Zoom görüşmesi nedir?</span>
-                <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:plus" mode="svg" noobserver></iconify-icon>
-                </span>
-              </button>
-              <div class="faq__item-body" id="faq-answer-6">
-                <p class="faq__item-answer">
-                  6 ve 12 Aylık paket alan danışanlarıma özel olarak süreç boyunca her Cumartesi 20 dakikalık birebir Zoom görüşmesi yapılır. Bu görüşmelerde haftalık gelişim analizi, antrenman/beslenme revizyonları ve zihinsel motivasyon takibi yüz yüze gerçekleştirilir.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq__item">
-              <button type="button" class="faq__item-header" aria-expanded="false" aria-controls="faq-answer-7">
-                <span class="faq__item-question">Paketi satın aldıktan sonra süreç ne zaman başlar?</span>
-                <span class="faq__item-toggle" aria-hidden="true">
-                  <iconify-icon icon="fa6-solid:plus" mode="svg" noobserver></iconify-icon>
-                </span>
-              </button>
-              <div class="faq__item-body" id="faq-answer-7">
-                <p class="faq__item-answer">
-                  Ödeme tamamlandıktan sonra tarafınıza detaylı danışan bilgi formu ve tahlil rehberi iletilir. Form ve tahliller tamamlanıp bana ulaştıktan sonraki 48 saat içinde programınız hazırlanır ve süreciniz başlar.
-                </p>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </div>
     </section>
-
     <section class="social" aria-labelledby="social-title">
       <div class="container">
         <div class="social__card">
@@ -543,43 +295,39 @@
             <h2 id="social-title" class="social__title">Bizi takip et</h2>
             <p class="social__text">Her hafta yeni içerik: antrenman teknikleri, beslenme ipuçları ve gerçek dönüşümler.</p>
             <div class="social__buttons">
-              <a href="https://youtube.com/" class="social__button social__button--youtube" title="YouTube kanalımızı ziyaret edin" target="_blank" rel="noopener">
+              <a href="@(Model.Layout.Link(SocialPlatform.YouTube) ?? "https://youtube.com/")" class="social__button social__button--youtube" title="YouTube kanalımızı ziyaret edin" target="_blank" rel="noopener">
                 <iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>YouTube</span></a>
-              <a href="https://instagram.com/" class="social__button social__button--instagram" title="Instagram hesabımızı ziyaret edin" target="_blank" rel="noopener">
+              <a href="@(Model.Layout.Link(SocialPlatform.Instagram) ?? "https://instagram.com/")" class="social__button social__button--instagram" title="Instagram hesabımızı ziyaret edin" target="_blank" rel="noopener">
                 <iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Instagram</span></a>
             </div>
           </div>
           <div class="social__previews">
-            <a href="https://youtube.com/" class="social__item social__item--youtube" title="Kardionun Önemi videosunu izle" target="_blank" rel="noopener">
-              <img src="/images/home_youtube1.png" alt="Emir Coaching YouTube videosu: Kardionun Önemi" title="Kardionun Önemi"
+            @foreach (var video in Model.YouTubePosts)
+            {
+            <a href="@video.Url" class="social__item social__item--youtube" title="@video.Title videosunu izle" target="_blank" rel="noopener">
+              <img src="@video.ImageUrl" alt="Emir Coaching YouTube videosu: @video.Title" title="@video.Title"
                 width="650" height="444" class="social__item-img" loading="lazy">
               <span class="social__badge social__badge--youtube"><iconify-icon icon="fa6-brands:youtube" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
               <span class="social__play" aria-hidden="true"><iconify-icon icon="ph:play-fill" mode="svg" noobserver></iconify-icon></span>
-              <span class="social__video-title">Kardionun Önemi</span>
+              <span class="social__video-title">@video.Title</span>
             </a>
-          <a href="https://instagram.com/" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
-            <img src="/images/home_instagram1.png" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
+            }
+            @foreach (var post in Model.InstagramPosts)
+            {
+          <a href="@post.Url" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
+            <img src="@post.ImageUrl" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
               width="333" height="458" class="social__item-img" loading="lazy">
             <span class="social__badge"><iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>4.891</span>
+            @if (post.LikeCount is { } likes)
+            {
+            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>@SiteFormat.Number(likes)</span>
+            }
           </a>
-          <a href="https://instagram.com/" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
-            <img src="/images/home_instagram2.png" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
-              width="333" height="458" class="social__item-img" loading="lazy">
-            <span class="social__badge"><iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>4.891</span>
-          </a>
-          <a href="https://instagram.com/" class="social__item" title="Instagram gönderisini aç" target="_blank" rel="noopener">
-            <img src="/images/home_instagram3.png" alt="Emir Coaching Instagram gönderisi" title="Emir Coaching Instagram gönderisi"
-              width="333" height="458" class="social__item-img" loading="lazy">
-            <span class="social__badge"><iconify-icon icon="fa6-brands:instagram" mode="svg" noobserver aria-hidden="true"></iconify-icon></span>
-            <span class="social__likes"><iconify-icon icon="fa6-solid:heart" mode="svg" noobserver aria-hidden="true"></iconify-icon>4.891</span>
-          </a>
+            }
           </div>
         </div>
       </div>
     </section>
-
     <section class="cta cta--home" aria-labelledby="cta-title">
       <div class="cta__triangle" aria-hidden="true"></div>
       <div class="container cta__inner">
@@ -588,7 +336,7 @@
         <div class="cta__actions">
           <button type="button" class="hero__button hero__button--primary" title="Paket seçimi için bizimle iletişime geç"
             data-contact-trigger>Hemen Başla</button>
-          <a href="https://wa.me/905453712515" class="hero__button hero__button--secondary"
+          <a href="@(await Api.GetWhatsAppUrlAsync())" class="hero__button hero__button--secondary"
             title="WhatsApp üzerinden bize ulaşın" target="_blank" rel="noopener">
             <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>
             <span>WhatsApp İletişim</span>

@@ -1,0 +1,50 @@
+@model PackageCardModel
+@{
+    var p = Model.Package;
+}
+          <article id="@Model.ElementId" class="pkg pkg--@Model.Rank" aria-labelledby="@Model.TitleId">
+            @if (p.IsFeatured)
+            {
+            <span class="pkg__badge">En Çok Tercih Edilen</span>
+            }
+            <div class="pkg__top">
+              <img src="/images/home_packet.png" alt="" width="477" height="477" class="pkg__img" loading="lazy">
+              <div class="pkg__top-row">
+                <div class="pkg__identity">@Html.Raw(Model.Rank switch
+                {
+                    1 => "<svg class=\"pkg__rank\" width=\"28\" height=\"15\" viewBox=\"0 0 28 15\" aria-hidden=\"true\"><path d=\"M3 12 L14 3 L25 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                    2 => "<svg class=\"pkg__rank\" width=\"28\" height=\"23\" viewBox=\"0 0 28 23\" aria-hidden=\"true\"><path d=\"M3 12 L14 3 L25 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3 20 L14 11 L25 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                    _ => "<svg class=\"pkg__rank\" width=\"28\" height=\"48\" viewBox=\"0 0 28 48\" aria-hidden=\"true\"><path d=\"M14 .5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L14 13.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z\" fill=\"currentColor\"/><g transform=\"translate(0 17)\"><path d=\"M3 11 L14 2 L25 11\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3 20 L14 11 L25 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3 29 L14 20 L25 29\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+                })<h3 id="@Model.TitleId" class="pkg__name"><a href="@Model.NameUrl" class="pkg__name-link" title="@p.Name@Model.LocationNote paketinin detaylarını incele">@p.Name</a></h3></div>
+                <span class="pkg__duration">@p.DurationMonths Aylık</span>
+              </div>
+            </div>
+            <div class="pkg__body">
+              <p class="pkg__price"><span class="pkg__total">@SiteFormat.Price(p.Price)</span><span class="pkg__total-label">toplam</span></p>
+              <p class="pkg__monthly">ayda ≈ <b>@SiteFormat.Price(p.MonthlyPrice)</b></p>
+              <ul class="pkg__list">
+              @foreach (var h in p.Highlights.OrderBy(h => h.SortOrder))
+              {
+                  var tag = Model.Perks.Label(h.Text, h.IsLocked);
+                  var (css, icon) = h.IsLocked ? (" pkg__item--locked", "mdi:lock-outline")
+                      : tag is not null ? (" pkg__item--zoom", "mdi:star")
+                      : ("", SiteFormat.HighlightIcon(h.IconKey));
+                  if (tag is null && h.SubText is null)
+                  {
+              <li class="pkg__item@(css)"><iconify-icon icon="@icon" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>@h.Text</span></li>
+                  }
+                  else
+                  {
+              <li class="pkg__item@(css)"><iconify-icon icon="@icon" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>@if (tag is not null) {<span class="pkg__tag">@tag</span>}@h.Text@if (h.SubText is not null) {<span class="pkg__sub">@h.SubText</span>}</span></li>
+                  }
+              }
+              </ul>
+              <div class="pkg__actions">
+                <a href="/paketler/@p.Slug" class="pkg__buy" title="@p.Name@Model.LocationNote paketini incele ve satın al">
+                  <iconify-icon icon="fa6-solid:basket-shopping" mode="svg" noobserver aria-hidden="true"></iconify-icon>Satın Al</a>
+                <p class="pkg__secure"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" mode="svg" noobserver aria-hidden="true"></iconify-icon><span>Güvenli ödeme · Shopier</span></p>
+                <a href="@Model.WhatsAppUrl" class="pkg__ask" title="@p.Name@Model.LocationNote paketi hakkında WhatsApp'tan soru sor" target="_blank" rel="noopener">
+                  <iconify-icon icon="fa6-brands:whatsapp" mode="svg" noobserver aria-hidden="true"></iconify-icon>Bu paket hakkında soru sor</a>
+              </div>
+            </div>
+          </article>
