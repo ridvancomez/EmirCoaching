@@ -73,7 +73,8 @@ public class PaketlerController(SiteApi api) : Controller
         {
             Layout = layout,
             Package = package,
-            Perks = new PackagePerks(layout.Packages, package.Location)
+            Perks = new PackagePerks(layout.Packages, package.Location),
+            Hero = await api.GetPageContentAsync("paket-detay")
         });
     }
 }
@@ -238,10 +239,15 @@ public class BultenController : Controller
 
 public class HataController : Controller
 {
+    // Durum kodu sayfaları (UseStatusCodePagesWithReExecute). 5xx sunucu hatası, diğer 4xx "sayfa yok" tasarımını
+    // kullanır; aralık dışı kod (ör. /hata/200) 404 sayılır ki hata sayfası 200 ile dizine girmesin.
     [Route("/hata/{code:int}")]
     public IActionResult Index(int code)
     {
+        if (code is < 400 or > 599)
+            code = StatusCodes.Status404NotFound;
+
         Response.StatusCode = code;
-        return code == StatusCodes.Status404NotFound ? View("NotFound") : View("ServerError");
+        return code >= StatusCodes.Status500InternalServerError ? View("ServerError") : View("NotFound");
     }
 }

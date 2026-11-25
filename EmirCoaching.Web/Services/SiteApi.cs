@@ -19,7 +19,9 @@ public sealed record LayoutData(
 
 /// <summary>
 /// Sitenin API'ye tek kapısı. Yanıtlar kısa süre (Api:CacheSeconds) bellekte tutulur: her sayfa birkaç uç çağırır,
-/// paneldeki değişiklik en geç bu süre sonra görünür. Bulunamayan kayıt (404) null döner.
+/// paneldeki değişiklik en geç bu süre sonra görünür. Bulunamayan kayıt (404) null döner ve önbelleğe alınmaz:
+/// adresteki slug'la üretilen anahtarlar yalnızca var olan kayıtlarla sınırlı kalır.
+/// Anahtarlar metot başına ayrı önekle başlar; slug başka bir metodun anahtarıyla çakışamaz.
 /// </summary>
 public sealed class SiteApi(
     IMemoryCache cache,
@@ -35,7 +37,6 @@ public sealed class SiteApi(
     ITestimonialsClient testimonials,
     IFaqsClient faqs,
     ITransformationsClient transformations,
-    ITransformationTypesClient transformationTypes,
     IBlogPostsClient blogPosts,
     IBlogCategoriesClient blogCategories,
     ILegalDocumentsClient legalDocuments,
@@ -50,17 +51,16 @@ public sealed class SiteApi(
         var settingsTask = siteSettings.GetAsync();
         var packagesTask = packages.GetListAsync();
         var linksTask = socialLinks.GetActiveAsync();
-        await Task.WhenAll(settingsTask, packagesTask, linksTask);
-        return new LayoutData(settingsTask.Result, packagesTask.Result, linksTask.Result);
+        return new LayoutData(await settingsTask, await packagesTask, await linksTask);
     });
 
     public async Task<string> GetWhatsAppUrlAsync() => (await GetLayoutAsync()).WhatsAppUrl;
 
     public Task<PackageDetailResponse?> GetPackageAsync(string slug) =>
-        CachedAsync($"package:{slug}", () => OrNullAsync(() => packages.GetDetailAsync(slug)));
+        CachedAsync($"package-detail:{slug}", () => OrNullAsync(() => packages.GetDetailAsync(slug)));
 
     public Task<PageContentResponse?> GetPageContentAsync(string pageKey) =>
-        CachedAsync($"page:{pageKey}", () => OrNullAsync(() => pageContents.GetByPageKeyAsync(pageKey)));
+        CachedAsync($"page-content:{pageKey}", () => OrNullAsync(() => pageContents.GetByPageKeyAsync(pageKey)));
 
     public Task<List<PurchaseStepResponse>> GetPurchaseStepsAsync() => CachedAsync("purchase-steps", purchaseSteps.GetAllAsync);
 
@@ -87,17 +87,19 @@ public sealed class SiteApi(
         return details.ToList();
     });
 
-    public Task<List<TransformationTypeResponse>> GetTransformationTypesAsync() =>
-        CachedAsync("transformation-types", transformationTypes.GetAllAsync);
-
     public Task<PagedResultOfBlogPostResponse> GetBlogPostsAsync(int page, int size) =>
-        CachedAsync($"blog:{page}:{size}", () => blogPosts.GetPagedAsync(null, page, size));
+        CachedAsync($"blog-list:{page}:{size}", () => blogPosts.GetPagedAsync(null, page, size));
 
     public Task<BlogPostResponse?> GetFeaturedPostAsync() =>
-        CachedAsync("blog:featured", () => OrNullAsync(() => blogPosts.GetFeaturedAsync(null)));
+        CachedAsync("blog-featured", () => OrNullAsync(() => blogPosts.GetFeaturedAsync(null)));
+
+    // API'de /blog-posts/featured sabit rota; bu slug detay değil öne çıkan yazının özetini döndürür
+    private const string ReservedBlogSlug = "featured";
 
     public Task<BlogPostDetailResponse?> GetBlogPostAsync(string slug) =>
-        CachedAsync($"blog:{slug}", () => OrNullAsync(() => blogPosts.GetDetailAsync(slug)));
+        slug == ReservedBlogSlug
+            ? Task.FromResult<BlogPostDetailResponse?>(null)
+            : CachedAsync($"blog-post:{slug}", () => OrNullAsync(() => blogPosts.GetDetailAsync(slug)));
 
     public Task<List<BlogCategoryResponse>> GetBlogCategoriesAsync() => CachedAsync("blog-categories", blogCategories.GetAllAsync);
 
@@ -120,7 +122,8 @@ public sealed class SiteApi(
             return value!;
 
         value = await factory();
-        cache.Set(key, value, _ttl);
+        if (value is not null)
+            cache.Set(key, value, _ttl);
         return value;
     }
 

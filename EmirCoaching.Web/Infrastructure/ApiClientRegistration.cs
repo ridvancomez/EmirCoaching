@@ -18,7 +18,6 @@ public static class ApiClientRegistration
         Add<ITestimonialsClient, TestimonialsClient>();
         Add<IFaqsClient, FaqsClient>();
         Add<ITransformationsClient, TransformationsClient>();
-        Add<ITransformationTypesClient, TransformationTypesClient>();
         Add<IBlogPostsClient, BlogPostsClient>();
         Add<IBlogCategoriesClient, BlogCategoriesClient>();
         Add<ILegalDocumentsClient, LegalDocumentsClient>();

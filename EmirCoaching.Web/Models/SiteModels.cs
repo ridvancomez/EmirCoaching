@@ -47,6 +47,12 @@ public sealed class PackageDetailViewModel
     public required LayoutData Layout { get; init; }
     public required PackageDetailResponse Package { get; init; }
     public required PackagePerks Perks { get; init; }
+    /// <summary>Panelde "paket-detay" sayfa içeriği (hero başlığı ve görseli)</summary>
+    public PageContentResponse? Hero { get; init; }
+
+    /// <summary>Evde ve salonda paketleri aynı adı taşır; detayda hangisi olduğu adda belirtilir</summary>
+    public bool IsHome => Package.Location == PackageLocation.Evde;
+    public string DisplayName => IsHome ? $"{Package.Name} (Evde)" : Package.Name;
 }
 
 public sealed class BlogListViewModel

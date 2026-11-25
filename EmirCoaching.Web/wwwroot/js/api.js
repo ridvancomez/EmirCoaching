@@ -5,12 +5,12 @@
   var base = (meta ? meta.content : "").replace(/\/+$/, "");
 
   // Hata yanıtı ProblemDetails: errors[] Türkçe mesajlardır; yoksa title
-  function problemMessages(response) {
+  function problemMessages(response, fallback) {
     return response.json().then(function (problem) {
       if (problem && problem.errors && problem.errors.length) return problem.errors;
-      return [problem && problem.title ? problem.title : "Bir hata oluştu. Lütfen tekrar deneyin."];
+      return [problem && problem.title ? problem.title : fallback];
     }, function () {
-      return ["Bir hata oluştu. Lütfen tekrar deneyin."];
+      return [fallback];
     });
   }
 
@@ -22,8 +22,11 @@
       body: JSON.stringify(body)
     }).then(function (response) {
       if (response.ok) return { ok: true };
-      if (response.status === 429) return { ok: false, errors: ["Çok fazla deneme yaptınız. Lütfen biraz sonra tekrar deneyin."] };
-      return problemMessages(response).then(function (errors) { return { ok: false, errors: errors }; });
+      // 429: API'nin kendi gerekçesi (ör. bülten günlük sınırı) varsa o, yoksa genel mesaj
+      var fallback = response.status === 429
+        ? "Çok fazla deneme yaptınız. Lütfen biraz sonra tekrar deneyin."
+        : "Bir hata oluştu. Lütfen tekrar deneyin.";
+      return problemMessages(response, fallback).then(function (errors) { return { ok: false, errors: errors }; });
     }, function () {
       return { ok: false, errors: ["Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin."] };
     });

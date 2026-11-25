@@ -10,23 +10,22 @@ namespace EmirCoaching.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.UpdateData(
-                table: "PageContents",
-                keyColumn: "Id",
-                keyValue: 1,
-                columns: new[] { "ButtonUrl", "Title" },
-                values: new object[] { "/paketler", "Kendini, bahanelerinden\ndaha GÜÇLÜ hale getir" });
+            // Yalnızca seed değerini hâlâ taşıyan alanlar güncellenir; panelde değiştirilmiş başlık/adres korunur
+            migrationBuilder.Sql(
+                "UPDATE PageContents SET Title = N'Kendini, bahanelerinden' + CHAR(10) + N'daha GÜÇLÜ hale getir' " +
+                "WHERE Id = 1 AND Title = N'Kendini, bahanelerinden daha GÜÇLÜ hale getir';");
+            migrationBuilder.Sql(
+                "UPDATE PageContents SET ButtonUrl = N'/paketler' WHERE Id = 1 AND ButtonUrl = N'/paketler.html';");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.UpdateData(
-                table: "PageContents",
-                keyColumn: "Id",
-                keyValue: 1,
-                columns: new[] { "ButtonUrl", "Title" },
-                values: new object[] { "/paketler.html", "Kendini, bahanelerinden daha GÜÇLÜ hale getir" });
+            migrationBuilder.Sql(
+                "UPDATE PageContents SET Title = N'Kendini, bahanelerinden daha GÜÇLÜ hale getir' " +
+                "WHERE Id = 1 AND Title = N'Kendini, bahanelerinden' + CHAR(10) + N'daha GÜÇLÜ hale getir';");
+            migrationBuilder.Sql(
+                "UPDATE PageContents SET ButtonUrl = N'/paketler.html' WHERE Id = 1 AND ButtonUrl = N'/paketler';");
         }
     }
 }

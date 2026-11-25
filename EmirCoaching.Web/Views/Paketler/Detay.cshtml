@@ -1,7 +1,7 @@
 @model PackageDetailViewModel
 @{
     var package = Model.Package;
-    ViewData["Title"] = package.MetaTitle ?? $"{package.Name} Paket Detayı | Emir Coaching — {package.Subtitle}";
+    ViewData["Title"] = package.MetaTitle ?? $"{Model.DisplayName} Paket Detayı | Emir Coaching — {package.Subtitle}";
     ViewData["Description"] = package.MetaDescription ?? package.ShortDescription;
     ViewData["ActiveNav"] = "paketler";
 }
@@ -9,7 +9,7 @@
   <main>
     <!-- ==================== Hero (sade varyant) ==================== -->
     <section class="paketler-hero paketler-hero--compact" aria-labelledby="paket-detay-title">
-      <img src="/images/paketlerslider.png" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
+      <img src="@(Model.Hero?.BackgroundImageUrl ?? "/images/paketlerslider.png")" alt="Karanlık spor salonunda ağırlık çalışan sporcu"
         title="Emir Coaching @package.Name" class="paketler-hero__bg">
       <div class="paketler-hero__overlay" aria-hidden="true"></div>
       <div class="paketler-hero__fade" aria-hidden="true"></div>
@@ -21,13 +21,13 @@
               <a href="/" class="paketler-hero__breadcrumb-link" title="Ana Sayfa">Ana Sayfa</a>
             </li>
             <li class="paketler-hero__breadcrumb-item">
-              <a href="/paketler/@package.Slug" class="paketler-hero__breadcrumb-link" title="@package.Name" aria-current="page">@package.Name</a>
+              <a href="/paketler/@package.Slug" class="paketler-hero__breadcrumb-link" title="@Model.DisplayName" aria-current="page">@Model.DisplayName</a>
             </li>
           </ul>
         </nav>
 
         <div class="container paketler-hero__intro">
-          <h1 id="paket-detay-title" class="paketler-hero__heading">Detaylı İnceleme</h1>
+          <h1 id="paket-detay-title" class="paketler-hero__heading">@SiteFormat.Highlight(Model.Hero?.Title ?? "Detaylı İnceleme", Model.Hero?.HighlightText, "paketler-hero__title-accent")</h1>
           <p class="paketler-hero__lead">
             @package.ShortDescription
           </p>
@@ -94,7 +94,7 @@
 
       <aside class="fiyat-karti" aria-labelledby="fiyat-karti-title">
         <h2 id="fiyat-karti-title" class="fiyat-karti__title">@package.Name</h2>
-        <p class="fiyat-karti__subtitle">@package.Subtitle</p>
+        <p class="fiyat-karti__subtitle">@package.Subtitle@(Model.IsHome ? " · Evde" : "")</p>
         <p class="fiyat-karti__price">@SiteFormat.Price(package.Price).Replace("₺", "₺ ")</p>
         <ul class="fiyat-karti__list">
           <li class="fiyat-karti__item">
@@ -132,7 +132,7 @@
         </ul>
         <!-- Satın Al → bilgi formu (paket seçili gelir); ödeme formdan sonra Shopier'de -->
         <a href="/diyet-formu?paket=@package.Slug" class="hero__button hero__button--secondary fiyat-karti__button fiyat-karti__button--shopier"
-          title="@package.Name paketi için bilgi formuna geç">
+          title="@Model.DisplayName paketi için bilgi formuna geç">
           <span>Satın Al</span>
         </a>
         <p class="fiyat-karti__note">Kredi kartı ile taksit imkanı mevcuttur.</p>
