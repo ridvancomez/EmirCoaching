@@ -226,6 +226,27 @@ h1:focus {
     font-size: 1.2rem;
 }
 
+/* MudBlazor'un sıfırlaması liste girintisini ve paragraf boşluğunu da siliyor; editörde okunur kalsın */
+.html-editor .ck-content p,
+.html-editor .ck-content ul,
+.html-editor .ck-content ol,
+.html-editor .ck-content blockquote {
+    margin: 0 0 0.75em;
+}
+
+.html-editor .ck-content ul,
+.html-editor .ck-content ol {
+    padding-left: 1.75em;
+}
+
+.html-editor .ck-content ul {
+    list-style: disc;
+}
+
+.html-editor .ck-content ol {
+    list-style: decimal;
+}
+
 /* Liste içindeki alt kayıtlar (paket modülleri, ölçümler) */
 .sub-list {
     display: flex;

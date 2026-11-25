@@ -1,7 +1,8 @@
 @typeparam TItem where TItem : class
 
-@* Panelin ortak listesi: çoklu seçim + toplu silme, satır sonunda "⋯" menüsü (Düzenle / Sil + sayfaya özel işlemler) *@
-<MudTable T="TItem" Items="Items" Loading="Loading" Hover="true" Elevation="0" Outlined="true"
+@* Panelin ortak listesi: çoklu seçim + toplu silme, satır sonunda "⋯" menüsü (Düzenle / Sil + sayfaya özel işlemler).
+   Tablo kendisi sayfalamaz (MudTable varsayılanı 10 satırda keser); sayfalı listeler sunucudan gelir ve Pager kullanır *@
+<MudTable T="TItem" Items="Items" Loading="Loading" Hover="true" Elevation="0" Outlined="true" RowsPerPage="int.MaxValue"
           MultiSelection="CanDelete" SelectedItems="SelectedItems" SelectedItemsChanged="SelectedItemsChanged"
           SelectOnRowClick="false" RowClassFunc="RowClass" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Primary">
     <ToolBarContent>
