@@ -3,6 +3,7 @@ using EmirCoaching.DataAccess.Repositories.Concrete;
 using EmirCoaching.Entities.Common;
 using EmirCoaching.Entities.Entities;
 using EmirCoaching.Tests.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmirCoaching.Tests.Repositories;
 
@@ -10,6 +11,13 @@ namespace EmirCoaching.Tests.Repositories;
 public class TestimonialRepositoryTests : IDisposable
 {
     private readonly SqliteDatabase _db = new();
+
+    // Seed'de ana sayfa yorumları var; testler yalnızca kendi eklediklerine baksın diye silinir
+    public TestimonialRepositoryTests()
+    {
+        using var context = _db.CreateContext();
+        context.Testimonials.ExecuteDelete();
+    }
 
     public void Dispose() => _db.Dispose();
 
@@ -31,7 +39,7 @@ public class TestimonialRepositoryTests : IDisposable
         await using var context = _db.CreateContext();
         context.Testimonials.Add(new Testimonial
         {
-            PackageId = packageId, Name = name, Text = "Metin", Rating = 4, // SQLite decimal'ı metin saklar: 5.0 > "5" sayılıp CK_Testimonials_Rating'e takılır
+            PackageId = packageId, Name = name, Text = "Metin", Rating = 5,
             IsActive = isActive, ShowOnHome = showOnHome, SortOrder = sortOrder
         });
         await context.SaveChangesAsync();

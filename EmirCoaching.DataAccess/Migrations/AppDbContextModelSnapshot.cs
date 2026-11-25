@@ -197,6 +197,146 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("IsPublished", "PublishedAt");
 
                     b.ToTable("BlogPosts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImageCaption = "Doğru hesaplanmış bir makro planı, başarının anahtarıdır.",
+                            CoverImagePath = "/images/blog-makro-besinler.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            MetaTitle = "Kalori Açığı Nedir, Nasıl Doğru Hesaplanır? | Emir Coaching Blog",
+                            PublishedAt = new DateTime(2024, 10, 24, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 8,
+                            RecommendedPackageId = 2,
+                            Slug = "kalori-acigi-nedir",
+                            Summary = "Kilo vermenin temel kuralı kalori açığı yaratmaktır. Ancak doğru hesaplanmayan bir kalori açığı metabolizmanızı yavaşlatabilir ve kas kaybına neden olabilir.",
+                            Title = "Kalori Açığı Nedir, Nasıl Doğru Hesaplanır?"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-makro-besinler.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = true,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 12, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 8,
+                            RecommendedPackageId = 2,
+                            Slug = "makro-besinlerin-gucu",
+                            Summary = "Vücudunuzun bir spor araba olduğunu düşünün. Sadece kalori saymak yetmez, yakıtın kalitesi belirleyicidir. Protein, karb ve yağ dengesini optimize etmenin yolları.",
+                            Title = "Makro Besinlerin Gücü: Performans İçin Yakıtınızı Doğru Seçin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-mekanik-gerilim.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 10, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 5,
+                            RecommendedPackageId = 2,
+                            Slug = "mekanik-gerilim",
+                            Summary = "Kas geliştirmek istiyorsanız antrenmanlarınızda mekanik gerilimi nasıl maksimize edeceğinizi öğrenmelisiniz.",
+                            Title = "Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 5,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-uyku-kas-gelisimi.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 5, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 6,
+                            RecommendedPackageId = 2,
+                            Slug = "uyku-ve-kas-gelisimi",
+                            Summary = "Antrenmanda yıkılan kaslar yatakta inşa edilir. Kaliteli bir uykunun anabolik hormonlara etkisi.",
+                            Title = "Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 3,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-deadlift-biyomekanigi.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 1, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 10,
+                            RecommendedPackageId = 2,
+                            Slug = "deadlift-biyomekanigi",
+                            Summary = "Kral egzersiz deadlift'i anatominize uygun şekilde nasıl optimize edebilirsiniz?",
+                            Title = "Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 2,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-mekanik-gerilim-2.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 10, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 5,
+                            RecommendedPackageId = 2,
+                            Slug = "mekanik-gerilim-2",
+                            Summary = "Kas geliştirmek istiyorsanız antrenmanlarınızda mekanik gerilimi nasıl maksimize edeceğinizi öğrenmelisiniz.",
+                            Title = "Mekanik Gerilim: Kas Gelişiminin Gerçek Sırrı"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 5,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-uyku-kas-gelisimi-2.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 5, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 6,
+                            RecommendedPackageId = 2,
+                            Slug = "uyku-ve-kas-gelisimi-2",
+                            Summary = "Antrenmanda yıkılan kaslar yatakta inşa edilir. Kaliteli bir uykunun anabolik hormonlara etkisi.",
+                            Title = "Uyku ve Kas Gelişimi Arasındaki Bilimsel Bağ"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 3,
+                            ContentHtml = "<section aria-label=\"Giriş\" class=\"makale__section\" id=\"giris\">\n<p>Fitness dünyasında en çok duyulan kavramlardan biri şüphesiz \"kalori açığı\"dır. İster yağ yakmak, ister kilo vermek isteyin, hedefinize ulaşmanın matematiksel temeli bu kavrama dayanır. Ancak mesele sadece \"az yemek\" değildir.</p>\n<p>Vücudunuz bir makine gibi çalışır ve bu makinenin çalışması için enerjiye (kaloriye) ihtiyacı vardır. Eğer bu makineye harcadığından daha az enerji verirseniz, aradaki farkı kapatmak için depoladığı enerjiyi (yağı) kullanmaya başlar. İşte bu sürece kalori açığı diyoruz.</p>\n</section>\n<section aria-labelledby=\"bmh-title\" class=\"makale__section\" id=\"bazal-metabolizma-hizi\">\n<h2 class=\"makale__title\" id=\"bmh-title\">Bazal Metabolizma Hızı (BMH) Nedir?</h2>\n<p>Kalori açığı hesaplamaya başlamadan önce bilmeniz gereken ilk değer Bazal Metabolizma Hızınızdır (BMR). Bu, vücudunuzun tam dinlenme halindeyken (hiçbir şey yapmadan yattığınızda) hayatta kalmak için harcadığı enerjidir.</p>\n<div class=\"makale-callout\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:calculator-variant-outline\" mode=\"svg\" noobserver></iconify-icon> Mifflin-St Jeor Formülü (Erkekler için)</p>\n<pre class=\"makale-callout__formula\"><code>BMH = (10 × Ağırlık) + (6.25 × Boy) − (5 × Yaş) + 5</code></pre>\n</div>\n</section>\n<section aria-labelledby=\"acik-title\" class=\"makale__section\" id=\"dogru-acik-miktari\">\n<h2 class=\"makale__title\" id=\"acik-title\">Doğru Açık Miktarı Ne Olmalı?</h2>\n<p>En sık yapılan hata, sonucu hızlandırmak için aşırı büyük bir kalori açığı yaratmaktır. Bu durum kas kaybına, enerji düşüklüğüne ve metabolizmanın yavaşlamasına neden olur.</p>\n<ul class=\"makale__list\">\n<li><strong>Hafif Açık (250-300 kcal):</strong> Yavaş ama çok sürdürülebilir. Maksimum kas koruması sağlar.</li>\n<li><strong>Orta Açık (500 kcal):</strong> Haftada yaklaşık 0.5 kg yağ kaybı sağlar. Çoğu kişi için idealdir.</li>\n<li><strong>Yüksek Açık (750+ kcal):</strong> Sadece ciddi obezite durumlarında ve uzman kontrolünde uygulanmalıdır.</li>\n</ul>\n<blockquote class=\"makale__quote\">\n<p>\"Hızlı kayıp, kalıcı kayıp değildir. Hedefiniz maraton koşmak olmalı, depar atmak değil.\"</p>\n</blockquote>\n</section>\n<section aria-labelledby=\"takip-title\" class=\"makale__section\" id=\"nasil-takip-edecegiz\">\n<h2 class=\"makale__title\" id=\"takip-title\">Nasıl Takip Edeceğiz?</h2>\n<p>Hesaplamayı yaptıktan sonra süreci yönetmek işin pratik kısmıdır. Şunlara dikkat etmelisiniz:</p>\n<ol class=\"makale__list makale__list--ordered\">\n<li>Mutfağınıza hassas bir dijital tartı alın. Göz kararı porsiyonlar genellikle yanıltıcıdır.</li>\n<li>Güvenilir bir kalori takip uygulaması indirin ve her öğünü kaydedin.</li>\n<li>Sıvı kalorileri (meyve suları, şekerli kahveler) gözden kaçırmayın.</li>\n<li>Haftalık tartılın ve ölçü alın; günlük dalgalanmalara takılmayın.</li>\n</ol>\n<div class=\"makale-callout makale-callout--dikkat\" role=\"note\">\n<p class=\"makale-callout__title\"><iconify-icon aria-hidden=\"true\" class=\"makale-callout__icon\" icon=\"mdi:alert-outline\" mode=\"svg\" noobserver></iconify-icon> Dikkat</p>\n<p class=\"makale-callout__text\">Kadınlar 1200 kcal, erkekler 1500 kcal altına kesinlikle inmemelidir. Bu değerlerin altı, mikro besin eksikliklerine ve hormonal bozukluklara yol açar.</p>\n</div>\n</section>",
+                            CoverImagePath = "/images/blog-deadlift-biyomekanigi-2.jpg",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            IsFeatured = false,
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 3, 1, 9, 0, 0, 0, DateTimeKind.Utc),
+                            ReadingMinutes = 10,
+                            RecommendedPackageId = 2,
+                            Slug = "deadlift-biyomekanigi-2",
+                            Summary = "Kral egzersiz deadlift'i anatominize uygun şekilde nasıl optimize edebilirsiniz?",
+                            Title = "Deadlift Biyomekaniği: Güvenli ve Ağır Kaldırmak"
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogPostTag", b =>
@@ -212,6 +352,28 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("BlogTagId");
 
                     b.ToTable("BlogPostTags");
+
+                    b.HasData(
+                        new
+                        {
+                            BlogPostId = 1,
+                            BlogTagId = 1
+                        },
+                        new
+                        {
+                            BlogPostId = 1,
+                            BlogTagId = 2
+                        },
+                        new
+                        {
+                            BlogPostId = 1,
+                            BlogTagId = 3
+                        },
+                        new
+                        {
+                            BlogPostId = 1,
+                            BlogTagId = 4
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.BlogTag", b =>
@@ -251,6 +413,40 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("BlogTags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "beslenme",
+                            Slug = "beslenme"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "kilo-verme",
+                            Slug = "kilo-verme"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "makro",
+                            Slug = "makro"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "kalori-acigi",
+                            Slug = "kalori-acigi"
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.Certificate", b =>
@@ -3379,6 +3575,37 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SiteStats");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yıl Deneyim",
+                            SortOrder = 1,
+                            Suffix = "+",
+                            Value = "8"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Danışan",
+                            SortOrder = 2,
+                            Suffix = "+",
+                            Value = "100"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Başarı",
+                            SortOrder = 3,
+                            Value = "%95"
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.SocialLink", b =>
@@ -3543,6 +3770,60 @@ namespace EmirCoaching.DataAccess.Migrations
                         .HasFilter("[ExternalId] IS NOT NULL AND [IsDeleted] = 0");
 
                     b.ToTable("SocialPosts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            ImagePath = "/images/home_youtube1.png",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Platform = 2,
+                            PostedAt = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SortOrder = 1,
+                            Title = "Kardionun Önemi",
+                            Url = "https://youtube.com/"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            ImagePath = "/images/home_instagram1.png",
+                            IsActive = true,
+                            IsDeleted = false,
+                            LikeCount = 4891,
+                            Platform = 1,
+                            PostedAt = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SortOrder = 2,
+                            Url = "https://instagram.com/"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            ImagePath = "/images/home_instagram2.png",
+                            IsActive = true,
+                            IsDeleted = false,
+                            LikeCount = 4891,
+                            Platform = 1,
+                            PostedAt = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SortOrder = 3,
+                            Url = "https://instagram.com/"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            ImagePath = "/images/home_instagram3.png",
+                            IsActive = true,
+                            IsDeleted = false,
+                            LikeCount = 4891,
+                            Platform = 1,
+                            PostedAt = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SortOrder = 4,
+                            Url = "https://instagram.com/"
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.Testimonial", b =>
@@ -3598,6 +3879,281 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.ToTable("Testimonials", t =>
                         {
                             t.HasCheckConstraint("CK_Testimonials_Rating", "[Rating] >= 0 AND [Rating] <= 5 AND [Rating] * 2 = FLOOR([Rating] * 2)");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "A.K.",
+                            PackageId = 2,
+                            Rating = 5m,
+                            ShowOnHome = true,
+                            SortOrder = 1,
+                            Text = "İlk ayda 6 kilo verdim ama asıl kazancım, neyi neden yaptığımı öğrenmek oldu."
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "M.Y.",
+                            PackageId = 1,
+                            Rating = 5m,
+                            ShowOnHome = true,
+                            SortOrder = 2,
+                            Text = "Programı hayatıma göre kurdu; ilk kez bir beslenme planını üç ay boyunca bırakmadan sürdürebildim."
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "E.D.",
+                            PackageId = 3,
+                            Rating = 5m,
+                            ShowOnHome = true,
+                            SortOrder = 3,
+                            Text = "Her hafta form kontrolü olunca bırakmak aklıma bile gelmedi. Bir yıl sonra bambaşka biriyim."
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Ahmet Y.",
+                            PackageId = 1,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Text = "Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Caner K.",
+                            PackageId = 1,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Text = "Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Burak M.",
+                            PackageId = 1,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Text = "Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Ahmet Y.",
+                            PackageId = 2,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Text = "Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Caner K.",
+                            PackageId = 2,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Text = "Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Burak M.",
+                            PackageId = 2,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Text = "Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Ahmet Y.",
+                            PackageId = 3,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Text = "Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Caner K.",
+                            PackageId = 3,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Text = "Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Burak M.",
+                            PackageId = 3,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Text = "Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Ahmet Y.",
+                            PackageId = 4,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Text = "Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Caner K.",
+                            PackageId = 4,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Text = "Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Burak M.",
+                            PackageId = 4,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Text = "Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Ahmet Y.",
+                            PackageId = 5,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Text = "Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Caner K.",
+                            PackageId = 5,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Text = "Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Burak M.",
+                            PackageId = 5,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Text = "Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Ahmet Y.",
+                            PackageId = 6,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Text = "Dönüşüm Protokolü ile hayatım değişti. Beslenme ve antrenman konusunda öğrendiklerim paha biçilemez. İletişim kalitesi mükemmel."
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Caner K.",
+                            PackageId = 6,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Text = "Daha önce birçok program denedim ama hiçbiri bu kadar detaylı ve takip odaklı değildi. Hedefime ulaştım ve korumaya devam ediyorum."
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Burak M.",
+                            PackageId = 6,
+                            Rating = 5m,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Text = "Sakatlık geçmişim olmasına rağmen bana özel hazırlanan programla hiçbir sorun yaşamadım. Gerçekten kişiye özel bir hizmet."
                         });
                 });
 
@@ -3687,6 +4243,250 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("ShowOnHome", "CreatedAt");
 
                     b.ToTable("Transformations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AfterImagePath = "/images/hakkimda-degisim-1-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-1-after-kare.jpg",
+                            Age = 28,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-1-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-1-before-kare.jpg",
+                            ClientName = "Mert",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 12,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Sadece fiziksel değil, mental olarak da büyük bir değişim yaşadım. Disiplin kelimesinin anlamını öğrendim.",
+                            Section = 0,
+                            ShowOnHome = true,
+                            SortOrder = 1,
+                            Story = "Programa başladığımda 98 kiloydum ve merdiven çıkarken bile nefes nefese kalıyordum. Yıllarca farklı diyetler denemiş, her seferinde birkaç hafta sonra bırakmıştım.\n\nİlk haftalarda en zorlandığım şey düzen oldu: öğünleri tartmak, antrenmanları kaçırmamak, uykuyu ciddiye almak. Haftalık kontrollerde planım küçük adımlarla güncellendi; hiçbir zaman aç kalmadım.\n\n12 haftanın sonunda 12 kilo verdim, yağ oranım %8 düştü ve kas kütlemi korudum. Ama asıl kazancım disiplin oldu: artık antrenmana motivasyon beklemeden gidiyorum.",
+                            TransformationTypeId = 1,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AfterImagePath = "/images/hakkimda-degisim-1-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-1-after-kare.jpg",
+                            Age = 32,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-1-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-1-before-kare.jpg",
+                            ClientName = "Can",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 16,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Kilo alamıyordum, yıllardır aynı formdaydım. Doğru yükleme ve beslenme planı ile tabularımı yıktım.",
+                            Section = 0,
+                            ShowOnHome = true,
+                            SortOrder = 2,
+                            Story = "Yıllardır spor salonuna gidiyordum ama tartıdaki rakam hiç değişmiyordu. Ne kadar yesem de kilo alamadığımı düşünüyordum; aslında ne yediğimi hiç ölçmemiştim.\n\nKoçumla önce gerçek kalori ihtiyacımı hesapladık. Antrenmanlarımı ilerleyici yüklemeye göre yeniden kurduk ve her hafta ağırlıkları kayıt altına aldık.\n\n16 haftada 8 kilo aldım ve bunun 6.5 kilosu kas kütlesiydi; yağ oranım sabit kaldı. Aynada gördüğüm değişimden daha önemlisi, kendime olan güvenimin geri gelmesi oldu.",
+                            TransformationTypeId = 2,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 26,
+                            AlignBottom = true,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Elif",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 20,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Sürekli diyet yapıp bırakıyordum. Sürdürülebilir bir sistemin ne demek olduğunu burada anladım.",
+                            Section = 0,
+                            ShowOnHome = true,
+                            SortOrder = 3,
+                            Story = "Sürekli diyet yapıp bırakıyordum. Her yeni programın ilk haftasında çok heyecanlı olur, sonra kısıtlamalardan sıkılıp eski alışkanlıklarıma dönerdim.\n\nBu kez yasaklar yerine sürdürülebilir bir sistem kurduk: sevdiğim yemekler planın içindeydi, antrenmanlarım kondisyonumu adım adım artıracak şekilde ilerledi.\n\n20 haftanın sonunda 8 kilo verdim, yağ oranım %6 azaldı ve 1 kilo kas kazandım. Artık merdivenleri koşarak çıkıyorum ve bir diyete değil, bir yaşam tarzına bağlıyım.",
+                            TransformationTypeId = 3,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AfterImagePath = "/images/hakkimda-degisim-1-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-1-after-kare.jpg",
+                            Age = 28,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-1-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-1-before-kare.jpg",
+                            ClientName = "Mert",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 12,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Sadece fiziksel değil, mental olarak da büyük bir değişim yaşadım. Disiplin kelimesinin anlamını öğrendim.",
+                            Section = 0,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Story = "Programa başladığımda 98 kiloydum ve merdiven çıkarken bile nefes nefese kalıyordum. Yıllarca farklı diyetler denemiş, her seferinde birkaç hafta sonra bırakmıştım.\n\nİlk haftalarda en zorlandığım şey düzen oldu: öğünleri tartmak, antrenmanları kaçırmamak, uykuyu ciddiye almak. Haftalık kontrollerde planım küçük adımlarla güncellendi; hiçbir zaman aç kalmadım.\n\n12 haftanın sonunda 12 kilo verdim, yağ oranım %8 düştü ve kas kütlemi korudum. Ama asıl kazancım disiplin oldu: artık antrenmana motivasyon beklemeden gidiyorum.",
+                            TransformationTypeId = 1,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AfterImagePath = "/images/hakkimda-degisim-1-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-1-after-kare.jpg",
+                            Age = 32,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-1-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-1-before-kare.jpg",
+                            ClientName = "Can",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 16,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Kilo alamıyordum, yıllardır aynı formdaydım. Doğru yükleme ve beslenme planı ile tabularımı yıktım.",
+                            Section = 0,
+                            ShowOnHome = false,
+                            SortOrder = 5,
+                            Story = "Yıllardır spor salonuna gidiyordum ama tartıdaki rakam hiç değişmiyordu. Ne kadar yesem de kilo alamadığımı düşünüyordum; aslında ne yediğimi hiç ölçmemiştim.\n\nKoçumla önce gerçek kalori ihtiyacımı hesapladık. Antrenmanlarımı ilerleyici yüklemeye göre yeniden kurduk ve her hafta ağırlıkları kayıt altına aldık.\n\n16 haftada 8 kilo aldım ve bunun 6.5 kilosu kas kütlesiydi; yağ oranım sabit kaldı. Aynada gördüğüm değişimden daha önemlisi, kendime olan güvenimin geri gelmesi oldu.",
+                            TransformationTypeId = 2,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 26,
+                            AlignBottom = true,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Elif",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 20,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Sürekli diyet yapıp bırakıyordum. Sürdürülebilir bir sistemin ne demek olduğunu burada anladım.",
+                            Section = 0,
+                            ShowOnHome = false,
+                            SortOrder = 6,
+                            Story = "Sürekli diyet yapıp bırakıyordum. Her yeni programın ilk haftasında çok heyecanlı olur, sonra kısıtlamalardan sıkılıp eski alışkanlıklarıma dönerdim.\n\nBu kez yasaklar yerine sürdürülebilir bir sistem kurduk: sevdiğim yemekler planın içindeydi, antrenmanlarım kondisyonumu adım adım artıracak şekilde ilerledi.\n\n20 haftanın sonunda 8 kilo verdim, yağ oranım %6 azaldı ve 1 kilo kas kazandım. Artık merdivenleri koşarak çıkıyorum ve bir diyete değil, bir yaşam tarzına bağlıyım.",
+                            TransformationTypeId = 3,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 26,
+                            AlignBottom = true,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Elif",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 20,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Sürekli diyet yapıp bırakıyordum. Sürdürülebilir bir sistemin ne demek olduğunu burada anladım.",
+                            Section = 0,
+                            ShowOnHome = false,
+                            SortOrder = 7,
+                            Story = "Sürekli diyet yapıp bırakıyordum. Her yeni programın ilk haftasında çok heyecanlı olur, sonra kısıtlamalardan sıkılıp eski alışkanlıklarıma dönerdim.\n\nBu kez yasaklar yerine sürdürülebilir bir sistem kurduk: sevdiğim yemekler planın içindeydi, antrenmanlarım kondisyonumu adım adım artıracak şekilde ilerledi.\n\n20 haftanın sonunda 8 kilo verdim, yağ oranım %6 azaldı ve 1 kilo kas kazandım. Artık merdivenleri koşarak çıkıyorum ve bir diyete değil, bir yaşam tarzına bağlıyım.",
+                            TransformationTypeId = 3,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 29,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Zeynep",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 16,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Doğumdan sonra eski formuma dönemeyeceğimi düşünüyordum.",
+                            Section = 1,
+                            ShowOnHome = false,
+                            SortOrder = 1,
+                            Story = "Doğumdan sonra eski formuma dönemeyeceğimi düşünüyordum. Gün içinde vakit bulmak zordu, bu yüzden antrenmanlarım evde 40 dakikaya sığacak şekilde planlandı.\n\nBeslenmede yasaklar yerine porsiyon ve öğün düzeni üzerinde çalıştık. Haftalık kontrollerde ölçülerim düzenli takip edildi, takıldığım haftalarda plan küçük dokunuşlarla güncellendi.\n\n16 haftanın sonunda 9 kilo verdim ve yağ oranım %7 düştü. En önemlisi, enerjim geri geldi ve bu düzeni artık zorlanmadan sürdürebiliyorum.",
+                            TransformationTypeId = 1,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 34,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Ayşe",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 12,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Kilom normaldi ama vücudum sıkı değildi; yıllardır sadece kardiyo yapıyordum.",
+                            Section = 1,
+                            ShowOnHome = false,
+                            SortOrder = 2,
+                            Story = "Kilom normaldi ama vücudum sıkı değildi; yıllardır sadece kardiyo yapıyordum. Hedefim tartıdaki sayıdan çok aynadaki görüntüydü.\n\nPrograma ağırlık antrenmanı ve yeterli protein ekledik. İlk haftalarda tartı neredeyse hiç değişmedi, ama mezura ölçüleri her hafta biraz daha azaldı.\n\n12 haftada 3 kilo verip 2 kilo kas kazandım. Kıyafetlerim artık farklı oturuyor ve kendimi hiç olmadığım kadar güçlü hissediyorum.",
+                            TransformationTypeId = 4,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 27,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Selin",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 20,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Ofiste uzun saatler oturmak ve düzensiz yemek yüzünden birkaç yılda ciddi kilo almıştım.",
+                            Section = 1,
+                            ShowOnHome = false,
+                            SortOrder = 3,
+                            Story = "Ofiste uzun saatler oturmak ve düzensiz yemek yüzünden birkaç yılda ciddi kilo almıştım. Daha önce denediğim sert diyetlerin hepsi kısa sürede bitmişti.\n\nBu sefer acele etmedik: kalori açığı küçük tutuldu, adım hedefi ve haftada üç antrenman eklendi. Zor haftalarda koçumla konuşup planı birlikte ayarladık.\n\n20 haftanın sonunda 14 kilo verdim ve yağ oranım %10 düştü. Verdiğim kiloları geri almadan korumak benim için en büyük başarı oldu.",
+                            TransformationTypeId = 1,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AfterImagePath = "/images/hakkimda-degisim-2-after.jpg",
+                            AfterSquarePath = "/images/hakkimda-degisim-2-after-kare.jpg",
+                            Age = 31,
+                            AlignBottom = false,
+                            BeforeImagePath = "/images/hakkimda-degisim-2-before.jpg",
+                            BeforeSquarePath = "/images/hakkimda-degisim-2-before-kare.jpg",
+                            ClientName = "Derya",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DurationWeeks = 14,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Quote = "Çok zayıf görünmekten ve çabuk yorulmaktan şikayetçiydim.",
+                            Section = 1,
+                            ShowOnHome = false,
+                            SortOrder = 4,
+                            Story = "Çok zayıf görünmekten ve çabuk yorulmaktan şikayetçiydim. Spora başlamak istiyordum ama ağırlık çalışmaktan çekiniyordum.\n\nTemel hareketlerin tekniğini öğrenerek başladık, yükleri haftadan haftaya kontrollü artırdık. Öğünlerimi atlamamam için pratik bir beslenme planı hazırlandı.\n\n14 haftada yağ oranımı koruyarak 3 kilo kas kazandım. Artık hem daha dinç hissediyorum hem de duruşum tamamen değişti.",
+                            TransformationTypeId = 2,
+                            Year = 2026
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.TransformationMetric", b =>
@@ -3730,6 +4530,338 @@ namespace EmirCoaching.DataAccess.Migrations
                     b.HasIndex("TransformationId");
 
                     b.ToTable("TransformationMetrics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 1,
+                            Value = "-12 KG"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 1,
+                            Value = "-%8"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 1,
+                            Value = "+2 KG"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 2,
+                            Value = "+8 KG"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 2,
+                            Value = "Sabit"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 2,
+                            Value = "+6.5 KG"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 3,
+                            Value = "-8 KG"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 3,
+                            Value = "-%6"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 3,
+                            Value = "+1 KG"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 4,
+                            Value = "-12 KG"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 4,
+                            Value = "-%8"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 4,
+                            Value = "+2 KG"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 5,
+                            Value = "+8 KG"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 5,
+                            Value = "Sabit"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 5,
+                            Value = "+6.5 KG"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 6,
+                            Value = "-8 KG"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 6,
+                            Value = "-%6"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 6,
+                            Value = "+1 KG"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 7,
+                            Value = "-8 KG"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 7,
+                            Value = "-%6"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 7,
+                            Value = "+1 KG"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 8,
+                            Value = "-9 KG"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 8,
+                            Value = "-%7"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 8,
+                            Value = "+1 KG"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 9,
+                            Value = "-3 KG"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 9,
+                            Value = "-%4"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 9,
+                            Value = "+2 KG"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 10,
+                            Value = "-14 KG"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 10,
+                            Value = "-%10"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 10,
+                            Value = "+1.5 KG"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Ağırlık",
+                            SortOrder = 1,
+                            TransformationId = 11,
+                            Value = "+2 KG"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Yağ Oranı",
+                            SortOrder = 2,
+                            TransformationId = 11,
+                            Value = "Sabit"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Label = "Kas Kütlesi",
+                            SortOrder = 3,
+                            TransformationId = 11,
+                            Value = "+3 KG"
+                        });
                 });
 
             modelBuilder.Entity("EmirCoaching.Entities.Entities.TransformationType", b =>
@@ -3800,6 +4932,15 @@ namespace EmirCoaching.DataAccess.Migrations
                             Name = "Kondisyon & Yağ Kaybı",
                             Slug = "kondisyon-yag-kaybi",
                             SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            Name = "Form Koruma",
+                            Slug = "form-koruma",
+                            SortOrder = 4
                         });
                 });
 

@@ -1,3 +1,4 @@
+using EmirCoaching.DataAccess.Context;
 using EmirCoaching.Entities.Common;
 using EmirCoaching.Entities.Entities;
 using EmirCoaching.Entities.Identity;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EmirCoaching.DataAccess.Seed;
 
-public static class SeedData
+public static partial class SeedData
 {
     public const int AdminRoleId = 1;
     public const string AdminRoleName = "Admin";
@@ -57,6 +58,7 @@ public static class SeedData
         SeedCertificates(builder);
         SeedPurchaseSteps(builder);
         SeedFaqs(builder);
+        SeedSampleContent(builder);
         SeedRoles(builder);
     }
 
@@ -172,7 +174,8 @@ public static class SeedData
             new TransformationType
             {
                 Id = 3, Name = "Kondisyon & Yağ Kaybı", Slug = "kondisyon-yag-kaybi", SortOrder = 3, CreatedAt = SeedDate
-            });
+            },
+            new TransformationType { Id = 4, Name = "Form Koruma", Slug = "form-koruma", SortOrder = 4, CreatedAt = SeedDate });
     }
 
     // Front-end blog.html data-category değerleri
@@ -432,6 +435,8 @@ public static class SeedData
             // Sitedeki koç bölümü bu kullanıcıdan gelir; metinler panelden değiştirilir
             IsCoach = true,
             Title = CoachDefaults.Title,
+            Bio = CoachDefaults.Bio,
+            AvatarPath = CoachDefaults.AvatarPath,
             CoachExperience = CoachDefaults.Experience,
             CoachStory = CoachDefaults.Story,
             CoachVideoCoverPath = CoachDefaults.VideoCoverPath
@@ -446,6 +451,12 @@ public static class SeedData
         }
 
         await userManager.AddToRoleAsync(admin, AdminRoleName);
+
+        // Seed blog yazıları migration'da yazarsız girer (kullanıcı henüz yok); ilk admin onların yazarı olur
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await context.BlogPosts.Where(p => p.AuthorId == null)
+            .ExecuteUpdateAsync(s => s.SetProperty(p => p.AuthorId, admin.Id));
+
         logger.LogInformation("Admin kullanıcısı oluşturuldu: {Email}", email);
     }
 }
