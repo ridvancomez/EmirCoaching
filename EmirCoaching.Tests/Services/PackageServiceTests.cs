@@ -61,6 +61,20 @@ public class PackageServiceTests
     }
 
     [Fact]
+    public async Task GetDetailAsync_ReturnsMonthlyPrice()
+    {
+        // Arrange — detay yanıtı da listedeki aylık fiyat hesabını devralır
+        _packages.Setup(r => r.GetBySlugWithDetailsAsync("donusum"))
+            .ReturnsAsync(new Package { Id = 1, Slug = "donusum", Price = 15999, DurationMonths = 6 });
+
+        // Act
+        var result = await _service.GetDetailAsync("donusum");
+
+        // Assert
+        result.Value!.MonthlyPrice.Should().Be(2667);
+    }
+
+    [Fact]
     public async Task GetByIdAsync_WithExistingId_ReturnsPackageWithModules()
     {
         // Arrange — sıralama repository'de (Include OrderBy); servis gelen sırayı korur

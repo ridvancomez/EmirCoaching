@@ -20,6 +20,7 @@ public class MappingProfile : Profile
         CreateMap<Package, PackageResponse>()
             .ForMember(d => d.MonthlyPrice, o => o.MapFrom(s => MonthlyPriceOf(s)));
         CreateMap<Package, PackageDetailResponse>()
+            .IncludeBase<Package, PackageResponse>()
             .ForMember(d => d.TotalItemCount, o => o.MapFrom(s => s.Modules.Sum(m => m.Items.Count(i => !i.IsLocked))));
         MapRequests<CreatePackageRequest, UpdatePackageRequest, Package>()
             .ForMember(d => d.Modules, o => o.Ignore())
