@@ -1,7 +1,7 @@
 // Yasal metin sayfası (gizlilik-politikasi.html?tur=kvkk). İçerik panelde editörle girilir ve API'den gelir:
 // başlık, sürüm, tarihler, metin, içindekiler ve revizyon geçmişi buradan doldurulur.
 // API'ye ulaşılamazsa sayfadaki statik Gizlilik Politikası metni olduğu gibi kalır.
-// api.js ve blog-detay.js'ten (initToc) SONRA yüklenir.
+// api.js ve blog-detay.js'ten (initToc, initContentTable) SONRA yüklenir.
 (function () {
   // URL'deki tür → API'deki LegalDocumentType adı
   var TURLER = {
@@ -98,6 +98,9 @@
       if (child !== revision) child.remove();
     });
     article.insertBefore(wrapper, revision);
+
+    // Sayfa açılışında blog-detay.js tabloları bileşene çevirir; API'den gelen içerik sonradan geldiği için burada tekrarlanır
+    if (typeof initContentTable === "function") wrapper.querySelectorAll("table").forEach(initContentTable);
     return wrapper;
   }
 

@@ -16299,13 +16299,14 @@ iconify-icon[icon="bi:award-fill"] {
   }
 }
 /* ==================== Yasal metin: panelde editörle girilen içerik (js/yasal-metin.js) ==================== */
-/* CKEditor düz h2/h3/p/ul/ol/a üretir; seed Gizlilik metni kendi gizlilik-bolum sınıflarını taşır */
-.yasal-icerik>*+* {
+/* CKEditor düz h2/h3/p/ul/ol/a üretir; kurallar yalnızca bu düz içeriğe (doğrudan çocuklar) uygulanır.
+   Seed Gizlilik metni kendi .gizlilik-bolum yapısını taşır ve tasarımdaki stilini korur. */
+.yasal-icerik>:not(.gizlilik-bolum)+* {
   margin-top: 20px;
 }
 
-.yasal-icerik h2,
-.yasal-icerik h3 {
+.yasal-icerik>h2,
+.yasal-icerik>h3 {
   margin: clamp(40px, 2.163vw + 17.846px, 49px) 0 0;
   scroll-margin-top: calc(var(--navbar-top) + var(--navbar-height) + 24px);
   font-family: var(--font-geologica);
@@ -16320,32 +16321,34 @@ iconify-icon[icon="bi:award-fill"] {
   margin-top: 0;
 }
 
-.yasal-icerik h2 {
+.yasal-icerik>h2 {
   font-size: clamp(26px, 1.923vw + 12.308px, 40px);
 }
 
-.yasal-icerik h3 {
+.yasal-icerik>h3 {
   font-size: clamp(20px, 0.962vw + 12px, 26px);
 }
 
-.yasal-icerik ul,
-.yasal-icerik ol {
+.yasal-icerik>ul,
+.yasal-icerik>ol {
   padding-left: 1.4em;
 }
 
-.yasal-icerik li+li {
+.yasal-icerik>ul>li+li,
+.yasal-icerik>ol>li+li {
   margin-top: 10px;
 }
 
-.yasal-icerik li::marker {
+.yasal-icerik>ul>li::marker,
+.yasal-icerik>ol>li::marker {
   color: #1b6dff;
 }
 
-.yasal-icerik a {
+.yasal-icerik>:is(p, ul, ol) a {
   color: #4d8dff;
   text-decoration: underline;
 }
 
-.yasal-icerik strong {
+.yasal-icerik>:is(p, ul, ol) strong {
   color: #dee2f6;
 }
